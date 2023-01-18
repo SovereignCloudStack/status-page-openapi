@@ -61,12 +61,12 @@ type GetIncidentsParams struct {
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// get specific component by id
+	// (GET /component/{componentId})
+	GetComponent(ctx echo.Context, componentId string) error
 
 	// (GET /components)
 	GetComponents(ctx echo.Context) error
-	// get specific component by id
-	// (GET /components/{componentId})
-	GetComponent(ctx echo.Context, componentId string) error
 
 	// (GET /impacttypes)
 	GetImpacttypes(ctx echo.Context) error
@@ -86,15 +86,6 @@ type ServerInterfaceWrapper struct {
 	Handler ServerInterface
 }
 
-// GetComponents converts echo context to params.
-func (w *ServerInterfaceWrapper) GetComponents(ctx echo.Context) error {
-	var err error
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetComponents(ctx)
-	return err
-}
-
 // GetComponent converts echo context to params.
 func (w *ServerInterfaceWrapper) GetComponent(ctx echo.Context) error {
 	var err error
@@ -108,6 +99,15 @@ func (w *ServerInterfaceWrapper) GetComponent(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetComponent(ctx, componentId)
+	return err
+}
+
+// GetComponents converts echo context to params.
+func (w *ServerInterfaceWrapper) GetComponents(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetComponents(ctx)
 	return err
 }
 
@@ -198,8 +198,8 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
+	router.GET(baseURL+"/component/:componentId", wrapper.GetComponent)
 	router.GET(baseURL+"/components", wrapper.GetComponents)
-	router.GET(baseURL+"/components/:componentId", wrapper.GetComponent)
 	router.GET(baseURL+"/impacttypes", wrapper.GetImpacttypes)
 	router.GET(baseURL+"/incident/:incidentId", wrapper.GetIncident)
 	router.GET(baseURL+"/incidents", wrapper.GetIncidents)
@@ -210,18 +210,18 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
