@@ -40,7 +40,7 @@ type Incident struct {
 	ImpactType  IncidentImpactType `json:"impactType"`
 	Phase       IncidentPhase      `json:"phase"`
 	Title       string             `json:"title"`
-	Updates     *[]IncidentUpdate  `json:"updates,omitempty"`
+	Updates     []IncidentUpdate   `json:"updates"`
 }
 
 // IncidentImpactType defines model for IncidentImpactType.
@@ -223,14 +223,14 @@ var swaggerSpec = []string{
 	"MacHwOmSQ+GD3SmEEJjWbEfvXBiVsN03liIBHJaN1UJuaV3w3s8J22ByMuVNGVUUPmh8yoVGDuEdYbYT",
 	"V3h+k9h9VW22ecTIUt5lfzlLGQk+IJQ5U6UNbpm8dPBxplNmIQTOLF5Y4crvFMTRRFooKzLZWzBKjnwA",
 	"UOZJwjYJQmh1jv7ocxGpYpG9dZ9PED1Itqx3FD6oB2ZGb125YJJL2KTfPrkiVi+Q/wD90+3rHkWfk8rs",
-	"bc396uBbmhwJ9lqrK8iQ1VZHpf4ZceDQsWSkkdnB0+9AWvxje3I9U8NF+Q38Ppo3VecyzgWJxZJVq75u",
-	"9jYGpRUyzlxsefKwvlp7a8tsbrwV26J3uVqCD79RG9cBMJsEhJQplEwJCGExCSZzOg9mH1zW2g3TffW4",
-	"5AWtbdGxpyIZVUxTAK7R1gOSgDRL0aI2EN7tQVBWAqdmcsMNGqjQFK7ssNKBfSLfU7BRmTSlPvMgcMeY",
-	"SXsYOUypRESutOmjKVu+xhvye83AydoaG/D9qztik6cp0zsISQfPKIxELCKvQvM2O09wFzpt3yUndTNw",
-	"JrdRTd0g2ennftKOS9m3FD9IZtkIew02/YPzBbQO+6f749MJl1eX2xiT15j/jcer+sdY/Lpp8SOZpsOP",
-	"38wYyUxXs3b+tWXaelns0eT1Yor0bOY95ah3Xpxp792PL1eLxeLje7pIaIdbqvU2BDAoNceY5QmN+Hkw",
-	"n18Es4tgdjsLQvebBLPgF/ijroHCf179Z8nPqR0lH1/5h3Mqv3/Nxhzdjs99lwjjvFBbzDnO/WUYtNuq",
-	"jHhNkvV/r3GDpyj+BgAA///TPm9SaQwAAA==",
+	"bc3rzH5lgZY6R6q9JutKM2S61VGzf0Yc2HTMGWlkdtAHHUiLf2xPrme6uCi/gd9H86bqYca5INlYsmrV",
+	"183exqC0QsaZiy09AOurtbe2zObGW7EteperJfjwG7VxvQCzSUBImULJlIAQFpNgMqfzYPbBZa19Md1X",
+	"j0te0NoWHXsqklHFNA/gGm09KglIsxQtagPh3R4EZSVwais35qCBCk3hyl4rvdgn8j0FG5VJU+ozDwJ3",
+	"jJm0h+HDlEpE5EqbPpqy+Wu8IefXDJysrQEC37+6IzZ5mjK9g5B08IzCSMQi8io0b7PzBHeh0/atclI3",
+	"A2dyG9XeDZKdzu4n7biUfUvxg2SWjbDXYNM/Ql9A67B/uj8+nXB5dc2NMXmN+d94vKp/jMWvmxY/kmk6",
+	"/PjNjJHMdDVr519bpq2XxR5NXi+mSM9m3lOOeufFmfbe/fhytVgsPr6ni4R2uKVab0MAg1JzjFme0Iif",
+	"B/P5RTC7CGa3syB0v0kwC36BP+oaKPzn1X+W/JzaUfLxlX84p/L712zM0e343HeJMM4LtcWc49xfhkG7",
+	"rcqI1yRZ/wsbN3iK4m8AAAD//yLBNF5zDAAA",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

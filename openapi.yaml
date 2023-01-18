@@ -47,6 +47,7 @@ components:
         - id
         - title
         - description
+        - updates
         - affects
         - impactType
         - phase
