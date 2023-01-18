@@ -83,7 +83,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/IncidentImpactType'
-  /components/{componentId}:
+  /component/{componentId}:
     get:
       summary: get specific component by id
       operationId: getComponent
