@@ -46,6 +46,7 @@ components:
       required:
         - id
         - title
+        - description
         - affects
         - impactType
         - phase
