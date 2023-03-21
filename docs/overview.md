@@ -29,7 +29,7 @@ However, as un-opinionated the API (in its first iteration) strives to be, it is
     1. Read-only anonymous access
     2. Read-write authenticated access
 
-[^1] In the future
+[^1]: In the future
 
 ### Reference implementation
 
