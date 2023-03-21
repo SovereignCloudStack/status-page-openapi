@@ -3,7 +3,6 @@
 Illustrating multiple interchangable logical "layers" of possible Status Page application stacks:
 
 ```mermaid
-
   C4Container
   title SCS Status Page components
   UpdateLayoutConfig("100", "1")
