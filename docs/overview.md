@@ -11,7 +11,8 @@ How was the decision to implement a new status page application made? What were 
 
 :::
 
-To be easily interoperable with other software, being "API-first", the status page should not be a single monolithic (Web) application, but should be split into an API server and a frontend component - both with respective reference implementations.
+To be easily interoperable with other software, being "API-first" is a priority.
+As such, the status page should not *need to* be a typical monolithic web application (even though it could be), hence making it possible to split functionality into an API server and a frontend component.
 
 ## The SCS status page **API**
 
