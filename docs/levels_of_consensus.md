@@ -7,20 +7,20 @@ The "levels" of consensus could be split into:
 
 **Consensus on...**
 
-1. Resource Definition
+1. **Resource Definition**
     - "What is an incident?"
     - Core REST API Spec
-1. General Architecture
+1. **General Architecture**
     - "Monolithic Web App or multiple components?"
     - "Use static password file or rely on OIDC provider?"
     - (If any:) Interfaces between components:
         - AuthN mechanisms
         - AuthZ decisions
-1. Implementation of core component(s)
+1. **Implementation of core component(s)**
     - "Use reference implementation components?"
     - "Go vs. JavaScript?"
     - "Postgres vs. MySQL?"
-1. Choice of all used components
+1. **Choice of all used components**
     - "Policy: Istio vs. traefik?"
     - "Deployment: Helm vs. ansible?"
     - "dex vs. keycloak vs. zitadel?"
