@@ -7,7 +7,7 @@ SCS strives to implement a status page that works well, while being interoperabl
 
 :::note
 
-How was the decision to implement a new status page application made? What were the requirements? See the [decision record](https://github.com/SovereignCloudStack/standards/pull/191). (TODO: Point link to file in main branch as soon as it is merged)
+How was the decision to implement a new status page application made? What were the requirements? See the [decision record](https://github.com/SovereignCloudStack/standards/blob/1fb174da1ee906f0da6a8bbefbd3d95884df5669/Standards/scs-0400-v1-status-page-create-decision.md).
 
 :::
 
