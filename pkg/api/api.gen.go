@@ -84,30 +84,30 @@ type PutPhasesJSONRequestBody = PutPhasesJSONBody
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
-	// Create a new component
-	// (POST /component)
-	CreateComponent(ctx echo.Context) error
-	// get specific component by id
-	// (GET /component/{componentId})
-	GetComponent(ctx echo.Context, componentId string) error
 
 	// (GET /components)
 	GetComponents(ctx echo.Context) error
-	// Create a new impact type
-	// (POST /impacttype)
-	CreateImpactType(ctx echo.Context) error
+	// Create a new component
+	// (POST /components)
+	CreateComponent(ctx echo.Context) error
+	// Get specific component by id
+	// (GET /components/{componentId})
+	GetComponent(ctx echo.Context, componentId string) error
 
 	// (GET /impacttypes)
 	GetImpacttypes(ctx echo.Context) error
-	// create a new incident
-	// (POST /incident)
-	CreateIncident(ctx echo.Context) error
-	// Get specific incident by id
-	// (GET /incident/{incidentId})
-	GetIncident(ctx echo.Context, incidentId string) error
+	// Create a new impact type
+	// (POST /impacttypes)
+	CreateImpactType(ctx echo.Context) error
 	// Get list of incidents
 	// (GET /incidents)
 	GetIncidents(ctx echo.Context, params GetIncidentsParams) error
+	// Create a new incident
+	// (POST /incidents)
+	CreateIncident(ctx echo.Context) error
+	// Get specific incident by id
+	// (GET /incidents/{incidentId})
+	GetIncident(ctx echo.Context, incidentId string) error
 
 	// (GET /phases)
 	GetPhases(ctx echo.Context) error
@@ -119,6 +119,15 @@ type ServerInterface interface {
 // ServerInterfaceWrapper converts echo contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler ServerInterface
+}
+
+// GetComponents converts echo context to params.
+func (w *ServerInterfaceWrapper) GetComponents(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetComponents(ctx)
+	return err
 }
 
 // CreateComponent converts echo context to params.
@@ -146,24 +155,6 @@ func (w *ServerInterfaceWrapper) GetComponent(ctx echo.Context) error {
 	return err
 }
 
-// GetComponents converts echo context to params.
-func (w *ServerInterfaceWrapper) GetComponents(ctx echo.Context) error {
-	var err error
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetComponents(ctx)
-	return err
-}
-
-// CreateImpactType converts echo context to params.
-func (w *ServerInterfaceWrapper) CreateImpactType(ctx echo.Context) error {
-	var err error
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.CreateImpactType(ctx)
-	return err
-}
-
 // GetImpacttypes converts echo context to params.
 func (w *ServerInterfaceWrapper) GetImpacttypes(ctx echo.Context) error {
 	var err error
@@ -173,28 +164,12 @@ func (w *ServerInterfaceWrapper) GetImpacttypes(ctx echo.Context) error {
 	return err
 }
 
-// CreateIncident converts echo context to params.
-func (w *ServerInterfaceWrapper) CreateIncident(ctx echo.Context) error {
+// CreateImpactType converts echo context to params.
+func (w *ServerInterfaceWrapper) CreateImpactType(ctx echo.Context) error {
 	var err error
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.CreateIncident(ctx)
-	return err
-}
-
-// GetIncident converts echo context to params.
-func (w *ServerInterfaceWrapper) GetIncident(ctx echo.Context) error {
-	var err error
-	// ------------- Path parameter "incidentId" -------------
-	var incidentId string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "incidentId", runtime.ParamLocationPath, ctx.Param("incidentId"), &incidentId)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter incidentId: %s", err))
-	}
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetIncident(ctx, incidentId)
+	err = w.Handler.CreateImpactType(ctx)
 	return err
 }
 
@@ -220,6 +195,31 @@ func (w *ServerInterfaceWrapper) GetIncidents(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetIncidents(ctx, params)
+	return err
+}
+
+// CreateIncident converts echo context to params.
+func (w *ServerInterfaceWrapper) CreateIncident(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.CreateIncident(ctx)
+	return err
+}
+
+// GetIncident converts echo context to params.
+func (w *ServerInterfaceWrapper) GetIncident(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "incidentId" -------------
+	var incidentId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "incidentId", runtime.ParamLocationPath, ctx.Param("incidentId"), &incidentId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter incidentId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetIncident(ctx, incidentId)
 	return err
 }
 
@@ -269,14 +269,14 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
-	router.POST(baseURL+"/component", wrapper.CreateComponent)
-	router.GET(baseURL+"/component/:componentId", wrapper.GetComponent)
 	router.GET(baseURL+"/components", wrapper.GetComponents)
-	router.POST(baseURL+"/impacttype", wrapper.CreateImpactType)
+	router.POST(baseURL+"/components", wrapper.CreateComponent)
+	router.GET(baseURL+"/components/:componentId", wrapper.GetComponent)
 	router.GET(baseURL+"/impacttypes", wrapper.GetImpacttypes)
-	router.POST(baseURL+"/incident", wrapper.CreateIncident)
-	router.GET(baseURL+"/incident/:incidentId", wrapper.GetIncident)
+	router.POST(baseURL+"/impacttypes", wrapper.CreateImpactType)
 	router.GET(baseURL+"/incidents", wrapper.GetIncidents)
+	router.POST(baseURL+"/incidents", wrapper.CreateIncident)
+	router.GET(baseURL+"/incidents/:incidentId", wrapper.GetIncident)
 	router.GET(baseURL+"/phases", wrapper.GetPhases)
 	router.PUT(baseURL+"/phases", wrapper.PutPhases)
 
@@ -285,21 +285,21 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
+	"ED6r8T3JnEaKb/bCQfovAAD//weRkBYeEQAA",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
