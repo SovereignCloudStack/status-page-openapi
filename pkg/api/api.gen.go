@@ -90,6 +90,9 @@ type ServerInterface interface {
 	// Create a new component
 	// (POST /components)
 	CreateComponent(ctx echo.Context) error
+	// Delete a component
+	// (DELETE /components/{componentId})
+	DeleteComponent(ctx echo.Context, componentId string) error
 	// Get specific component by id
 	// (GET /components/{componentId})
 	GetComponent(ctx echo.Context, componentId string) error
@@ -99,12 +102,18 @@ type ServerInterface interface {
 	// Create a new impact type
 	// (POST /impacttypes)
 	CreateImpactType(ctx echo.Context) error
+	// Delete a impact type
+	// (DELETE /impacttypes/{impactType})
+	DeleteImpactType(ctx echo.Context, impactType IncidentImpactType) error
 	// Get list of incidents
 	// (GET /incidents)
 	GetIncidents(ctx echo.Context, params GetIncidentsParams) error
 	// Create a new incident
 	// (POST /incidents)
 	CreateIncident(ctx echo.Context) error
+	// Delete a incident
+	// (DELETE /incidents/{incidentId})
+	DeleteIncident(ctx echo.Context, incidentId string) error
 	// Get specific incident by id
 	// (GET /incidents/{incidentId})
 	GetIncident(ctx echo.Context, incidentId string) error
@@ -136,6 +145,22 @@ func (w *ServerInterfaceWrapper) CreateComponent(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.CreateComponent(ctx)
+	return err
+}
+
+// DeleteComponent converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteComponent(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "componentId" -------------
+	var componentId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "componentId", runtime.ParamLocationPath, ctx.Param("componentId"), &componentId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter componentId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteComponent(ctx, componentId)
 	return err
 }
 
@@ -173,6 +198,22 @@ func (w *ServerInterfaceWrapper) CreateImpactType(ctx echo.Context) error {
 	return err
 }
 
+// DeleteImpactType converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteImpactType(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "impactType" -------------
+	var impactType IncidentImpactType
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "impactType", runtime.ParamLocationPath, ctx.Param("impactType"), &impactType)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter impactType: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteImpactType(ctx, impactType)
+	return err
+}
+
 // GetIncidents converts echo context to params.
 func (w *ServerInterfaceWrapper) GetIncidents(ctx echo.Context) error {
 	var err error
@@ -204,6 +245,22 @@ func (w *ServerInterfaceWrapper) CreateIncident(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.CreateIncident(ctx)
+	return err
+}
+
+// DeleteIncident converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteIncident(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "incidentId" -------------
+	var incidentId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "incidentId", runtime.ParamLocationPath, ctx.Param("incidentId"), &incidentId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter incidentId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteIncident(ctx, incidentId)
 	return err
 }
 
@@ -271,11 +328,14 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 
 	router.GET(baseURL+"/components", wrapper.GetComponents)
 	router.POST(baseURL+"/components", wrapper.CreateComponent)
+	router.DELETE(baseURL+"/components/:componentId", wrapper.DeleteComponent)
 	router.GET(baseURL+"/components/:componentId", wrapper.GetComponent)
 	router.GET(baseURL+"/impacttypes", wrapper.GetImpacttypes)
 	router.POST(baseURL+"/impacttypes", wrapper.CreateImpactType)
+	router.DELETE(baseURL+"/impacttypes/:impactType", wrapper.DeleteImpactType)
 	router.GET(baseURL+"/incidents", wrapper.GetIncidents)
 	router.POST(baseURL+"/incidents", wrapper.CreateIncident)
+	router.DELETE(baseURL+"/incidents/:incidentId", wrapper.DeleteIncident)
 	router.GET(baseURL+"/incidents/:incidentId", wrapper.GetIncident)
 	router.GET(baseURL+"/phases", wrapper.GetPhases)
 	router.PUT(baseURL+"/phases", wrapper.PutPhases)
@@ -285,21 +345,22 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/8xXUY+jNhD+K5bbh1ZiA0n6Ut7uovaEeupFzfWlp31w8JD1CWyfbdqiiP9e2SYBAktI",
-	"c7daaR8Aj2e+mfm+mc0Rp6KQggM3GsdHrNMnKIh73JwO7ItUQoIyDNwRyTJIDdC3lX1jBgr3+XsFGY7x",
-	"d2HrM2wchgnFdYBNJQHHmChFKvtOmZY5qX4nBVgHzbE2ivGDPWfUflZA6AeeVzg2qoRgaJaTPeRXIbz3",
-	"VnUdYAVfSqaA4viTjdEHcvYXdBN9PMcV+8+QGhs3oaOoE54yOlE4fWfV9nAg/I1znwlVEINjTImBB8Mc",
-	"/AEgCjpVTBom+Chg4BTohENe5jnZ5/BsA2b2iRWSpOaj+3wl8aaESXujDrB8Inr21a0ztuVjJh+nVylt",
-	"lje0o3H9p7s3bM0Ys3z0fg/ayMGZEr3qnFIdJd2wNFMk3J5q9qxFk82ArKkCYiZ5MXBp4F8zEuuiLs4q",
-	"6PgfS/P9WdOEUmbLRvJtD98wet+HDct4Jpyt5wDebXZoZ4gpNdqSA6A32wQH+G9Q2mkDLxeR9SQkcCIZ",
-	"jvF6ES1Wth/EPLmoYX9gHsAlbHERC9KOBPwOzKa1sslrKbj2sFdR5KoruGlmBJEyZ6m7Hn7WXqOecrOZ",
-	"2Q7rISkvBwD+8Jv/KoUeAb9xbWkd+t6BNm8FrW5CPhNw7fnRK9HypkCXdBtk7HOijom6LAqiqvNXRBCH",
-	"f1DaARR0uxwez88JrWf13PFFkQIMKI3jT0fMLArLITtN3bbDHa+4qw8/O59P7vFOPs3uyihtuvV7BwZp",
-	"CSnLWNrWD+0rxHypQz/SbAaTYkk6Zi+hlvHt8jVkk3Rn+LfQzRj01yEg32tkPCTb/AbqdOvPRgPN9BHs",
-	"DFEGiQzZ3YMya4mMQF9KUBXKhEI//PHrZr1e//yjXaX2hjtq9aatg0mlUchImdslt4pWq4do+RAtPy6j",
-	"2P0tomX0Fw5mLcI6uET/C6f3YAdO5yP/6R7kjy+pv9mqu5w6OdOOCy3FrunyFPHbqvLVaLHF0xVieDw9",
-	"XtlknXJdX2Stz1ezx7r9uG2NnZLpbjH3v/jkFNt6i5fUTvvzZu7aKkewb8su9v8njK8Du76zeI2/vRA5",
-	"ED6r8T3JnEaKb/bCQfovAAD//weRkBYeEQAA",
+	"H4sIAAAAAAAC/9RYwY7bNhD9FYLtoQW0luztpbolbhsYDRqjm14a7IEWR7sMJJIhqbaC4X8vSMoSZWll",
+	"uZtsHWAPEkXNvHnz5onrPc5EKQUHbjRO91hnj1ASd7k+PrA3UgkJyjBwj0ieQ2aAvq7tHTNQuuVvFeQ4",
+	"xd/EXcy4CRhvKD5E2NQScIqJUqS295RpWZD6N1KCDdA81kYx/mCfM2qXFRD6jhc1To2qIBpuK8gOirMQ",
+	"3vpdh0OEFXyqmAKK0w82Rx9IGy8KC71v84rdR8iMzbuho6g3PGN0gjj9TNZ28ED4Kxc+F6okBqeYEgM3",
+	"hjn4A0AUdKaYNEzwUcDAKdCJgLwqCrIr4MkGzOwTKyXJzHu3fKbwhsJN98YhwvKR6Nmvbt1mSx8zxbi8",
+	"KmmrvKAdTeg/3HvD1owpy2fv96DLHLWS6LFzLHVUdENqpkS4PXL25I6mmoFYMwXETOpiENLAP2Yk1wkv",
+	"blcUxB8r820704RSZmkjxbaHb5i9H8OmZTwXbq/XAL5b36E7Q0yl0ZY8AHq13eAI/wVKu9nAy0ViIwkJ",
+	"nEiGU3y7SBYr2w9iHl3WuG+YD+AKtriIBWktAb8Bs+522eK1FFx72KskcewKbhqPIFIWLHOvxx+1n1Ev",
+	"udnK7Mx6KMpTA8DvfvWrUugR8GvXli6g7x1o81rQ+iLkMwEfvD56FC0vSnQqt0HFvibqlKirsiSqblcR",
+	"QRz+RlkAKAq7HO/b6w092HQUCvAD02fuJ7ceMieJIiUYUBqnH/aYWSxWSdZT3TcPB7FxOCXeQZ8u8f6Z",
+	"qmri7YQogPAnVRLS5ctDJKQqOj8AV03DbImeZecNGKQlZCxnWccQ2tWIed3F3t9tBZPOsQm2vYR1jH9q",
+	"P4eHbMIP2pcwkTHo1+EmvtfIeEj95sf77ks/w096LJ6fJHZK+vggXUzr/2k4QzYbhNOD1G4a8NZPfGeI",
+	"MkjkyB5rUG53IiPQpwpUjXKh0He//7K+vb398Xt7SrNvuEcd59oGmKSbQk6qwp6fVslqdZMsb5Ll+2WS",
+	"ur9Fskz+xNGsM9YhOkX/M6fPwQ6czkf+w3OQ37+km832sFMPL5h2Wugkds7ljhm/rMddjbN1eMJBjPfH",
+	"y1mHpIC0GZbWRv5qjkgskOE5f7pmDuYq87Lj0bGY8HTk/uGd9POt3/GSLtL9hjD3OFSNYN9WIfb/ZhGf",
+	"B/bh5UeiZx5Hc/XNXjhI/wYAAP//G/i7qIMUAAA=",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
