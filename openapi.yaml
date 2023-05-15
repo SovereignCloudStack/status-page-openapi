@@ -33,6 +33,7 @@ components:
       properties:
         id:
           type: string
+          readOnly: true
         displayName:
           type: string
         labels:
@@ -54,6 +55,7 @@ components:
       properties:
         id:
           type: string
+          readOnly: true
         title:
           type: string
         description:
@@ -89,6 +91,22 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/IncidentPhase'
+    put:
+      summary: Create a new list of phases.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/IncidentPhase'
+      responses:
+        '200':
+          description:  OK
+          content:
+            application/json:
+              schema:
+                type: boolean
   /impacttypes:
     get:
       responses:
@@ -100,6 +118,22 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/IncidentImpactType'
+  /impacttype:
+    post:
+      summary: Create a new impact type
+      operationId: createImpactType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IncidentImpactType'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: string
   /component/{componentId}:
     get:
       summary: get specific component by id
@@ -128,6 +162,22 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Component'
+  /component:
+    post:
+      summary: Create a new component
+      operationId: createComponent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Component'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: string
   /incident/{incidentId}:
     get:
       summary: Get specific incident by id
@@ -174,3 +224,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Incident'
+  /incident:
+    post:
+      summary: create a new incident
+      operationId: createIncident
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Incident'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: string
