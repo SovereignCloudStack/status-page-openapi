@@ -133,6 +133,23 @@ paths:
             application/json:
               schema:
                 type: string
+  /impacttypes/{impactType}:
+    delete:
+      summary: Delete a impact type
+      operationId: deleteImpactType
+      parameters:
+        - name: impactType
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/IncidentImpactType'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
   /components:
     get:
       responses:
@@ -176,6 +193,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Component'
+    delete:
+      summary: Delete a component
+      operationId: deleteComponent
+      parameters:
+        - name: componentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
   /incidents:
     get:
       summary: Get list of incidents
@@ -237,3 +270,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Incident'
+    delete:
+      summary: Delete a incident
+      operationId: deleteIncident
+      parameters:
+        - name: incidentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
