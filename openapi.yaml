@@ -25,15 +25,9 @@ components:
         type: string
     Component:
       type: object
-      required:
-        - id
-        - displayName
-        - labels
-        - affectedBy
       properties:
         id:
           type: string
-          readOnly: true
         displayName:
           type: string
         labels:
@@ -44,18 +38,9 @@ components:
             $ref: '#/components/schemas/Id'
     Incident:
       type: object
-      required:
-        - id
-        - title
-        - description
-        - updates
-        - affects
-        - impactType
-        - phase
       properties:
         id:
           type: string
-          readOnly: true
         title:
           type: string
         description:
@@ -135,7 +120,7 @@ paths:
                 type: string
   /impacttypes/{impactType}:
     delete:
-      summary: Delete a impact type
+      summary: Delete an impact type
       operationId: deleteImpactType
       parameters:
         - name: impactType
@@ -202,6 +187,27 @@ paths:
           required: true
           schema:
             type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
+    patch:
+      summary: Fully or partially change a component
+      operationId: updateComponent
+      parameters:
+      - in: path
+        name: componentId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Component'
       responses:
         '200':
           description: OK
@@ -279,6 +285,27 @@ paths:
           required: true
           schema:
             type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
+    patch:
+      summary: Fully or partially change a incident
+      operationId: updateIncident
+      parameters:
+        - name: incidentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Incident'
       responses:
         '200':
           description: OK
