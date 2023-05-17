@@ -23,7 +23,7 @@ import (
 type Component struct {
 	AffectedBy  *[]Id   `json:"affectedBy,omitempty"`
 	DisplayName *string `json:"displayName,omitempty"`
-	Id          *string `json:"id,omitempty"`
+	Id          *Id     `json:"id,omitempty"`
 	Labels      *Labels `json:"labels,omitempty"`
 }
 
@@ -36,7 +36,7 @@ type Incident struct {
 	BeganAt     *time.Time          `json:"beganAt,omitempty"`
 	Description *string             `json:"description,omitempty"`
 	EndedAt     *time.Time          `json:"endedAt"`
-	Id          *string             `json:"id,omitempty"`
+	Id          *Id                 `json:"id,omitempty"`
 	ImpactType  *IncidentImpactType `json:"impactType,omitempty"`
 	Phase       *IncidentPhase      `json:"phase,omitempty"`
 	Title       *string             `json:"title,omitempty"`
@@ -110,13 +110,13 @@ type ServerInterface interface {
 	CreateComponent(ctx echo.Context) error
 	// Delete a component
 	// (DELETE /components/{componentId})
-	DeleteComponent(ctx echo.Context, componentId string) error
+	DeleteComponent(ctx echo.Context, componentId Id) error
 	// Get specific component by id
 	// (GET /components/{componentId})
-	GetComponent(ctx echo.Context, componentId string) error
+	GetComponent(ctx echo.Context, componentId Id) error
 	// Fully or partially change a component
 	// (PATCH /components/{componentId})
-	UpdateComponent(ctx echo.Context, componentId string) error
+	UpdateComponent(ctx echo.Context, componentId Id) error
 
 	// (GET /impacttypes)
 	GetImpacttypes(ctx echo.Context) error
@@ -134,13 +134,13 @@ type ServerInterface interface {
 	CreateIncident(ctx echo.Context) error
 	// Delete a incident
 	// (DELETE /incidents/{incidentId})
-	DeleteIncident(ctx echo.Context, incidentId string) error
+	DeleteIncident(ctx echo.Context, incidentId Id) error
 	// Get specific incident by id
 	// (GET /incidents/{incidentId})
-	GetIncident(ctx echo.Context, incidentId string) error
+	GetIncident(ctx echo.Context, incidentId Id) error
 	// Fully or partially change a incident
 	// (PATCH /incidents/{incidentId})
-	UpdateIncident(ctx echo.Context, incidentId string) error
+	UpdateIncident(ctx echo.Context, incidentId Id) error
 
 	// (GET /phases)
 	GetPhases(ctx echo.Context) error
@@ -176,7 +176,7 @@ func (w *ServerInterfaceWrapper) CreateComponent(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) DeleteComponent(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "componentId" -------------
-	var componentId string
+	var componentId Id
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "componentId", runtime.ParamLocationPath, ctx.Param("componentId"), &componentId)
 	if err != nil {
@@ -192,7 +192,7 @@ func (w *ServerInterfaceWrapper) DeleteComponent(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) GetComponent(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "componentId" -------------
-	var componentId string
+	var componentId Id
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "componentId", runtime.ParamLocationPath, ctx.Param("componentId"), &componentId)
 	if err != nil {
@@ -208,7 +208,7 @@ func (w *ServerInterfaceWrapper) GetComponent(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) UpdateComponent(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "componentId" -------------
-	var componentId string
+	var componentId Id
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "componentId", runtime.ParamLocationPath, ctx.Param("componentId"), &componentId)
 	if err != nil {
@@ -292,7 +292,7 @@ func (w *ServerInterfaceWrapper) CreateIncident(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) DeleteIncident(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "incidentId" -------------
-	var incidentId string
+	var incidentId Id
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "incidentId", runtime.ParamLocationPath, ctx.Param("incidentId"), &incidentId)
 	if err != nil {
@@ -308,7 +308,7 @@ func (w *ServerInterfaceWrapper) DeleteIncident(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) GetIncident(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "incidentId" -------------
-	var incidentId string
+	var incidentId Id
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "incidentId", runtime.ParamLocationPath, ctx.Param("incidentId"), &incidentId)
 	if err != nil {
@@ -324,7 +324,7 @@ func (w *ServerInterfaceWrapper) GetIncident(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) UpdateIncident(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "incidentId" -------------
-	var incidentId string
+	var incidentId Id
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "incidentId", runtime.ParamLocationPath, ctx.Param("incidentId"), &incidentId)
 	if err != nil {
@@ -403,24 +403,24 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
+	"b/dzxBfzxoX8PwAA///E7Ukd5hcAAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
