@@ -70,6 +70,32 @@ components:
           $ref: '#/components/schemas/IncidentImpactType'
         phase:
           $ref: '#/components/schemas/IncidentPhase'
+  requestBodies:
+    ComponentRequest:
+      description: Send a component
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Component'
+    IncidentRequest:
+      description: Send an incident
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Incident'
+  responses:
+    SuccessResponse:
+      description: A request has successfully run
+      content:
+        application/json:
+          schema:
+            type: boolean
+    IdResponse:
+      description: A request returns an ID
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Id'
 paths:
   /phases:
     get:
@@ -93,11 +119,7 @@ paths:
                 $ref: '#/components/schemas/IncidentPhase'
       responses:
         '200':
-          description:  OK
-          content:
-            application/json:
-              schema:
-                type: boolean
+          $ref: "#/components/responses/SuccessResponse"
   /impacttypes:
     get:
       responses:
@@ -119,11 +141,7 @@ paths:
               $ref: '#/components/schemas/IncidentImpactType'
       responses:
         '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: string
+          $ref: '#/components/responses/IdResponse'
   /impacttypes/{impactType}:
     delete:
       summary: Delete an impact type
@@ -136,11 +154,7 @@ paths:
             $ref: '#/components/schemas/IncidentImpactType'
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: boolean
+          $ref: "#/components/responses/SuccessResponse"
   /components:
     get:
       responses:
@@ -156,17 +170,10 @@ paths:
       summary: Create a new component
       operationId: createComponent
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Component'
+        $ref: '#/components/requestBodies/ComponentRequest'
       responses:
         '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: string
+          $ref: '#/components/responses/IdResponse'
   /components/{componentId}:
     get:
       summary: Get specific component by id
@@ -195,11 +202,7 @@ paths:
             type: string
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: boolean
+          $ref: "#/components/responses/SuccessResponse"
     patch:
       summary: Fully or partially change a component
       operationId: updateComponent
@@ -210,17 +213,10 @@ paths:
         schema:
           type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Component'
+        $ref: '#/components/requestBodies/ComponentRequest'
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: boolean
+          $ref: "#/components/responses/SuccessResponse"
   /incidents:
     get:
       summary: Get list of incidents
@@ -254,17 +250,10 @@ paths:
       summary: Create a new incident
       operationId: createIncident
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Incident'
+        $ref: '#/components/requestBodies/IncidentRequest'
       responses:
         '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: string
+          $ref: '#/components/responses/IdResponse'
   /incidents/{incidentId}:
     get:
       summary: Get specific incident by id
@@ -293,11 +282,7 @@ paths:
             type: string
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: boolean
+          $ref: "#/components/responses/SuccessResponse"
     patch:
       summary: Fully or partially change a incident
       operationId: updateIncident
@@ -308,14 +293,7 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Incident'
+        $ref: '#/components/requestBodies/IncidentRequest'
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: boolean
+          $ref: "#/components/responses/SuccessResponse"
