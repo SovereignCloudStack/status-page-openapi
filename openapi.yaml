@@ -25,9 +25,12 @@ components:
         type: string
     Component:
       type: object
+      required:
+        - id
       properties:
         id:
           type: string
+          readOnly: true
         displayName:
           type: string
         labels:
@@ -38,9 +41,12 @@ components:
             $ref: '#/components/schemas/Id'
     Incident:
       type: object
+      required:
+        - id
       properties:
         id:
           type: string
+          readOnly: true
         title:
           type: string
         description:
