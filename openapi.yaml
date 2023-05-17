@@ -25,12 +25,9 @@ components:
         type: string
     Component:
       type: object
-      required:
-        - id
       properties:
         id:
-          type: string
-          readOnly: true
+          $ref: '#/components/schemas/Id'
         displayName:
           type: string
         labels:
@@ -41,12 +38,9 @@ components:
             $ref: '#/components/schemas/Id'
     Incident:
       type: object
-      required:
-        - id
       properties:
         id:
-          type: string
-          readOnly: true
+          $ref: '#/components/schemas/Id'
         title:
           type: string
         description:
@@ -183,7 +177,7 @@ paths:
         name: componentId
         required: true
         schema:
-          type: string
+          $ref: '#/components/schemas/Id'
       responses:
         '200':
           description: OK
@@ -199,7 +193,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/Id'
       responses:
         '200':
           $ref: "#/components/responses/SuccessResponse"
@@ -211,7 +205,7 @@ paths:
         name: componentId
         required: true
         schema:
-          type: string
+          $ref: '#/components/schemas/Id'
       requestBody:
         $ref: '#/components/requestBodies/ComponentRequest'
       responses:
@@ -263,7 +257,7 @@ paths:
         name: incidentId
         required: true
         schema:
-          type: string
+          $ref: '#/components/schemas/Id'
       responses:
         '200':
           description: OK
@@ -279,7 +273,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/Id'
       responses:
         '200':
           $ref: "#/components/responses/SuccessResponse"
@@ -291,7 +285,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/Id'
       requestBody:
         $ref: '#/components/requestBodies/IncidentRequest'
       responses:
