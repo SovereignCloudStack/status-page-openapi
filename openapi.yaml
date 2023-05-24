@@ -6,19 +6,29 @@ components:
   schemas:
     Id:
       type: string
+      readOnly: true
+    IdList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Id'
     IncidentImpactType:
       type: string
     IncidentPhase:
       type: string
     IncidentUpdate:
       type: object
-      required: [text, createdAt]
       properties:
+        id:
+          $ref: '#/components/schemas/Id'
         text:
           type: string
         createdAt:
           type: string
           format: date-time
+      required:
+        - id
+        - text
+        - createdAt
     Labels:
       type: object
       additionalProperties:
@@ -33,9 +43,9 @@ components:
         labels:
           $ref: '#/components/schemas/Labels'
         affectedBy:
-          type: array
-          items:
-            $ref: '#/components/schemas/Id'
+          $ref: '#/components/schemas/IdList'
+      required:
+        - id
     Incident:
       type: object
       properties:
@@ -46,13 +56,9 @@ components:
         description:
           type: string
         updates:
-          type: array
-          items:
-            $ref: '#/components/schemas/IncidentUpdate'
+          $ref: '#/components/schemas/IdList'
         affects:
-          type: array
-          items:
-            $ref: '#/components/schemas/Id'
+          $ref: '#/components/schemas/IdList'
         beganAt:
           type: string
           format: date-time
@@ -64,6 +70,8 @@ components:
           $ref: '#/components/schemas/IncidentImpactType'
         phase:
           $ref: '#/components/schemas/IncidentPhase'
+      required:
+        - id
   requestBodies:
     ComponentRequest:
       description: Send a component
@@ -77,6 +85,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Incident'
+    IncidentUpdateRequest:
+      description: Send an incident update
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IncidentUpdate'
   responses:
     SuccessResponse:
       description: A request has successfully run
@@ -90,6 +104,25 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Id'
+  parameters:
+    ComponentIdPathParameter:
+      name: componentId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id'
+    IncidentIdPathParameter:
+      name: incidentId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id'
+    IncidentUpdateIdPathParameter:
+      name: updateId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id'
 paths:
   /phases:
     get:
@@ -173,11 +206,7 @@ paths:
       summary: Get specific component by id
       operationId: getComponent
       parameters:
-      - in: path
-        name: componentId
-        required: true
-        schema:
-          $ref: '#/components/schemas/Id'
+      - $ref: '#/components/parameters/ComponentIdPathParameter'
       responses:
         '200':
           description: OK
@@ -189,11 +218,7 @@ paths:
       summary: Delete a component
       operationId: deleteComponent
       parameters:
-        - name: componentId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/Id'
+        - $ref: '#/components/parameters/ComponentIdPathParameter'
       responses:
         '200':
           $ref: "#/components/responses/SuccessResponse"
@@ -201,11 +226,7 @@ paths:
       summary: Fully or partially change a component
       operationId: updateComponent
       parameters:
-      - in: path
-        name: componentId
-        required: true
-        schema:
-          $ref: '#/components/schemas/Id'
+      - $ref: '#/components/parameters/ComponentIdPathParameter'
       requestBody:
         $ref: '#/components/requestBodies/ComponentRequest'
       responses:
@@ -253,11 +274,7 @@ paths:
       summary: Get specific incident by id
       operationId: getIncident
       parameters:
-      - in: path
-        name: incidentId
-        required: true
-        schema:
-          $ref: '#/components/schemas/Id'
+      - $ref: '#/components/parameters/IncidentIdPathParameter'
       responses:
         '200':
           description: OK
@@ -269,11 +286,7 @@ paths:
       summary: Delete a incident
       operationId: deleteIncident
       parameters:
-        - name: incidentId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/Id'
+        - $ref: '#/components/parameters/IncidentIdPathParameter'
       responses:
         '200':
           $ref: "#/components/responses/SuccessResponse"
@@ -281,13 +294,68 @@ paths:
       summary: Fully or partially change a incident
       operationId: updateIncident
       parameters:
-        - name: incidentId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/Id'
+        - $ref: '#/components/parameters/IncidentIdPathParameter'
       requestBody:
         $ref: '#/components/requestBodies/IncidentRequest'
+      responses:
+        '200':
+          $ref: "#/components/responses/SuccessResponse"
+  /incidents/{incidentId}/updates:
+    get:
+      summary: Get updates of a specific incident
+      operationId: getIncidentUpdates
+      parameters:
+        - $ref: '#/components/parameters/IncidentIdPathParameter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IncidentUpdate'
+    post:
+      summary: Create a new update to a specific incident
+      operationId: createIncidentUpdate
+      parameters:
+        - $ref: '#/components/parameters/IncidentIdPathParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/IncidentUpdateRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/IdResponse'
+  /incidents/{incidentId}/updates/{updateId}:
+    get:
+      summary: Get a specific update from a specific incident
+      operationId: getIncidentUpdate
+      parameters:
+        - $ref: '#/components/parameters/IncidentIdPathParameter'
+        - $ref: '#/components/parameters/IncidentUpdateIdPathParameter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncidentUpdate'
+    delete:
+      summary: Delete a specific update from a specific incident
+      operationId: deleteIncidentUpdate
+      parameters:
+        - $ref: '#/components/parameters/IncidentIdPathParameter'
+        - $ref: '#/components/parameters/IncidentUpdateIdPathParameter'
+      responses:
+        '200':
+          $ref: "#/components/responses/SuccessResponse"
+    patch:
+      summary: Update a specific update from a specific incident
+      operationId: updateIncidentUpdate
+      parameters:
+        - $ref: '#/components/parameters/IncidentIdPathParameter'
+        - $ref: '#/components/parameters/IncidentUpdateIdPathParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/IncidentUpdateRequest'
       responses:
         '200':
           $ref: "#/components/responses/SuccessResponse"

@@ -21,7 +21,7 @@ import (
 
 // Component defines model for Component.
 type Component struct {
-	AffectedBy  *[]Id   `json:"affectedBy,omitempty"`
+	AffectedBy  *IdList `json:"affectedBy,omitempty"`
 	DisplayName *string `json:"displayName,omitempty"`
 	Id          *Id     `json:"id,omitempty"`
 	Labels      *Labels `json:"labels,omitempty"`
@@ -30,9 +30,12 @@ type Component struct {
 // Id defines model for Id.
 type Id = string
 
+// IdList defines model for IdList.
+type IdList = []Id
+
 // Incident defines model for Incident.
 type Incident struct {
-	Affects     *[]Id               `json:"affects,omitempty"`
+	Affects     *IdList             `json:"affects,omitempty"`
 	BeganAt     *time.Time          `json:"beganAt,omitempty"`
 	Description *string             `json:"description,omitempty"`
 	EndedAt     *time.Time          `json:"endedAt"`
@@ -40,7 +43,7 @@ type Incident struct {
 	ImpactType  *IncidentImpactType `json:"impactType,omitempty"`
 	Phase       *IncidentPhase      `json:"phase,omitempty"`
 	Title       *string             `json:"title,omitempty"`
-	Updates     *[]IncidentUpdate   `json:"updates,omitempty"`
+	Updates     *IdList             `json:"updates,omitempty"`
 }
 
 // IncidentImpactType defines model for IncidentImpactType.
@@ -52,11 +55,21 @@ type IncidentPhase = string
 // IncidentUpdate defines model for IncidentUpdate.
 type IncidentUpdate struct {
 	CreatedAt time.Time `json:"createdAt"`
+	Id        *Id       `json:"id,omitempty"`
 	Text      string    `json:"text"`
 }
 
 // Labels defines model for Labels.
 type Labels map[string]string
+
+// ComponentIdPathParameter defines model for ComponentIdPathParameter.
+type ComponentIdPathParameter = Id
+
+// IncidentIdPathParameter defines model for IncidentIdPathParameter.
+type IncidentIdPathParameter = Id
+
+// IncidentUpdateIdPathParameter defines model for IncidentUpdateIdPathParameter.
+type IncidentUpdateIdPathParameter = Id
 
 // IdResponse defines model for IdResponse.
 type IdResponse = Id
@@ -69,6 +82,9 @@ type ComponentRequest = Component
 
 // IncidentRequest defines model for IncidentRequest.
 type IncidentRequest = Incident
+
+// IncidentUpdateRequest defines model for IncidentUpdateRequest.
+type IncidentUpdateRequest = IncidentUpdate
 
 // GetIncidentsParams defines parameters for GetIncidents.
 type GetIncidentsParams struct {
@@ -97,6 +113,12 @@ type CreateIncidentJSONRequestBody = Incident
 // UpdateIncidentJSONRequestBody defines body for UpdateIncident for application/json ContentType.
 type UpdateIncidentJSONRequestBody = Incident
 
+// CreateIncidentUpdateJSONRequestBody defines body for CreateIncidentUpdate for application/json ContentType.
+type CreateIncidentUpdateJSONRequestBody = IncidentUpdate
+
+// UpdateIncidentUpdateJSONRequestBody defines body for UpdateIncidentUpdate for application/json ContentType.
+type UpdateIncidentUpdateJSONRequestBody = IncidentUpdate
+
 // PutPhasesJSONRequestBody defines body for PutPhases for application/json ContentType.
 type PutPhasesJSONRequestBody = PutPhasesJSONBody
 
@@ -110,13 +132,13 @@ type ServerInterface interface {
 	CreateComponent(ctx echo.Context) error
 	// Delete a component
 	// (DELETE /components/{componentId})
-	DeleteComponent(ctx echo.Context, componentId Id) error
+	DeleteComponent(ctx echo.Context, componentId ComponentIdPathParameter) error
 	// Get specific component by id
 	// (GET /components/{componentId})
-	GetComponent(ctx echo.Context, componentId Id) error
+	GetComponent(ctx echo.Context, componentId ComponentIdPathParameter) error
 	// Fully or partially change a component
 	// (PATCH /components/{componentId})
-	UpdateComponent(ctx echo.Context, componentId Id) error
+	UpdateComponent(ctx echo.Context, componentId ComponentIdPathParameter) error
 
 	// (GET /impacttypes)
 	GetImpacttypes(ctx echo.Context) error
@@ -134,13 +156,28 @@ type ServerInterface interface {
 	CreateIncident(ctx echo.Context) error
 	// Delete a incident
 	// (DELETE /incidents/{incidentId})
-	DeleteIncident(ctx echo.Context, incidentId Id) error
+	DeleteIncident(ctx echo.Context, incidentId IncidentIdPathParameter) error
 	// Get specific incident by id
 	// (GET /incidents/{incidentId})
-	GetIncident(ctx echo.Context, incidentId Id) error
+	GetIncident(ctx echo.Context, incidentId IncidentIdPathParameter) error
 	// Fully or partially change a incident
 	// (PATCH /incidents/{incidentId})
-	UpdateIncident(ctx echo.Context, incidentId Id) error
+	UpdateIncident(ctx echo.Context, incidentId IncidentIdPathParameter) error
+	// Get updates of a specific incident
+	// (GET /incidents/{incidentId}/updates)
+	GetIncidentUpdates(ctx echo.Context, incidentId IncidentIdPathParameter) error
+	// Create a new update to a specific incident
+	// (POST /incidents/{incidentId}/updates)
+	CreateIncidentUpdate(ctx echo.Context, incidentId IncidentIdPathParameter) error
+	// Delete a specific update from a specific incident
+	// (DELETE /incidents/{incidentId}/updates/{updateId})
+	DeleteIncidentUpdate(ctx echo.Context, incidentId IncidentIdPathParameter, updateId IncidentUpdateIdPathParameter) error
+	// Get a specific update from a specific incident
+	// (GET /incidents/{incidentId}/updates/{updateId})
+	GetIncidentUpdate(ctx echo.Context, incidentId IncidentIdPathParameter, updateId IncidentUpdateIdPathParameter) error
+	// Update a specific update from a specific incident
+	// (PATCH /incidents/{incidentId}/updates/{updateId})
+	UpdateIncidentUpdate(ctx echo.Context, incidentId IncidentIdPathParameter, updateId IncidentUpdateIdPathParameter) error
 
 	// (GET /phases)
 	GetPhases(ctx echo.Context) error
@@ -176,7 +213,7 @@ func (w *ServerInterfaceWrapper) CreateComponent(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) DeleteComponent(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "componentId" -------------
-	var componentId Id
+	var componentId ComponentIdPathParameter
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "componentId", runtime.ParamLocationPath, ctx.Param("componentId"), &componentId)
 	if err != nil {
@@ -192,7 +229,7 @@ func (w *ServerInterfaceWrapper) DeleteComponent(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) GetComponent(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "componentId" -------------
-	var componentId Id
+	var componentId ComponentIdPathParameter
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "componentId", runtime.ParamLocationPath, ctx.Param("componentId"), &componentId)
 	if err != nil {
@@ -208,7 +245,7 @@ func (w *ServerInterfaceWrapper) GetComponent(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) UpdateComponent(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "componentId" -------------
-	var componentId Id
+	var componentId ComponentIdPathParameter
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "componentId", runtime.ParamLocationPath, ctx.Param("componentId"), &componentId)
 	if err != nil {
@@ -292,7 +329,7 @@ func (w *ServerInterfaceWrapper) CreateIncident(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) DeleteIncident(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "incidentId" -------------
-	var incidentId Id
+	var incidentId IncidentIdPathParameter
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "incidentId", runtime.ParamLocationPath, ctx.Param("incidentId"), &incidentId)
 	if err != nil {
@@ -308,7 +345,7 @@ func (w *ServerInterfaceWrapper) DeleteIncident(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) GetIncident(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "incidentId" -------------
-	var incidentId Id
+	var incidentId IncidentIdPathParameter
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "incidentId", runtime.ParamLocationPath, ctx.Param("incidentId"), &incidentId)
 	if err != nil {
@@ -324,7 +361,7 @@ func (w *ServerInterfaceWrapper) GetIncident(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) UpdateIncident(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "incidentId" -------------
-	var incidentId Id
+	var incidentId IncidentIdPathParameter
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "incidentId", runtime.ParamLocationPath, ctx.Param("incidentId"), &incidentId)
 	if err != nil {
@@ -333,6 +370,110 @@ func (w *ServerInterfaceWrapper) UpdateIncident(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.UpdateIncident(ctx, incidentId)
+	return err
+}
+
+// GetIncidentUpdates converts echo context to params.
+func (w *ServerInterfaceWrapper) GetIncidentUpdates(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "incidentId" -------------
+	var incidentId IncidentIdPathParameter
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "incidentId", runtime.ParamLocationPath, ctx.Param("incidentId"), &incidentId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter incidentId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetIncidentUpdates(ctx, incidentId)
+	return err
+}
+
+// CreateIncidentUpdate converts echo context to params.
+func (w *ServerInterfaceWrapper) CreateIncidentUpdate(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "incidentId" -------------
+	var incidentId IncidentIdPathParameter
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "incidentId", runtime.ParamLocationPath, ctx.Param("incidentId"), &incidentId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter incidentId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.CreateIncidentUpdate(ctx, incidentId)
+	return err
+}
+
+// DeleteIncidentUpdate converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteIncidentUpdate(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "incidentId" -------------
+	var incidentId IncidentIdPathParameter
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "incidentId", runtime.ParamLocationPath, ctx.Param("incidentId"), &incidentId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter incidentId: %s", err))
+	}
+
+	// ------------- Path parameter "updateId" -------------
+	var updateId IncidentUpdateIdPathParameter
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "updateId", runtime.ParamLocationPath, ctx.Param("updateId"), &updateId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter updateId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteIncidentUpdate(ctx, incidentId, updateId)
+	return err
+}
+
+// GetIncidentUpdate converts echo context to params.
+func (w *ServerInterfaceWrapper) GetIncidentUpdate(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "incidentId" -------------
+	var incidentId IncidentIdPathParameter
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "incidentId", runtime.ParamLocationPath, ctx.Param("incidentId"), &incidentId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter incidentId: %s", err))
+	}
+
+	// ------------- Path parameter "updateId" -------------
+	var updateId IncidentUpdateIdPathParameter
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "updateId", runtime.ParamLocationPath, ctx.Param("updateId"), &updateId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter updateId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetIncidentUpdate(ctx, incidentId, updateId)
+	return err
+}
+
+// UpdateIncidentUpdate converts echo context to params.
+func (w *ServerInterfaceWrapper) UpdateIncidentUpdate(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "incidentId" -------------
+	var incidentId IncidentIdPathParameter
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "incidentId", runtime.ParamLocationPath, ctx.Param("incidentId"), &incidentId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter incidentId: %s", err))
+	}
+
+	// ------------- Path parameter "updateId" -------------
+	var updateId IncidentUpdateIdPathParameter
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "updateId", runtime.ParamLocationPath, ctx.Param("updateId"), &updateId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter updateId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.UpdateIncidentUpdate(ctx, incidentId, updateId)
 	return err
 }
 
@@ -395,6 +536,11 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.DELETE(baseURL+"/incidents/:incidentId", wrapper.DeleteIncident)
 	router.GET(baseURL+"/incidents/:incidentId", wrapper.GetIncident)
 	router.PATCH(baseURL+"/incidents/:incidentId", wrapper.UpdateIncident)
+	router.GET(baseURL+"/incidents/:incidentId/updates", wrapper.GetIncidentUpdates)
+	router.POST(baseURL+"/incidents/:incidentId/updates", wrapper.CreateIncidentUpdate)
+	router.DELETE(baseURL+"/incidents/:incidentId/updates/:updateId", wrapper.DeleteIncidentUpdate)
+	router.GET(baseURL+"/incidents/:incidentId/updates/:updateId", wrapper.GetIncidentUpdate)
+	router.PATCH(baseURL+"/incidents/:incidentId/updates/:updateId", wrapper.UpdateIncidentUpdate)
 	router.GET(baseURL+"/phases", wrapper.GetPhases)
 	router.PUT(baseURL+"/phases", wrapper.PutPhases)
 
@@ -403,24 +549,27 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/8xYTW/jNhD9KwTbQwtoIznppbplvd2F0UVrxNtLFznQ4sjmQiIZkmprGPrvBUnb+rSs",
-	"OHY2QA6WNJp582b4ZqItTkQuBQduNI63WMFTAdq8F5SBuzHdP37wT+y9RHAD3P0kUmYsIYYJHn7Tgtt7",
-	"OllDTuyvHxWkOMY/hFWQ0D/V4cExLssywBR0opi0jnCMF8ApIiipbAI84wmjVwCy93scB0essgmwAi0F",
-	"156fGX3YXV4OEO2Dco92tUEKTKG4trhmHywziyJJQOuzgJiNBBzjpRAZED4ceE000j5WWmTZBqmCO0Z2",
-	"yBv9Yi+kEhKU2bUSSVNIDND3G3vFDOR6DBXBHiNRimzsNWVaZmTzB8mhloI2ivGVfc7oOL8ZWUJ2EsNn",
-	"b1VWQMTyGyS+J2kvgENLHeFAv5CAJawIv3fuU6FyYnCMKTHwzrAccNAF1KhoD2DgFOiAQ15kGVlmgGOj",
-	"CgjOp5zlkiTmi3t93LGcVW+UAZZroke/OnfGlj9msv5WKaRN8xn12Ln+y73XrU1vk3QzGWqa+T7Foxa7",
-	"4J3mShQQM1jHjksD/5meWE7lngqmgOL4q7cKav4fe9L8fDhNhFJmW41k8wa+bvSmDxuW8VQ4W18yvJgu",
-	"0MIQU2g0JytA9/MZDvA/oLRXp8lNZD0JCZxIhmN8dxPd3OIAS2LWLmrYnHArcAlbXE4T7RHGn8BMK6uW",
-	"xN9G0bMkdVQjTeujrdVDHQn+83d/VwrdA37qylI5DGpTfHMMR2PQh50pX3Y4mBz3tLMLa7PQTYUiz4na",
-	"HBAigjj8Wx/qZVCvTrg9/J7R0oajkIFv9GbGH9z9esaSKJKDAaVx/HWLmWXNdoDVLjcmcM03rne3F7Rn",
-	"TObH/vYYpqY9opv8+HzaC8/JTn0TeV9/GXTdX6frExikJSQsZUlFGVpuEHNDRhKTrLvUedn8nuxd/lS+",
-	"uPU+ukVOKCSJMozYi2RN+KrVjfak+tlttWpQSGc1s9dQ0v5F4RKSWvPYqd5F//WoQy/LK2qvLyEyPlKz",
-	"puG2Ws5GqG+DnNMHibW5POMc9bF1RTXmPXTtIAwfgINRh5jWf5eGKINEiux2hlJriYxATwWoDUqFQj89",
-	"fJze3d39+jMOPKfuUUWqtg4G+aSQkiKza+BtdHv7Lpq8iyZfJlHs/m6iSfQ3DkatimXQRv8bpy/BDpyO",
-	"R/7LS5A/vqYKjdae9kDLmHa9ULXYKXXaRzxjsrS/pVxTcuqfTqoDFG73P0fterVkR2jNwfPb3fRYrV9O",
-	"CclbSPrqn9qGt7x9diOXvO/H3MUP4lU3vObhdB9XBkfb3Fu8pqBWH3HGbnRFD/Z5Ucd+3iZ3GdhXqHBD",
-	"b/dzxBfzxoX8PwAA///E7Ukd5hcAAA==",
+	"H4sIAAAAAAAC/8xZTW/jNhD9KwTbQwtoIzvppb5lvd2F0aBrJLuXLnKgxVHMhURqSaqtYei/FyQl69M2",
+	"/aEgQA6xNOI8vpl5M6K2OBJpJjhwrfBsizMiSQoapP01r+4t6JLo9bK6ae4xjmc4I3qNA8xJCnhWL7Wg",
+	"OMASfuRMAsUzLXMIsIrWkBLz6M8SYjzDP4W179DdVeGC4qII8IJHjHo7Zjvra/n9mlGiwc97Xtpe5rtw",
+	"T4PS7wVl0Ob/0d0x1yLBNXD7L8myhEVEM8HD70pwc83P425h55iCiiTLzEJ4hp+AU0RQVNvUvFwbSLXu",
+	"fhwcsZ1NNz5joXGr+2BCeWVqwqcywZUL3YI+lj+vh44OIbpHZdogCTqXXBl4iw+GrKc8ikCps4DoTWZy",
+	"eyVEAoQfdrwmCinnK86TZINkzi0jJfJWKluVkSIDqcssJ3EMkQb6fnOcgQembB5QprKEbP6yFbhDq7Rk",
+	"/MXcZ9SHzQAnZAWJOmb74KyqGnUV/s04eQ4q32L1HSKXo9a3BEI/82RTSUEPYrkZoykaUuWHt1yFSEk2",
+	"zXrYx6ryp3QFL4Tf25ViIVOi8Qyb3H6nWQp4YAOtdBiIAXAK9MCCPE8SskpgL0O+QWRpRiL9xT7uV+CL",
+	"+okiwNmaKO9Hl9bYhILpZDj5nCZ4U++ZVX3oQ77bMA9ZlCLXS5xIAtEHA3d2oDT8pwcw9QkoTYMGmCFO",
+	"HnbVSyhlJhFJsmxtpge1s4bxzXgsrK0LKH6aP6EnTXSu0JK8ALpfLnCA/wGpnPBNbyZmJZEBJxnDM3x3",
+	"M7m5xYEdC6zXsD1UvYDdtcFl5dYIBP4Eel5bdbrH7WRyklp7Kci82dDbQtJX989/uquZUAPg5zYs9YLN",
+	"2WWvirfGm7A32xQ9Dqb7VyrtwkabtQ0nT1MiNzuEiCAO/zZHmSJoRifcNmbWwrijkICrivaOP9jrzR03",
+	"R+Vvwzhrk3DvKF08D8f+8L67rb29eQe2O8MdTcPxNzX+8GrztsnFJ9BIZRCxmEU1H2i1QcxqUkZ0tO7z",
+	"4tRxNGquXywXJ81HO7oJiTIiNSPmR7Qm/KWTR6aAXMM1EnJQ3xYNs9cQuOHufg2la6zYi95V3zya0Iti",
+	"REl0IUTaeWrHNNzWE5WHKLbI6VTJ0Mt6l8szXpiH2BpRR/kAXSWEwwWwM+oR03mt1ERqJGJkJiwUG0uk",
+	"BfqRg9ygWEj0y+PH+d3d3e+/4sBxam/VpCqzwEE+KcQkT8wodzu5vX03mb6bTL9MJzP7dzOZTv7Ggde4",
+	"VwRd9H9wegl24NQf+W+XIH9+TRXy1p5ut0qYsrlQp9gxdao8ntFZugc7Y0pOfdbTLKBwWx/f+ahNvdnT",
+	"OvK+I8VRB7Dm2dUxlRh9R6Of2B0evnZnZn6z10i0XL0+Rh28fGombJw3HMuxr6Xpm0m1kyS1Opc9U1hL",
+	"noy2kn5a+qpsCeJNZGX7GHxE7XbUmb4+yNzx5Ay31WeSEzT+2lQH3o8Of/8ZtVXsaC25jqVI9+WpX5m/",
+	"feJe6avNoBqcxrhXq3qbtI+kLRdnvnNwUhyMztjT+oPNbuksXrMz1V8FfE8b8gHsy7yJ/bxThuvAHiHc",
+	"rX5SveO4YN5Yl/8HAAD//7iWRZCMIAAA",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
