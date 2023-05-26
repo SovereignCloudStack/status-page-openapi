@@ -21,58 +21,147 @@ import (
 
 // Component defines model for Component.
 type Component struct {
-	AffectedBy  *IdList `json:"affectedBy,omitempty"`
-	DisplayName *string `json:"displayName,omitempty"`
-	Id          *Id     `json:"id,omitempty"`
-	Labels      *Labels `json:"labels,omitempty"`
+	// AffectedBy A list of impacts for a component or incident.
+	// In case of an incident the IDs refer to a component and vice versa.
+	AffectedBy *ImpactList `json:"affectedBy,omitempty"`
+
+	// DisplayName Short and describing name.
+	DisplayName *DisplayName `json:"displayName,omitempty"`
+
+	// Id Identfication for objects. UUID prefered.
+	Id *Id `json:"id,omitempty"`
+
+	// Labels Labels are free text key value pairs for components.
+	Labels *Labels `json:"labels,omitempty"`
 }
 
-// Id defines model for Id.
+// Date Point in time. Nullable for open ends.
+type Date = time.Time
+
+// Description A longer text for detailed informations.
+type Description = string
+
+// DisplayName Short and describing name.
+type DisplayName = string
+
+// Id Identfication for objects. UUID prefered.
 type Id = string
 
-// IdList defines model for IdList.
-type IdList = []Id
+// Impact An impact connects a component and an incident with an impact type.
+type Impact struct {
+	// Reference Identfication for objects. UUID prefered.
+	Reference *Id         `json:"reference,omitempty"`
+	Type      *ImpactType `json:"type,omitempty"`
+}
+
+// ImpactList A list of impacts for a component or incident.
+// In case of an incident the IDs refer to a component and vice versa.
+type ImpactList = []Impact
+
+// ImpactType defines model for ImpactType.
+type ImpactType struct {
+	// Description A longer text for detailed informations.
+	Description *Description `json:"description,omitempty"`
+
+	// DisplayName Short and describing name.
+	DisplayName *DisplayName `json:"displayName,omitempty"`
+
+	// Id Identfication for objects. UUID prefered.
+	Id *Id `json:"id,omitempty"`
+}
 
 // Incident defines model for Incident.
 type Incident struct {
-	Affects     *IdList             `json:"affects,omitempty"`
-	BeganAt     *time.Time          `json:"beganAt,omitempty"`
-	Description *string             `json:"description,omitempty"`
-	EndedAt     *time.Time          `json:"endedAt"`
-	Id          *Id                 `json:"id,omitempty"`
-	ImpactType  *IncidentImpactType `json:"impactType,omitempty"`
-	Phase       *IncidentPhase      `json:"phase,omitempty"`
-	Title       *string             `json:"title,omitempty"`
-	Updates     *IdList             `json:"updates,omitempty"`
+	// Affects A list of impacts for a component or incident.
+	// In case of an incident the IDs refer to a component and vice versa.
+	Affects *ImpactList `json:"affects,omitempty"`
+
+	// BeganAt Point in time. Nullable for open ends.
+	BeganAt *Date `json:"beganAt"`
+
+	// Description A longer text for detailed informations.
+	Description *Description `json:"description,omitempty"`
+
+	// DisplayName Short and describing name.
+	DisplayName *DisplayName `json:"displayName,omitempty"`
+
+	// EndedAt Point in time. Nullable for open ends.
+	EndedAt *Date `json:"endedAt"`
+
+	// Id Identfication for objects. UUID prefered.
+	Id *Id `json:"id,omitempty"`
+
+	// Phase To reference a phase, its generation and order is needed.
+	Phase *PhaseReference `json:"phase,omitempty"`
+
+	// Updates Positive and incrementing number for ordering and identfication of e.g. sub resources.
+	Updates *Incremental `json:"updates,omitempty"`
 }
 
-// IncidentImpactType defines model for IncidentImpactType.
-type IncidentImpactType = string
-
-// IncidentPhase defines model for IncidentPhase.
-type IncidentPhase = string
-
-// IncidentUpdate defines model for IncidentUpdate.
+// IncidentUpdate An update is a sub resource to an incident.
+// It's identified by the incident ID and its own order.
+// Updates happen in a given order.
 type IncidentUpdate struct {
-	CreatedAt time.Time `json:"createdAt"`
-	Id        *Id       `json:"id,omitempty"`
-	Text      string    `json:"text"`
+	// CreatedAt Point in time. Nullable for open ends.
+	CreatedAt *Date `json:"createdAt"`
+
+	// Description A longer text for detailed informations.
+	Description *Description `json:"description,omitempty"`
+
+	// DisplayName Short and describing name.
+	DisplayName *DisplayName `json:"displayName,omitempty"`
+
+	// Order Positive and incrementing number for ordering and identfication of e.g. sub resources.
+	Order *Incremental `json:"order,omitempty"`
 }
 
-// Labels defines model for Labels.
+// Incremental Positive and incrementing number for ordering and identfication of e.g. sub resources.
+type Incremental = int
+
+// Labels Labels are free text key value pairs for components.
 type Labels map[string]string
 
-// ComponentIdPathParameter defines model for ComponentIdPathParameter.
+// Phase A single phase is just its name.
+// It can be referenced by its generation and order.
+// See: #/components/schemas/DisplayName
+type Phase = string
+
+// PhaseList Phase resources are always handled as a list.
+type PhaseList struct {
+	// Generation Positive and incrementing number for ordering and identfication of e.g. sub resources.
+	Generation *Incremental `json:"generation,omitempty"`
+	Phases     []Phase      `json:"phases"`
+}
+
+// PhaseReference To reference a phase, its generation and order is needed.
+type PhaseReference struct {
+	// DisplayName Short and describing name.
+	DisplayName *DisplayName `json:"displayName,omitempty"`
+
+	// Generation Positive and incrementing number for ordering and identfication of e.g. sub resources.
+	Generation *Incremental `json:"generation,omitempty"`
+
+	// Order Positive and incrementing number for ordering and identfication of e.g. sub resources.
+	Order *Incremental `json:"order,omitempty"`
+}
+
+// ComponentIdPathParameter Identfication for objects. UUID prefered.
 type ComponentIdPathParameter = Id
 
-// IncidentIdPathParameter defines model for IncidentIdPathParameter.
+// ImpactTypeIdPathParameter Identfication for objects. UUID prefered.
+type ImpactTypeIdPathParameter = Id
+
+// IncidentIdPathParameter Identfication for objects. UUID prefered.
 type IncidentIdPathParameter = Id
 
-// IncidentUpdateIdPathParameter defines model for IncidentUpdateIdPathParameter.
-type IncidentUpdateIdPathParameter = Id
+// IncidentUpdateIdPathParameter Positive and incrementing number for ordering and identfication of e.g. sub resources.
+type IncidentUpdateIdPathParameter = Incremental
 
-// IdResponse defines model for IdResponse.
+// IdResponse Identfication for objects. UUID prefered.
 type IdResponse = Id
+
+// IncrementalResponse Positive and incrementing number for ordering and identfication of e.g. sub resources.
+type IncrementalResponse = Incremental
 
 // SuccessResponse defines model for SuccessResponse.
 type SuccessResponse = bool
@@ -80,23 +169,30 @@ type SuccessResponse = bool
 // ComponentRequest defines model for ComponentRequest.
 type ComponentRequest = Component
 
+// ImpactTypeRequest defines model for ImpactTypeRequest.
+type ImpactTypeRequest = ImpactType
+
 // IncidentRequest defines model for IncidentRequest.
 type IncidentRequest = Incident
 
-// IncidentUpdateRequest defines model for IncidentUpdateRequest.
+// IncidentUpdateRequest An update is a sub resource to an incident.
+// It's identified by the incident ID and its own order.
+// Updates happen in a given order.
 type IncidentUpdateRequest = IncidentUpdate
 
 // GetIncidentsParams defines parameters for GetIncidents.
 type GetIncidentsParams struct {
-	// Start Start of time frame to query for (RFC3339)
+	// Start Start of time frame to query for (RFC3339).
 	Start time.Time `form:"start" json:"start"`
 
-	// End End of time frame to query for (RFC3339)
+	// End End of time frame to query for (RFC3339).
 	End time.Time `form:"end" json:"end"`
 }
 
-// PutPhasesJSONBody defines parameters for PutPhases.
-type PutPhasesJSONBody = []IncidentPhase
+// GetPhaseListParams defines parameters for GetPhaseList.
+type GetPhaseListParams struct {
+	Generation *Incremental `form:"generation,omitempty" json:"generation,omitempty"`
+}
 
 // CreateComponentJSONRequestBody defines body for CreateComponent for application/json ContentType.
 type CreateComponentJSONRequestBody = Component
@@ -105,7 +201,10 @@ type CreateComponentJSONRequestBody = Component
 type UpdateComponentJSONRequestBody = Component
 
 // CreateImpactTypeJSONRequestBody defines body for CreateImpactType for application/json ContentType.
-type CreateImpactTypeJSONRequestBody = IncidentImpactType
+type CreateImpactTypeJSONRequestBody = ImpactType
+
+// UpdateImpactTypeJSONRequestBody defines body for UpdateImpactType for application/json ContentType.
+type UpdateImpactTypeJSONRequestBody = ImpactType
 
 // CreateIncidentJSONRequestBody defines body for CreateIncident for application/json ContentType.
 type CreateIncidentJSONRequestBody = Incident
@@ -119,71 +218,77 @@ type CreateIncidentUpdateJSONRequestBody = IncidentUpdate
 // UpdateIncidentUpdateJSONRequestBody defines body for UpdateIncidentUpdate for application/json ContentType.
 type UpdateIncidentUpdateJSONRequestBody = IncidentUpdate
 
-// PutPhasesJSONRequestBody defines body for PutPhases for application/json ContentType.
-type PutPhasesJSONRequestBody = PutPhasesJSONBody
+// CreatePhaseListJSONRequestBody defines body for CreatePhaseList for application/json ContentType.
+type CreatePhaseListJSONRequestBody = PhaseList
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
-
+	// Get a list of components.
 	// (GET /components)
 	GetComponents(ctx echo.Context) error
-	// Create a new component
+	// Create a new component.
 	// (POST /components)
 	CreateComponent(ctx echo.Context) error
-	// Delete a component
+	// Delete a component.
 	// (DELETE /components/{componentId})
 	DeleteComponent(ctx echo.Context, componentId ComponentIdPathParameter) error
-	// Get specific component by id
+	// Get a specific component by id.
 	// (GET /components/{componentId})
 	GetComponent(ctx echo.Context, componentId ComponentIdPathParameter) error
-	// Fully or partially change a component
+	// Update a component.
 	// (PATCH /components/{componentId})
 	UpdateComponent(ctx echo.Context, componentId ComponentIdPathParameter) error
-
+	// Get a list of impact types.
 	// (GET /impacttypes)
-	GetImpacttypes(ctx echo.Context) error
-	// Create a new impact type
+	GetImpactTypes(ctx echo.Context) error
+	// Create a new impact type.
 	// (POST /impacttypes)
 	CreateImpactType(ctx echo.Context) error
-	// Delete an impact type
-	// (DELETE /impacttypes/{impactType})
-	DeleteImpactType(ctx echo.Context, impactType IncidentImpactType) error
-	// Get list of incidents
+	// Delete an impact type.
+	// (DELETE /impacttypes/{impactTypeId})
+	DeleteImpactType(ctx echo.Context, impactTypeId ImpactTypeIdPathParameter) error
+	// Get a specific impact type by id.
+	// (GET /impacttypes/{impactTypeId})
+	GetImpactType(ctx echo.Context, impactTypeId ImpactTypeIdPathParameter) error
+	// Update a specific impact type.
+	// (PATCH /impacttypes/{impactTypeId})
+	UpdateImpactType(ctx echo.Context, impactTypeId ImpactTypeIdPathParameter) error
+	// Get a list of incidents between two points in time.
 	// (GET /incidents)
 	GetIncidents(ctx echo.Context, params GetIncidentsParams) error
-	// Create a new incident
+	// Create a new incident.
 	// (POST /incidents)
 	CreateIncident(ctx echo.Context) error
-	// Delete a incident
+	// Delete an incident.
 	// (DELETE /incidents/{incidentId})
 	DeleteIncident(ctx echo.Context, incidentId IncidentIdPathParameter) error
-	// Get specific incident by id
+	// Get a specific incident by id.
 	// (GET /incidents/{incidentId})
 	GetIncident(ctx echo.Context, incidentId IncidentIdPathParameter) error
-	// Fully or partially change a incident
+	// Update an incident.
 	// (PATCH /incidents/{incidentId})
 	UpdateIncident(ctx echo.Context, incidentId IncidentIdPathParameter) error
-	// Get updates of a specific incident
+	// Get a list of updates from a specific incident.
 	// (GET /incidents/{incidentId}/updates)
 	GetIncidentUpdates(ctx echo.Context, incidentId IncidentIdPathParameter) error
-	// Create a new update to a specific incident
+	// Create a new update to a specific incident.
 	// (POST /incidents/{incidentId}/updates)
 	CreateIncidentUpdate(ctx echo.Context, incidentId IncidentIdPathParameter) error
 	// Delete a specific update from a specific incident
 	// (DELETE /incidents/{incidentId}/updates/{updateId})
 	DeleteIncidentUpdate(ctx echo.Context, incidentId IncidentIdPathParameter, updateId IncidentUpdateIdPathParameter) error
-	// Get a specific update from a specific incident
+	// Get a specific update from a specific incident.
 	// (GET /incidents/{incidentId}/updates/{updateId})
 	GetIncidentUpdate(ctx echo.Context, incidentId IncidentIdPathParameter, updateId IncidentUpdateIdPathParameter) error
-	// Update a specific update from a specific incident
+	// Update a specific update from a specific incident.
 	// (PATCH /incidents/{incidentId}/updates/{updateId})
 	UpdateIncidentUpdate(ctx echo.Context, incidentId IncidentIdPathParameter, updateId IncidentUpdateIdPathParameter) error
-
+	// Get the current generation list of phases.
 	// (GET /phases)
-	GetPhases(ctx echo.Context) error
-	// Create a new list of phases.
-	// (PUT /phases)
-	PutPhases(ctx echo.Context) error
+	GetPhaseList(ctx echo.Context, params GetPhaseListParams) error
+	// Create a new generation of the phase list.
+	// (POST /phases)
+	CreatePhaseList(ctx echo.Context) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
@@ -257,12 +362,12 @@ func (w *ServerInterfaceWrapper) UpdateComponent(ctx echo.Context) error {
 	return err
 }
 
-// GetImpacttypes converts echo context to params.
-func (w *ServerInterfaceWrapper) GetImpacttypes(ctx echo.Context) error {
+// GetImpactTypes converts echo context to params.
+func (w *ServerInterfaceWrapper) GetImpactTypes(ctx echo.Context) error {
 	var err error
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetImpacttypes(ctx)
+	err = w.Handler.GetImpactTypes(ctx)
 	return err
 }
 
@@ -278,16 +383,48 @@ func (w *ServerInterfaceWrapper) CreateImpactType(ctx echo.Context) error {
 // DeleteImpactType converts echo context to params.
 func (w *ServerInterfaceWrapper) DeleteImpactType(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "impactType" -------------
-	var impactType IncidentImpactType
+	// ------------- Path parameter "impactTypeId" -------------
+	var impactTypeId ImpactTypeIdPathParameter
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "impactType", runtime.ParamLocationPath, ctx.Param("impactType"), &impactType)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "impactTypeId", runtime.ParamLocationPath, ctx.Param("impactTypeId"), &impactTypeId)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter impactType: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter impactTypeId: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.DeleteImpactType(ctx, impactType)
+	err = w.Handler.DeleteImpactType(ctx, impactTypeId)
+	return err
+}
+
+// GetImpactType converts echo context to params.
+func (w *ServerInterfaceWrapper) GetImpactType(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "impactTypeId" -------------
+	var impactTypeId ImpactTypeIdPathParameter
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "impactTypeId", runtime.ParamLocationPath, ctx.Param("impactTypeId"), &impactTypeId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter impactTypeId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetImpactType(ctx, impactTypeId)
+	return err
+}
+
+// UpdateImpactType converts echo context to params.
+func (w *ServerInterfaceWrapper) UpdateImpactType(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "impactTypeId" -------------
+	var impactTypeId ImpactTypeIdPathParameter
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "impactTypeId", runtime.ParamLocationPath, ctx.Param("impactTypeId"), &impactTypeId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter impactTypeId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.UpdateImpactType(ctx, impactTypeId)
 	return err
 }
 
@@ -477,21 +614,30 @@ func (w *ServerInterfaceWrapper) UpdateIncidentUpdate(ctx echo.Context) error {
 	return err
 }
 
-// GetPhases converts echo context to params.
-func (w *ServerInterfaceWrapper) GetPhases(ctx echo.Context) error {
+// GetPhaseList converts echo context to params.
+func (w *ServerInterfaceWrapper) GetPhaseList(ctx echo.Context) error {
 	var err error
 
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetPhaseListParams
+	// ------------- Optional query parameter "generation" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "generation", ctx.QueryParams(), &params.Generation)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter generation: %s", err))
+	}
+
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetPhases(ctx)
+	err = w.Handler.GetPhaseList(ctx, params)
 	return err
 }
 
-// PutPhases converts echo context to params.
-func (w *ServerInterfaceWrapper) PutPhases(ctx echo.Context) error {
+// CreatePhaseList converts echo context to params.
+func (w *ServerInterfaceWrapper) CreatePhaseList(ctx echo.Context) error {
 	var err error
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.PutPhases(ctx)
+	err = w.Handler.CreatePhaseList(ctx)
 	return err
 }
 
@@ -528,9 +674,11 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.DELETE(baseURL+"/components/:componentId", wrapper.DeleteComponent)
 	router.GET(baseURL+"/components/:componentId", wrapper.GetComponent)
 	router.PATCH(baseURL+"/components/:componentId", wrapper.UpdateComponent)
-	router.GET(baseURL+"/impacttypes", wrapper.GetImpacttypes)
+	router.GET(baseURL+"/impacttypes", wrapper.GetImpactTypes)
 	router.POST(baseURL+"/impacttypes", wrapper.CreateImpactType)
-	router.DELETE(baseURL+"/impacttypes/:impactType", wrapper.DeleteImpactType)
+	router.DELETE(baseURL+"/impacttypes/:impactTypeId", wrapper.DeleteImpactType)
+	router.GET(baseURL+"/impacttypes/:impactTypeId", wrapper.GetImpactType)
+	router.PATCH(baseURL+"/impacttypes/:impactTypeId", wrapper.UpdateImpactType)
 	router.GET(baseURL+"/incidents", wrapper.GetIncidents)
 	router.POST(baseURL+"/incidents", wrapper.CreateIncident)
 	router.DELETE(baseURL+"/incidents/:incidentId", wrapper.DeleteIncident)
@@ -541,35 +689,46 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.DELETE(baseURL+"/incidents/:incidentId/updates/:updateId", wrapper.DeleteIncidentUpdate)
 	router.GET(baseURL+"/incidents/:incidentId/updates/:updateId", wrapper.GetIncidentUpdate)
 	router.PATCH(baseURL+"/incidents/:incidentId/updates/:updateId", wrapper.UpdateIncidentUpdate)
-	router.GET(baseURL+"/phases", wrapper.GetPhases)
-	router.PUT(baseURL+"/phases", wrapper.PutPhases)
+	router.GET(baseURL+"/phases", wrapper.GetPhaseList)
+	router.POST(baseURL+"/phases", wrapper.CreatePhaseList)
 
 }
 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/8xZTW/jNhD9KwTbQwtoIzvppb5lvd2F0aBrJLuXLnKgxVHMhURqSaqtYei/FyQl69M2",
-	"/aEgQA6xNOI8vpl5M6K2OBJpJjhwrfBsizMiSQoapP01r+4t6JLo9bK6ae4xjmc4I3qNA8xJCnhWL7Wg",
-	"OMASfuRMAsUzLXMIsIrWkBLz6M8SYjzDP4W179DdVeGC4qII8IJHjHo7Zjvra/n9mlGiwc97Xtpe5rtw",
-	"T4PS7wVl0Ob/0d0x1yLBNXD7L8myhEVEM8HD70pwc83P425h55iCiiTLzEJ4hp+AU0RQVNvUvFwbSLXu",
-	"fhwcsZ1NNz5joXGr+2BCeWVqwqcywZUL3YI+lj+vh44OIbpHZdogCTqXXBl4iw+GrKc8ikCps4DoTWZy",
-	"eyVEAoQfdrwmCinnK86TZINkzi0jJfJWKluVkSIDqcssJ3EMkQb6fnOcgQembB5QprKEbP6yFbhDq7Rk",
-	"/MXcZ9SHzQAnZAWJOmb74KyqGnUV/s04eQ4q32L1HSKXo9a3BEI/82RTSUEPYrkZoykaUuWHt1yFSEk2",
-	"zXrYx6ryp3QFL4Tf25ViIVOi8Qyb3H6nWQp4YAOtdBiIAXAK9MCCPE8SskpgL0O+QWRpRiL9xT7uV+CL",
-	"+okiwNmaKO9Hl9bYhILpZDj5nCZ4U++ZVX3oQ77bMA9ZlCLXS5xIAtEHA3d2oDT8pwcw9QkoTYMGmCFO",
-	"HnbVSyhlJhFJsmxtpge1s4bxzXgsrK0LKH6aP6EnTXSu0JK8ALpfLnCA/wGpnPBNbyZmJZEBJxnDM3x3",
-	"M7m5xYEdC6zXsD1UvYDdtcFl5dYIBP4Eel5bdbrH7WRyklp7Kci82dDbQtJX989/uquZUAPg5zYs9YLN",
-	"2WWvirfGm7A32xQ9Dqb7VyrtwkabtQ0nT1MiNzuEiCAO/zZHmSJoRifcNmbWwrijkICrivaOP9jrzR03",
-	"R+Vvwzhrk3DvKF08D8f+8L67rb29eQe2O8MdTcPxNzX+8GrztsnFJ9BIZRCxmEU1H2i1QcxqUkZ0tO7z",
-	"4tRxNGquXywXJ81HO7oJiTIiNSPmR7Qm/KWTR6aAXMM1EnJQ3xYNs9cQuOHufg2la6zYi95V3zya0Iti",
-	"REl0IUTaeWrHNNzWE5WHKLbI6VTJ0Mt6l8szXpiH2BpRR/kAXSWEwwWwM+oR03mt1ERqJGJkJiwUG0uk",
-	"BfqRg9ygWEj0y+PH+d3d3e+/4sBxam/VpCqzwEE+KcQkT8wodzu5vX03mb6bTL9MJzP7dzOZTv7Ggde4",
-	"VwRd9H9wegl24NQf+W+XIH9+TRXy1p5ut0qYsrlQp9gxdao8ntFZugc7Y0pOfdbTLKBwWx/f+ahNvdnT",
-	"OvK+I8VRB7Dm2dUxlRh9R6Of2B0evnZnZn6z10i0XL0+Rh28fGombJw3HMuxr6Xpm0m1kyS1Opc9U1hL",
-	"noy2kn5a+qpsCeJNZGX7GHxE7XbUmb4+yNzx5Ay31WeSEzT+2lQH3o8Of/8ZtVXsaC25jqVI9+WpX5m/",
-	"feJe6avNoBqcxrhXq3qbtI+kLRdnvnNwUhyMztjT+oPNbuksXrMz1V8FfE8b8gHsy7yJ/bxThuvAHiHc",
-	"rX5SveO4YN5Yl/8HAAD//7iWRZCMIAAA",
+	"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",
+	"/2mROTrvLQAA",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
