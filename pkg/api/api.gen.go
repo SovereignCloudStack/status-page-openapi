@@ -123,7 +123,7 @@ type Labels map[string]string
 
 // Phase A single phase is just its name.
 // It can be referenced by its generation and order.
-// See: #/components/schemas/DisplayName
+// See: #/components/schemas/PhaseReference
 type Phase = string
 
 // PhaseList Phase resources are always handled as a list.
@@ -714,21 +714,21 @@ var swaggerSpec = []string{
 	"mr9oIjIiBE5We1uFwju2YOEJo0n8KkmsOKjJF+nW1mTLElQSIQkjG/EC5YgGZYUKmDknQN8jhyz6a2Lm",
 	"Jgg8aztCWMzQottaGPECzvH5SKtu6W4FygkVroO/2UEYqkLH4jWByWZSCbx2EenQMCENbEAhso/F9oRx",
 	"LnA+Fi0rcWzoXhW9m4AwBWStAJzs/wf25IVFKZCECeXUoXSsJ9ili5Z52dWVRgu5iYDYssQM/5ZqY/PT",
-	"aj9mNAmZJCsghUjatMYhG5CgnJfQb3muPgPMSV96WAc2jLcw20XRPiojYF3Cole2x7KRHDdADAsUpbOp",
-	"8CXUs9Ix4ys7xSB1dH5uiGMtrT00xQpfu6L25G9Oqj75FJdRIcwFMegMDYZXAnC3Aavp88U1frFnb0YO",
-	"HoKmE/El3BjbWhMG9930+eGZPBtmUk2WbAPkw3JBA4obIefWu8nMAkxAskTQOX0/mU3u0WfMbK27ptVO",
-	"4QZswqJDLQ7cHtN/gnkoR9WOx/ez2VmnvUHJ5zVaGgnYYJbf/uUOgOlux9Te4c3KBznP5xMsg1i3mPhg",
-	"ablc1u8qdR4VK42naaPrdGx46q57pmzc1Os2VI1yCAkjEl4rTaZj4AdxevC6r0dXaBG47UDV5Ef7u2+y",
-	"3yb+vR1oOWTa2UY+fm1PkdOG1zsIVesd2EZ7rTddv7dVneF0OaoTCPGg6R1nUJG4y1Rmwm3TPLfFGs3C",
-	"22f91cF3FteCj2nvDpXIDyfJqzzOvQ17+Sfmq+nLO+73E5i38gWxbDarR6Swame6Fs3pwb+UGUBjFcPP",
-	"q4fuK6YxiazZmu/P3jcw7Q2uJjryvaBCzy9DyXBEF41QQrfjwzaf5cWUHdRPE2MxqOG2Wk/VMGXZyIgd",
-	"nt/YzrYM/khB7e2h7aenfzy8f//+bz8Xt372WXntp3GGk3d+HNYsjQyd0/vZ/f272d272d2nu9nc/pvM",
-	"7mb/7mpE1w5fx6AO/+94cLgCPEg+HPpfr4H+9U30qbisu16d8gwiKzCvAJKY15gkscCf8iuGXtXK8VxS",
-	"cLULzTEVq7y/rFTY9FBeyw+RqtLaM6mq49uCkWXKv7XtI5LRbRr9srpXnfIG6FBpGsczN6+Sm4mSHFYn",
-	"U68P3pdVWVP5x0mus1g2/wbhaq7NPEbWKt61peRgns0Q/RAZWf3+Y0T2zq4+7OVhm+v6U3V6yL9dOoPl",
-	"b+3rYPCr7V92jdqcKfyaObsrU4dIyf+L497oe6U+Xerx+HCh+jH9PhK7jHAU6w8EMk15GdNVB+UFUiMU",
-	"bUeUykXMJd99jZnepS1DM9tsgYSpUrjT8m6Acil07usVPN+HtRy6vV2XaVfLd30nRMxzBZ5nt/l1p7sq",
-	"RBD/CwAA///OXjTp+y0AAA==",
+	"aj9mNAmZJCsghUjatMYhG5CgnJfQb3muPgPMyYC6tj5s2G/HtOuifVQGwXqFRa9sj5UjOe6BGNYoqmdT",
+	"5Eu0Z2VkRll2ikEC6Vzd0MdaZntoihW+dgXuyd+fVH3yKS4DQ5iLY9AZHYywBOBuD1aT6IvL/GLP3owf",
+	"PARNJ+JLuDe25SYMbr3p88MzeTbMpJos2QbIh+WCBhT3Qs6td5OZBZiAZImgc/p+Mpvco8+Y2Vp3TavN",
+	"wg3YhEWHWhy4Q6b/BPNQjqqdkO9ns7MOfIOSz+u1NBKwQS6//cudAdPdjqm9w5uVD9KeTylYBrFuMfHB",
+	"MnO5rN9Y6jwtVnpP00bj6djw1F33TNm4qddwqBrlEBJGJLxW+kzHwA/i9OA1YI+u0CJwO4KqyY/2d99k",
+	"v1P8ezvQcsi0s5N8/NqeIqcNrzcRqtY7sI0OW2+6fm+rOsPpclQnEOJZ0zvRoChxl6nMhNumeW6XNZqF",
+	"t8/6q4PvLK4FH9PenSuRH06SV3miexv28g/NV9OXd+LvJzBv5Qti2exXj0hh1eZ0LZrTg38vM4DGKoaf",
+	"Vw/dt0xjElmzO9+fvW9g2hvcTnTke0GFnl+GkuGILhqhhG7Hh20+y4spO6ufJsZiUMNttbaqYcqykRE7",
+	"PMKxne0a/JGC2ttz209P/3h4//79334uLv7ss/LmT+MMJ6/9OKxZGhk6p/ez+/t3s7t3s7tPd7O5/TeZ",
+	"3c3+3dWLrh2+jkEd/t/x4HAFeJB8OPS/XgP965voU3Ffd7065RlEVmBeASQxrzFJYoE/5bcMvaqV47mk",
+	"4Gp3mmMqVnmFWamw6aG8mR8iVaW1Z1JVx+cFI8uUf3HbRySj2zT6fXWvOuU90KHSNI5nbl4lNxMlOaxO",
+	"pl4rvC+rsr7yj5NcZ7Fs/hnC1VybeYysVbxrS8nBPJsh+iEysvoJyIjsnd1+2PvDNtf1p+r0kH++dAbL",
+	"39rXweBX2z/uGrU5U/g1c3ZXpg6Rkv8Xx73RJ0t9utTj8eFC9WP6fSR2GeEo1h8IZJryMqarDsoLpEYo",
+	"2o4olYuYSz79GjO9S1uGZrbZAglTpXCn5d0A5VLo3NcreL4Pazl0e7su066WT/tOiJjnCjzPbvMbT3dV",
+	"iCD+FwAA///uLJ3G/i0AAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
