@@ -70,7 +70,7 @@ components:
       description: |
         A single phase is just its name.
         It can be referenced by its generation and order.
-        See: #/components/schemas/DisplayName
+        See: #/components/schemas/PhaseReference
       type: string
 
     PhaseReference:
