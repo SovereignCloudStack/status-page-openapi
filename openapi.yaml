@@ -150,7 +150,11 @@ components:
         description:
           $ref: '#/components/schemas/Description'
         updates:
-          $ref: '#/components/schemas/Incremental'
+          description: An incident will have multiple references to updates and they should not be changed.
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Incremental'
         affects:
           $ref: '#/components/schemas/ImpactList'
         beganAt:
