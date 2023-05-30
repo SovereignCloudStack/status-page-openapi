@@ -6,7 +6,7 @@ components:
   schemas:
     # common values
     Id:
-      description: Identfication for objects. UUID prefered.
+      description: Identification for objects. UUID preferred.
       type: string
       readOnly: true
 
@@ -27,11 +27,11 @@ components:
       type: string
 
     Description:
-      description: A longer text for detailed informations.
+      description: A longer text with detailed information.
       type: string
 
     Date:
-      description: Point in time. Nullable for open ends.
+      description: Point in time. Nullable for open end timeframes.
       type: string
       format: date-time
       nullable: true

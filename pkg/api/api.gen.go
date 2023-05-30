@@ -28,28 +28,28 @@ type Component struct {
 	// DisplayName Short and describing name.
 	DisplayName *DisplayName `json:"displayName,omitempty"`
 
-	// Id Identfication for objects. UUID prefered.
+	// Id Identification for objects. UUID preferred.
 	Id *Id `json:"id,omitempty"`
 
 	// Labels Labels are free text key value pairs for components.
 	Labels *Labels `json:"labels,omitempty"`
 }
 
-// Date Point in time. Nullable for open ends.
+// Date Point in time. Nullable for open end timeframes.
 type Date = time.Time
 
-// Description A longer text for detailed informations.
+// Description A longer text with detailed information.
 type Description = string
 
 // DisplayName Short and describing name.
 type DisplayName = string
 
-// Id Identfication for objects. UUID prefered.
+// Id Identification for objects. UUID preferred.
 type Id = string
 
 // Impact An impact connects a component and an incident with an impact type.
 type Impact struct {
-	// Reference Identfication for objects. UUID prefered.
+	// Reference Identification for objects. UUID preferred.
 	Reference *Id         `json:"reference,omitempty"`
 	Type      *ImpactType `json:"type,omitempty"`
 }
@@ -60,13 +60,13 @@ type ImpactList = []Impact
 
 // ImpactType defines model for ImpactType.
 type ImpactType struct {
-	// Description A longer text for detailed informations.
+	// Description A longer text with detailed information.
 	Description *Description `json:"description,omitempty"`
 
 	// DisplayName Short and describing name.
 	DisplayName *DisplayName `json:"displayName,omitempty"`
 
-	// Id Identfication for objects. UUID prefered.
+	// Id Identification for objects. UUID preferred.
 	Id *Id `json:"id,omitempty"`
 }
 
@@ -76,19 +76,19 @@ type Incident struct {
 	// In case of an incident the IDs refer to a component and vice versa.
 	Affects *ImpactList `json:"affects,omitempty"`
 
-	// BeganAt Point in time. Nullable for open ends.
+	// BeganAt Point in time. Nullable for open end timeframes.
 	BeganAt *Date `json:"beganAt"`
 
-	// Description A longer text for detailed informations.
+	// Description A longer text with detailed information.
 	Description *Description `json:"description,omitempty"`
 
 	// DisplayName Short and describing name.
 	DisplayName *DisplayName `json:"displayName,omitempty"`
 
-	// EndedAt Point in time. Nullable for open ends.
+	// EndedAt Point in time. Nullable for open end timeframes.
 	EndedAt *Date `json:"endedAt"`
 
-	// Id Identfication for objects. UUID prefered.
+	// Id Identification for objects. UUID preferred.
 	Id *Id `json:"id,omitempty"`
 
 	// Phase To reference a phase, its generation and order is needed.
@@ -102,10 +102,10 @@ type Incident struct {
 // It's identified by the incident ID and its own order.
 // Updates happen in a given order.
 type IncidentUpdate struct {
-	// CreatedAt Point in time. Nullable for open ends.
+	// CreatedAt Point in time. Nullable for open end timeframes.
 	CreatedAt *Date `json:"createdAt"`
 
-	// Description A longer text for detailed informations.
+	// Description A longer text with detailed information.
 	Description *Description `json:"description,omitempty"`
 
 	// DisplayName Short and describing name.
@@ -145,19 +145,19 @@ type PhaseReference struct {
 	Order *Incremental `json:"order,omitempty"`
 }
 
-// ComponentIdPathParameter Identfication for objects. UUID prefered.
+// ComponentIdPathParameter Identification for objects. UUID preferred.
 type ComponentIdPathParameter = Id
 
-// ImpactTypeIdPathParameter Identfication for objects. UUID prefered.
+// ImpactTypeIdPathParameter Identification for objects. UUID preferred.
 type ImpactTypeIdPathParameter = Id
 
-// IncidentIdPathParameter Identfication for objects. UUID prefered.
+// IncidentIdPathParameter Identification for objects. UUID preferred.
 type IncidentIdPathParameter = Id
 
 // IncidentUpdateIdPathParameter Positive and incrementing number for ordering and identfication of e.g. sub resources.
 type IncidentUpdateIdPathParameter = Incremental
 
-// IdResponse Identfication for objects. UUID prefered.
+// IdResponse Identification for objects. UUID preferred.
 type IdResponse = Id
 
 // IncrementalResponse Positive and incrementing number for ordering and identfication of e.g. sub resources.
@@ -697,38 +697,38 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
-	"/2mROTrvLQAA",
+	"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",
+	"RBD/CwAA///OXjTp+y0AAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
