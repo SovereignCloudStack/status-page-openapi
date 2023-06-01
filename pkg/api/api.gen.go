@@ -36,6 +36,9 @@ type Component struct {
 	Labels *Labels `json:"labels,omitempty"`
 }
 
+// ComponentList defines model for ComponentList.
+type ComponentList = []Component
+
 // Date Point in time. Nullable for open end timeframes.
 type Date = time.Time
 
@@ -71,6 +74,9 @@ type ImpactType struct {
 	Id *Id `json:"id,omitempty"`
 }
 
+// ImpactTypeList defines model for ImpactTypeList.
+type ImpactTypeList = []ImpactType
+
 // Incident defines model for Incident.
 type Incident struct {
 	// Affects A list of impacts for a component or incident.
@@ -95,9 +101,12 @@ type Incident struct {
 	// Phase To reference a phase, its generation and order is needed.
 	Phase *PhaseReference `json:"phase,omitempty"`
 
-	// Updates An incident will have multiple references to updates and they should not be changed.
-	Updates *[]Incremental `json:"updates,omitempty"`
+	// Updates List of Incrementals for referencing subresources.
+	Updates *IncrementalList `json:"updates,omitempty"`
 }
+
+// IncidentList defines model for IncidentList.
+type IncidentList = []Incident
 
 // IncidentUpdate An update is a sub resource to an incident.
 // It's identified by the incident ID and its own order.
@@ -116,8 +125,14 @@ type IncidentUpdate struct {
 	Order *Incremental `json:"order,omitempty"`
 }
 
+// IncidentUpdateList defines model for IncidentUpdateList.
+type IncidentUpdateList = []IncidentUpdate
+
 // Incremental Positive and incrementing number for ordering and identfication of e.g. sub resources.
 type Incremental = int
+
+// IncrementalList List of Incrementals for referencing subresources.
+type IncrementalList = []Incremental
 
 // Labels Labels are free text key value pairs for components.
 type Labels map[string]string
@@ -299,6 +314,240 @@ func (t *ResponseData_Content) FromIncremental(v Incremental) error {
 
 // MergeIncremental performs a merge with any union data inside the ResponseData_Content, using the provided Incremental
 func (t *ResponseData_Content) MergeIncremental(v Incremental) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(b, t.union)
+	t.union = merged
+	return err
+}
+
+// AsPhaseList returns the union data inside the ResponseData_Content as a PhaseList
+func (t ResponseData_Content) AsPhaseList() (PhaseList, error) {
+	var body PhaseList
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromPhaseList overwrites any union data inside the ResponseData_Content as the provided PhaseList
+func (t *ResponseData_Content) FromPhaseList(v PhaseList) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergePhaseList performs a merge with any union data inside the ResponseData_Content, using the provided PhaseList
+func (t *ResponseData_Content) MergePhaseList(v PhaseList) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(b, t.union)
+	t.union = merged
+	return err
+}
+
+// AsImpactType returns the union data inside the ResponseData_Content as a ImpactType
+func (t ResponseData_Content) AsImpactType() (ImpactType, error) {
+	var body ImpactType
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromImpactType overwrites any union data inside the ResponseData_Content as the provided ImpactType
+func (t *ResponseData_Content) FromImpactType(v ImpactType) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeImpactType performs a merge with any union data inside the ResponseData_Content, using the provided ImpactType
+func (t *ResponseData_Content) MergeImpactType(v ImpactType) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(b, t.union)
+	t.union = merged
+	return err
+}
+
+// AsImpactTypeList returns the union data inside the ResponseData_Content as a ImpactTypeList
+func (t ResponseData_Content) AsImpactTypeList() (ImpactTypeList, error) {
+	var body ImpactTypeList
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromImpactTypeList overwrites any union data inside the ResponseData_Content as the provided ImpactTypeList
+func (t *ResponseData_Content) FromImpactTypeList(v ImpactTypeList) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeImpactTypeList performs a merge with any union data inside the ResponseData_Content, using the provided ImpactTypeList
+func (t *ResponseData_Content) MergeImpactTypeList(v ImpactTypeList) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(b, t.union)
+	t.union = merged
+	return err
+}
+
+// AsComponent returns the union data inside the ResponseData_Content as a Component
+func (t ResponseData_Content) AsComponent() (Component, error) {
+	var body Component
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromComponent overwrites any union data inside the ResponseData_Content as the provided Component
+func (t *ResponseData_Content) FromComponent(v Component) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeComponent performs a merge with any union data inside the ResponseData_Content, using the provided Component
+func (t *ResponseData_Content) MergeComponent(v Component) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(b, t.union)
+	t.union = merged
+	return err
+}
+
+// AsComponentList returns the union data inside the ResponseData_Content as a ComponentList
+func (t ResponseData_Content) AsComponentList() (ComponentList, error) {
+	var body ComponentList
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromComponentList overwrites any union data inside the ResponseData_Content as the provided ComponentList
+func (t *ResponseData_Content) FromComponentList(v ComponentList) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeComponentList performs a merge with any union data inside the ResponseData_Content, using the provided ComponentList
+func (t *ResponseData_Content) MergeComponentList(v ComponentList) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(b, t.union)
+	t.union = merged
+	return err
+}
+
+// AsIncident returns the union data inside the ResponseData_Content as a Incident
+func (t ResponseData_Content) AsIncident() (Incident, error) {
+	var body Incident
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromIncident overwrites any union data inside the ResponseData_Content as the provided Incident
+func (t *ResponseData_Content) FromIncident(v Incident) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeIncident performs a merge with any union data inside the ResponseData_Content, using the provided Incident
+func (t *ResponseData_Content) MergeIncident(v Incident) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(b, t.union)
+	t.union = merged
+	return err
+}
+
+// AsIncidentList returns the union data inside the ResponseData_Content as a IncidentList
+func (t ResponseData_Content) AsIncidentList() (IncidentList, error) {
+	var body IncidentList
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromIncidentList overwrites any union data inside the ResponseData_Content as the provided IncidentList
+func (t *ResponseData_Content) FromIncidentList(v IncidentList) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeIncidentList performs a merge with any union data inside the ResponseData_Content, using the provided IncidentList
+func (t *ResponseData_Content) MergeIncidentList(v IncidentList) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(b, t.union)
+	t.union = merged
+	return err
+}
+
+// AsIncidentUpdate returns the union data inside the ResponseData_Content as a IncidentUpdate
+func (t ResponseData_Content) AsIncidentUpdate() (IncidentUpdate, error) {
+	var body IncidentUpdate
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromIncidentUpdate overwrites any union data inside the ResponseData_Content as the provided IncidentUpdate
+func (t *ResponseData_Content) FromIncidentUpdate(v IncidentUpdate) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeIncidentUpdate performs a merge with any union data inside the ResponseData_Content, using the provided IncidentUpdate
+func (t *ResponseData_Content) MergeIncidentUpdate(v IncidentUpdate) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(b, t.union)
+	t.union = merged
+	return err
+}
+
+// AsIncidentUpdateList returns the union data inside the ResponseData_Content as a IncidentUpdateList
+func (t ResponseData_Content) AsIncidentUpdateList() (IncidentUpdateList, error) {
+	var body IncidentUpdateList
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromIncidentUpdateList overwrites any union data inside the ResponseData_Content as the provided IncidentUpdateList
+func (t *ResponseData_Content) FromIncidentUpdateList(v IncidentUpdateList) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeIncidentUpdateList performs a merge with any union data inside the ResponseData_Content, using the provided IncidentUpdateList
+func (t *ResponseData_Content) MergeIncidentUpdateList(v IncidentUpdateList) error {
 	b, err := json.Marshal(v)
 	if err != nil {
 		return err
@@ -795,40 +1044,40 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/9Ra32/juBH+Vwi2QO8Ar+VkiwL1217SHowuboNkFwV6mwdaHFvck0gdSSU1Av/vxZD6",
-	"QVlSJCd2bgvsw8aiyJmP33xDzuiJxirLlQRpDV0+0ZxploEF7f66qp6t+A2zyU31EJ9xMLEWuRVK0mUz",
-	"kqyuiTBEw++F0MCJkCRnNpnTGRU4EP+gMypZBnTZLL7idEarl+jS6gJm1MQJZAwX+7OGDV3SP0WNtZF/",
-	"aqIVp/v9jK6ynMX28y6HUWP9UGJ3ORxnrgjWeLW9MhZ8CrTVwCNNrac/laFfcs4sTDe3cOOJ4OQHITVk",
-	"IC1LfzzChaJc8OUOyLhal+7RFZwGjP1JcQFtgt/6J/hbrKQF6f7L8jwVMUPPom8G3XuauHQ9sV+4DdEd",
-	"SE4YqV+b0xZ/T21LM/OwMZKIJii8PeU+ntyact5nbSnHtAzx/DuXOX72KUaVxJ5TzyiTK2k8m27LP05m",
-	"XDXhNbOsz7SfQYJmKamsIBuliSniGIzZFClROWi3rvHWlvO2mO9UX+NIWwYF22wgtsB/2k1j1kdhLG4U",
-	"FyZP2e4XF73Pv3gdDN3PqOBTtGhGU7aG1IyN/ehHVQHvdeNXXOR+RpHfdEnV+hvEzupr3PaOit0oIS3q",
-	"kxUZzMkvRZqydeoBVjlIgqTAZxsUQoMKtlE6Y5YuKbLjHT5DKStfrISrXN5YLeTWLR8ue2jFB5IquQVN",
-	"LPzXkkdhE8LBMpE67fQLCiVx9e7E7d044HSitCVMcuJ/Xwu5JSi7vVOteI/MYyiITclrj4vD1MzJly+r",
-	"a5Jr2IDWwOdOvxn/JNPdIAyeST0I1MIUKylx+lA4nQdhaDqIDsVsdsBvZxjIGKaRztt6hMT2kCwIlL5N",
-	"FsYStSmtNg7M0EulG0X8KleSxMwAvhC6bhM8zGBy3SBhVAenBxEDeQBt2PyrxIxrITPTHGtgoExrtmvn",
-	"q66C8Dapn1WCYOgbaMg0Tahz1IA2muOEcQ1bJj/YUYdcApr9IeiB5MCnmzhVsPOEmVFTbnDQbR2U+1l5",
-	"8jP9ctDEepqShD0AyYrUijwFUke2wQAoZ3HktwnsiElUkXIilSVrIHHC5NbL07RQCE+Tg5JWxsdxPCsP",
-	"H33uVqdo1D1TrDHVq0LH4CJctnTB/sUQUcoycLLeOU0QwfUBkRDWEPUoidIc9Pyr/FKilLAc85qQhJGt",
-	"eIBmREdAYw3MHkOXP4LRzvrjbgjtPfMTzAJvB7awnqHnFGGEFQ/gga9GulxbZGvQPm3iOvibG4RbVWdV",
-	"tSEw385bG2/8jgzQT0gLW9Bo2cf6sMQ4FzgfS29a+9jJwm3r/QSEaSAbDeAPIb/BjjywtACSM6F9rmqA",
-	"DY4PDUQ3lQgc5j0j5DYF4kQCGf6tMNbx051EkNEkZhJjtQ5sR2scsnVHX4cS4lZx9Q5gSSaojMOw478b",
-	"05+l3aNmExwqLH1kO4wcyfFExjBGMZd3jxyNtUeqjMPGTTFJozzU+xE1CqypV7gf2rjb8LTUxuSzajaG",
-	"ML+Ps8HdwR2WANxL7sGB4cVh/mJkT6YPgQV9ILbucB0I/61ZbpxOa7CFBE44s8ypsCwP1BWrE2tzs4yi",
-	"rbBJsZ7HKovu1ANoEFt5laqC31kW/xYZy2xh3uVsC+/wpsJyEQljCjDR3/q0vLmnKgmfNnT56/OQ3Pnr",
-	"Jd3PJhwAjkD3vvfgXK3Wlxrr2y15ZCa49gYitFYqBSb93RlvTE72hMULGb27uiN3Di1yw7ZAPtys6Izi",
-	"CdkvcTFfOKJ4EOmSvp8v5peIILOJMylqF0+34HGs7MJ7E/0Z7FUz6qBicLlYHFUsmCQCQe2pIwQdkf/0",
-	"L18ZKLKM6Z23t5QxTD+htKMcKdPj4pXLkM2yYaFtsIbQqsVFnULcvoPUxfBM5bi6XnLgkrePMCLhsVV1",
-	"28/CLYyegnL03lMuBX8uazt87X4PHQ7r5gMB1AyJBuvq+/t+grzIbW9lp9A4ytLv1B1PTJNDLDYiDi63",
-	"eCLgnp7MxknXOX/EPZt/p6f6y0Hyrh7sOdLc1xZQDZ6VquZW/zZaFRZOXi1WQdVnXK6ClV+wid1q/dkE",
-	"q12YP9jL6CnsSU0QrZbbx4XBcIftLLLVbUmMk/YNfHqDlswAzWvpC3CZKn5nhOgMkXMC/esDqwqfsiLy",
-	"vBDWgzp4HZTSLdNOfazI8KLMMleb+b0AvXO34x9u/3n1/v37v/9Ytznds6bPaXCGZ5ucHDasSC1d0svF",
-	"5eW7xcW7xcXni8XS/ZsvLhb/Geo/HFxx8UTeNv8feD17hfEg+XTT//oa0+/fJB/V3cnXZ6OKQWQN9hFA",
-	"EvuoSK4E/lR1lkazVGXPSyLtoIN7vgzVtGtb8RU9NV8hTElNja9HKtTApxTnSkthd3pMP87uzNmb8qPZ",
-	"qCowT01F50Hm5MHx+iQkp0VGFLQ7xuhUVuu/H1YdparVRxav1taqtbPRKuvj4mRdLS36LqjY/sDlbGpd",
-	"dpRch7gPuHGiRk/Vp1lHqPqpkZ5NfrX/w7XzlFpqQEuUhwg6JXX8vyD2Rt9hjeWhEcSnJ6bvE/czicop",
-	"r1rjO4Da0rS0hgKgacN19qDvCtJqZ73ky9Bz8rrxZSqlbQIkLrTGI1XQR6tSn4dvNMGFGB6Q5/R+nS1X",
-	"Bf7jJTWpmsW+y4or/y8AAP//1jcFnsEuAAA=",
+	"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",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

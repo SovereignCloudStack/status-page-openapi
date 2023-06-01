@@ -15,11 +15,19 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Id'
+      readOnly: true
 
     Incremental:
       description: |
         Positive and incrementing number for ordering and identfication of e.g. sub resources.
       type: integer
+      readOnly: true
+
+    IncrementalList:
+      description: List of Incrementals for referencing subresources.
+      type: array
+      items:
+        $ref: '#/components/schemas/Incremental'
       readOnly: true
 
     DisplayName:
@@ -52,6 +60,12 @@ components:
           $ref: '#/components/schemas/Description'
       required:
         - id
+
+    ImpactTypeList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ImpactType'
+      readOnly: true
 
     Impact:
       description: An impact connects a component and an incident with an impact type.
@@ -124,6 +138,12 @@ components:
         - order
         - createdAt
 
+    IncidentUpdateList:
+      type: array
+      items:
+        $ref: '#/components/schemas/IncidentUpdate'
+      readOnly: true
+
     Labels:
       description: Labels are free text key value pairs for components.
       type: object
@@ -144,6 +164,12 @@ components:
       required:
         - id
 
+    ComponentList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Component'
+      readOnly: true
+
     Incident:
       type: object
       properties:
@@ -154,11 +180,7 @@ components:
         description:
           $ref: '#/components/schemas/Description'
         updates:
-          description: An incident will have multiple references to updates and they should not be changed.
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/Incremental'
+          $ref: '#/components/schemas/IncrementalList'
         affects:
           $ref: '#/components/schemas/ImpactList'
         beganAt:
@@ -169,6 +191,12 @@ components:
           $ref: '#/components/schemas/PhaseReference'
       required:
         - id
+
+    IncidentList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Incident'
+      readOnly: true
 
     ResponseData:
       description: |
@@ -181,6 +209,15 @@ components:
             - $ref: '#/components/schemas/Success'
             - $ref: '#/components/schemas/Id'
             - $ref: '#/components/schemas/Incremental'
+            - $ref: '#/components/schemas/PhaseList'
+            - $ref: '#/components/schemas/ImpactType'
+            - $ref: '#/components/schemas/ImpactTypeList'
+            - $ref: '#/components/schemas/Component'
+            - $ref: '#/components/schemas/ComponentList'
+            - $ref: '#/components/schemas/Incident'
+            - $ref: '#/components/schemas/IncidentList'
+            - $ref: '#/components/schemas/IncidentUpdate'
+            - $ref: '#/components/schemas/IncidentUpdateList'
 
   # requests
   requestBodies:
@@ -267,11 +304,7 @@ paths:
             $ref: '#/components/schemas/Incremental'
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PhaseList'
+          $ref: '#/components/responses/Response'
 
     post:
       summary: Create a new generation of the phase list.
@@ -291,13 +324,7 @@ paths:
       operationId: getImpactTypes
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ImpactType'
+          $ref: '#/components/responses/Response'
 
     post:
       summary: Create a new impact type.
@@ -316,11 +343,7 @@ paths:
         - $ref: '#/components/parameters/ImpactTypeIdPathParameter'
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ImpactType'
+          $ref: '#/components/responses/Response'
 
     patch:
       summary: Update a specific impact type.
@@ -348,13 +371,7 @@ paths:
       operationId: getComponents
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Component'
+          $ref: '#/components/responses/Response'
 
     post:
       summary: Create a new component.
@@ -418,13 +435,7 @@ paths:
         description: End of time frame to query for (RFC3339).
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Incident'
+          $ref: '#/components/responses/Response'
 
     post:
       summary: Create a new incident.
@@ -443,11 +454,7 @@ paths:
       - $ref: '#/components/parameters/IncidentIdPathParameter'
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Incident'
+          $ref: '#/components/responses/Response'
 
     patch:
       summary: Update an incident.
@@ -477,13 +484,7 @@ paths:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/IncidentUpdate'
+          $ref: '#/components/responses/Response'
 
     post:
       summary: Create a new update to a specific incident.
@@ -505,11 +506,7 @@ paths:
         - $ref: '#/components/parameters/IncidentUpdateIdPathParameter'
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IncidentUpdate'
+          $ref: '#/components/responses/Response'
 
     patch:
       summary: Update a specific update from a specific incident.
