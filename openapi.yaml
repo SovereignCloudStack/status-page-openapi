@@ -36,6 +36,10 @@ components:
       format: date-time
       nullable: true
 
+    Success:
+      description: An operation was successful.
+      type: boolean
+
     # API objects
     ImpactType:
       type: object
@@ -166,6 +170,18 @@ components:
       required:
         - id
 
+    ResponseData:
+      description: |
+        Wraps the retuned data in an object.
+        See: https://github.com/SovereignCloudStack/status-page-openapi/issues/6
+      type: object
+      properties:
+        content:
+          oneOf:
+            - $ref: '#/components/schemas/Success'
+            - $ref: '#/components/schemas/Id'
+            - $ref: '#/components/schemas/Incremental'
+
   # requests
   requestBodies:
     ComponentRequest:
@@ -198,26 +214,12 @@ components:
 
   # responses
   responses:
-    SuccessResponse:
-      description: A request has successfully run.
+    Response:
+      description: General response for successful operations.
       content:
         application/json:
           schema:
-            type: boolean
-
-    IdResponse:
-      description: A request returns an ID.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Id'
-
-    IncrementalResponse:
-      description: A request returns an Incremental.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Incremental'
+            $ref: '#/components/schemas/ResponseData'
 
   # parameter
   parameters:
@@ -281,7 +283,7 @@ paths:
               $ref: '#/components/schemas/PhaseList'
       responses:
         '201':
-          $ref: '#/components/responses/IncrementalResponse'
+          $ref: '#/components/responses/Response'
 
   /impacttypes:
     get:
@@ -304,7 +306,7 @@ paths:
         $ref: '#/components/requestBodies/ImpactTypeRequest'
       responses:
         '201':
-          $ref: '#/components/responses/IdResponse'
+          $ref: '#/components/responses/Response'
 
   /impacttypes/{impactTypeId}:
     get:
@@ -329,7 +331,7 @@ paths:
         $ref: '#/components/requestBodies/ImpactTypeRequest'
       responses:
         '200':
-          $ref: '#/components/responses/SuccessResponse'
+          $ref: '#/components/responses/Response'
 
     delete:
       summary: Delete an impact type.
@@ -338,7 +340,7 @@ paths:
         - $ref: '#/components/parameters/ImpactTypeIdPathParameter'
       responses:
         '200':
-          $ref: "#/components/responses/SuccessResponse"
+          $ref: "#/components/responses/Response"
 
   /components:
     get:
@@ -361,7 +363,7 @@ paths:
         $ref: '#/components/requestBodies/ComponentRequest'
       responses:
         '201':
-          $ref: '#/components/responses/IdResponse'
+          $ref: '#/components/responses/Response'
 
   /components/{componentId}:
     get:
@@ -371,7 +373,7 @@ paths:
       - $ref: '#/components/parameters/ComponentIdPathParameter'
       responses:
         '200':
-          $ref: '#/components/responses/IdResponse'
+          $ref: '#/components/responses/Response'
 
     patch:
       summary: Update a component.
@@ -382,7 +384,7 @@ paths:
         $ref: '#/components/requestBodies/ComponentRequest'
       responses:
         '200':
-          $ref: "#/components/responses/SuccessResponse"
+          $ref: "#/components/responses/Response"
 
     delete:
       summary: Delete a component.
@@ -391,7 +393,7 @@ paths:
         - $ref: '#/components/parameters/ComponentIdPathParameter'
       responses:
         '200':
-          $ref: "#/components/responses/SuccessResponse"
+          $ref: "#/components/responses/Response"
 
   /incidents:
     get:
@@ -431,7 +433,7 @@ paths:
         $ref: '#/components/requestBodies/IncidentRequest'
       responses:
         '201':
-          $ref: '#/components/responses/IdResponse'
+          $ref: '#/components/responses/Response'
 
   /incidents/{incidentId}:
     get:
@@ -456,7 +458,7 @@ paths:
         $ref: '#/components/requestBodies/IncidentRequest'
       responses:
         '200':
-          $ref: "#/components/responses/SuccessResponse"
+          $ref: "#/components/responses/Response"
 
     delete:
       summary: Delete an incident.
@@ -465,7 +467,7 @@ paths:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
       responses:
         '200':
-          $ref: "#/components/responses/SuccessResponse"
+          $ref: "#/components/responses/Response"
 
   /incidents/{incidentId}/updates:
     get:
@@ -492,7 +494,7 @@ paths:
         $ref: '#/components/requestBodies/IncidentUpdateRequest'
       responses:
         '201':
-          $ref: '#/components/responses/IdResponse'
+          $ref: '#/components/responses/Response'
 
   /incidents/{incidentId}/updates/{updateId}:
     get:
@@ -519,7 +521,7 @@ paths:
         $ref: '#/components/requestBodies/IncidentUpdateRequest'
       responses:
         '200':
-          $ref: "#/components/responses/SuccessResponse"
+          $ref: "#/components/responses/Response"
 
     delete:
       summary: Delete a specific update from a specific incident
@@ -529,4 +531,4 @@ paths:
         - $ref: '#/components/parameters/IncidentUpdateIdPathParameter'
       responses:
         '200':
-          $ref: "#/components/responses/SuccessResponse"
+          $ref: "#/components/responses/Response"

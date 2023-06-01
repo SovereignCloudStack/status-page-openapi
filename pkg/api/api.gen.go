@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -145,6 +146,20 @@ type PhaseReference struct {
 	Order *Incremental `json:"order,omitempty"`
 }
 
+// ResponseData Wraps the retuned data in an object.
+// See: https://github.com/SovereignCloudStack/status-page-openapi/issues/6
+type ResponseData struct {
+	Content *ResponseData_Content `json:"content,omitempty"`
+}
+
+// ResponseData_Content defines model for ResponseData.Content.
+type ResponseData_Content struct {
+	union json.RawMessage
+}
+
+// Success An operation was successful.
+type Success = bool
+
 // ComponentIdPathParameter Identification for objects. UUID preferred.
 type ComponentIdPathParameter = Id
 
@@ -157,14 +172,9 @@ type IncidentIdPathParameter = Id
 // IncidentUpdateIdPathParameter Positive and incrementing number for ordering and identfication of e.g. sub resources.
 type IncidentUpdateIdPathParameter = Incremental
 
-// IdResponse Identification for objects. UUID preferred.
-type IdResponse = Id
-
-// IncrementalResponse Positive and incrementing number for ordering and identfication of e.g. sub resources.
-type IncrementalResponse = Incremental
-
-// SuccessResponse defines model for SuccessResponse.
-type SuccessResponse = bool
+// Response Wraps the retuned data in an object.
+// See: https://github.com/SovereignCloudStack/status-page-openapi/issues/6
+type Response = ResponseData
 
 // ComponentRequest defines model for ComponentRequest.
 type ComponentRequest = Component
@@ -220,6 +230,94 @@ type UpdateIncidentUpdateJSONRequestBody = IncidentUpdate
 
 // CreatePhaseListJSONRequestBody defines body for CreatePhaseList for application/json ContentType.
 type CreatePhaseListJSONRequestBody = PhaseList
+
+// AsSuccess returns the union data inside the ResponseData_Content as a Success
+func (t ResponseData_Content) AsSuccess() (Success, error) {
+	var body Success
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromSuccess overwrites any union data inside the ResponseData_Content as the provided Success
+func (t *ResponseData_Content) FromSuccess(v Success) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeSuccess performs a merge with any union data inside the ResponseData_Content, using the provided Success
+func (t *ResponseData_Content) MergeSuccess(v Success) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(b, t.union)
+	t.union = merged
+	return err
+}
+
+// AsId returns the union data inside the ResponseData_Content as a Id
+func (t ResponseData_Content) AsId() (Id, error) {
+	var body Id
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromId overwrites any union data inside the ResponseData_Content as the provided Id
+func (t *ResponseData_Content) FromId(v Id) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeId performs a merge with any union data inside the ResponseData_Content, using the provided Id
+func (t *ResponseData_Content) MergeId(v Id) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(b, t.union)
+	t.union = merged
+	return err
+}
+
+// AsIncremental returns the union data inside the ResponseData_Content as a Incremental
+func (t ResponseData_Content) AsIncremental() (Incremental, error) {
+	var body Incremental
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromIncremental overwrites any union data inside the ResponseData_Content as the provided Incremental
+func (t *ResponseData_Content) FromIncremental(v Incremental) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeIncremental performs a merge with any union data inside the ResponseData_Content, using the provided Incremental
+func (t *ResponseData_Content) MergeIncremental(v Incremental) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(b, t.union)
+	t.union = merged
+	return err
+}
+
+func (t ResponseData_Content) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *ResponseData_Content) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
@@ -697,39 +795,40 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
-	"AP//hTLRi4wuAAA=",
+	"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",
+	"Bf7jJTWpmsW+y4or/y8AAP//1jcFnsEuAAA=",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
