@@ -198,8 +198,56 @@ components:
         $ref: '#/components/schemas/Incident'
       readOnly: true
 
+  # parameter
+  parameters:
+    GenerationQueryParameter:
+      description: Optional generation in query. E.g. ?generation=7
+      name: generation
+      in: query
+      schema:
+        $ref: '#/components/schemas/Incremental'
+
+    ComponentIdPathParameter:
+      description: Component ID is required in path.
+      name: componentId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id'
+
+    IncidentIdPathParameter:
+      description: Incident ID is required in path.
+      name: incidentId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id'
+
+    IncidentUpdateIdPathParameter:
+      description: Incident update id (inremental) is required in path.
+      name: updateId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Incremental'
+
+    ImpactTypeIdPathParameter:
+      description: Impact type ID is required in path.
+      name: impactTypeId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id'
+
   # requests
   requestBodies:
+    PhaseListRequest:
+      description: Send a new list of phases.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PhaseList'
+
     ComponentRequest:
       description: Send a component.
       content:
@@ -350,50 +398,13 @@ components:
               data:
                 $ref: '#/components/schemas/IncidentUpdateList'
 
-  # parameter
-  parameters:
-    ComponentIdPathParameter:
-      description: Component ID is required in path.
-      name: componentId
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/Id'
-
-    IncidentIdPathParameter:
-      description: Incident ID is required in path.
-      name: incidentId
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/Id'
-
-    IncidentUpdateIdPathParameter:
-      description: Incident update id (inremental) is required in path.
-      name: updateId
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/Incremental'
-
-    ImpactTypeIdPathParameter:
-      description: Impact type ID is required in path.
-      name: impactTypeId
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/Id'
-
 paths:
   /phases:
     get:
       summary: Get the current generation list of phases.
       operationId: getPhaseList
       parameters:
-        - name: generation
-          in: query
-          schema:
-            $ref: '#/components/schemas/Incremental'
+        - $ref: '#/components/parameters/GenerationQueryParameter'
       responses:
         '200':
           $ref: '#/components/responses/PhaseListResponse'
@@ -402,10 +413,7 @@ paths:
       summary: Create a new generation of the phase list.
       operationId: createPhaseList
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PhaseList'
+        $ref: '#/components/requestBodies/PhaseListRequest'
       responses:
         '201':
           $ref: '#/components/responses/IncrementalResponse'
