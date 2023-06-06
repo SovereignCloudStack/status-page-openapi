@@ -7,7 +7,6 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -161,17 +160,6 @@ type PhaseReference struct {
 	Order *Incremental `json:"order,omitempty"`
 }
 
-// ResponseData Wraps the retuned data in an object.
-// See: https://github.com/SovereignCloudStack/status-page-openapi/issues/6
-type ResponseData struct {
-	Content *ResponseData_Content `json:"content,omitempty"`
-}
-
-// ResponseData_Content defines model for ResponseData.Content.
-type ResponseData_Content struct {
-	union json.RawMessage
-}
-
 // Success An operation was successful.
 type Success = bool
 
@@ -187,9 +175,72 @@ type IncidentIdPathParameter = Id
 // IncidentUpdateIdPathParameter Positive and incrementing number for ordering and identfication of e.g. sub resources.
 type IncidentUpdateIdPathParameter = Incremental
 
-// Response Wraps the retuned data in an object.
-// See: https://github.com/SovereignCloudStack/status-page-openapi/issues/6
-type Response = ResponseData
+// ComponentListResponse defines model for ComponentListResponse.
+type ComponentListResponse struct {
+	Data *ComponentList `json:"data,omitempty"`
+}
+
+// ComponentResponse defines model for ComponentResponse.
+type ComponentResponse struct {
+	Data *Component `json:"data,omitempty"`
+}
+
+// IdResponse defines model for IdResponse.
+type IdResponse struct {
+	// Data Identification for objects. UUID preferred.
+	Data *Id `json:"data,omitempty"`
+}
+
+// ImpactTypeListResponse defines model for ImpactTypeListResponse.
+type ImpactTypeListResponse struct {
+	Data *ImpactTypeList `json:"data,omitempty"`
+}
+
+// ImpactTypeResponse defines model for ImpactTypeResponse.
+type ImpactTypeResponse struct {
+	Data *ImpactType `json:"data,omitempty"`
+}
+
+// IncidentListResponse defines model for IncidentListResponse.
+type IncidentListResponse struct {
+	Data *IncidentList `json:"data,omitempty"`
+}
+
+// IncidentResponse defines model for IncidentResponse.
+type IncidentResponse struct {
+	Data *Incident `json:"data,omitempty"`
+}
+
+// IncidentUpdateListResponse defines model for IncidentUpdateListResponse.
+type IncidentUpdateListResponse struct {
+	Data *IncidentUpdateList `json:"data,omitempty"`
+}
+
+// IncidentUpdateResponse defines model for IncidentUpdateResponse.
+type IncidentUpdateResponse struct {
+	// Data An update is a sub resource to an incident.
+	// It's identified by the incident ID and its own order.
+	// Updates happen in a given order.
+	Data *IncidentUpdate `json:"data,omitempty"`
+}
+
+// IncrementalResponse defines model for IncrementalResponse.
+type IncrementalResponse struct {
+	// Data Positive and incrementing number for ordering and identfication of e.g. sub resources.
+	Data *Incremental `json:"data,omitempty"`
+}
+
+// PhaseListResponse defines model for PhaseListResponse.
+type PhaseListResponse struct {
+	// Data Phase resources are always handled as a list.
+	Data *PhaseList `json:"data,omitempty"`
+}
+
+// SuccessResponse defines model for SuccessResponse.
+type SuccessResponse struct {
+	// Data An operation was successful.
+	Data *Success `json:"data,omitempty"`
+}
 
 // ComponentRequest defines model for ComponentRequest.
 type ComponentRequest = Component
@@ -245,328 +296,6 @@ type UpdateIncidentUpdateJSONRequestBody = IncidentUpdate
 
 // CreatePhaseListJSONRequestBody defines body for CreatePhaseList for application/json ContentType.
 type CreatePhaseListJSONRequestBody = PhaseList
-
-// AsSuccess returns the union data inside the ResponseData_Content as a Success
-func (t ResponseData_Content) AsSuccess() (Success, error) {
-	var body Success
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromSuccess overwrites any union data inside the ResponseData_Content as the provided Success
-func (t *ResponseData_Content) FromSuccess(v Success) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeSuccess performs a merge with any union data inside the ResponseData_Content, using the provided Success
-func (t *ResponseData_Content) MergeSuccess(v Success) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JsonMerge(b, t.union)
-	t.union = merged
-	return err
-}
-
-// AsId returns the union data inside the ResponseData_Content as a Id
-func (t ResponseData_Content) AsId() (Id, error) {
-	var body Id
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromId overwrites any union data inside the ResponseData_Content as the provided Id
-func (t *ResponseData_Content) FromId(v Id) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeId performs a merge with any union data inside the ResponseData_Content, using the provided Id
-func (t *ResponseData_Content) MergeId(v Id) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JsonMerge(b, t.union)
-	t.union = merged
-	return err
-}
-
-// AsIncremental returns the union data inside the ResponseData_Content as a Incremental
-func (t ResponseData_Content) AsIncremental() (Incremental, error) {
-	var body Incremental
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromIncremental overwrites any union data inside the ResponseData_Content as the provided Incremental
-func (t *ResponseData_Content) FromIncremental(v Incremental) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeIncremental performs a merge with any union data inside the ResponseData_Content, using the provided Incremental
-func (t *ResponseData_Content) MergeIncremental(v Incremental) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JsonMerge(b, t.union)
-	t.union = merged
-	return err
-}
-
-// AsPhaseList returns the union data inside the ResponseData_Content as a PhaseList
-func (t ResponseData_Content) AsPhaseList() (PhaseList, error) {
-	var body PhaseList
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromPhaseList overwrites any union data inside the ResponseData_Content as the provided PhaseList
-func (t *ResponseData_Content) FromPhaseList(v PhaseList) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergePhaseList performs a merge with any union data inside the ResponseData_Content, using the provided PhaseList
-func (t *ResponseData_Content) MergePhaseList(v PhaseList) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JsonMerge(b, t.union)
-	t.union = merged
-	return err
-}
-
-// AsImpactType returns the union data inside the ResponseData_Content as a ImpactType
-func (t ResponseData_Content) AsImpactType() (ImpactType, error) {
-	var body ImpactType
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromImpactType overwrites any union data inside the ResponseData_Content as the provided ImpactType
-func (t *ResponseData_Content) FromImpactType(v ImpactType) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeImpactType performs a merge with any union data inside the ResponseData_Content, using the provided ImpactType
-func (t *ResponseData_Content) MergeImpactType(v ImpactType) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JsonMerge(b, t.union)
-	t.union = merged
-	return err
-}
-
-// AsImpactTypeList returns the union data inside the ResponseData_Content as a ImpactTypeList
-func (t ResponseData_Content) AsImpactTypeList() (ImpactTypeList, error) {
-	var body ImpactTypeList
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromImpactTypeList overwrites any union data inside the ResponseData_Content as the provided ImpactTypeList
-func (t *ResponseData_Content) FromImpactTypeList(v ImpactTypeList) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeImpactTypeList performs a merge with any union data inside the ResponseData_Content, using the provided ImpactTypeList
-func (t *ResponseData_Content) MergeImpactTypeList(v ImpactTypeList) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JsonMerge(b, t.union)
-	t.union = merged
-	return err
-}
-
-// AsComponent returns the union data inside the ResponseData_Content as a Component
-func (t ResponseData_Content) AsComponent() (Component, error) {
-	var body Component
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromComponent overwrites any union data inside the ResponseData_Content as the provided Component
-func (t *ResponseData_Content) FromComponent(v Component) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeComponent performs a merge with any union data inside the ResponseData_Content, using the provided Component
-func (t *ResponseData_Content) MergeComponent(v Component) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JsonMerge(b, t.union)
-	t.union = merged
-	return err
-}
-
-// AsComponentList returns the union data inside the ResponseData_Content as a ComponentList
-func (t ResponseData_Content) AsComponentList() (ComponentList, error) {
-	var body ComponentList
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromComponentList overwrites any union data inside the ResponseData_Content as the provided ComponentList
-func (t *ResponseData_Content) FromComponentList(v ComponentList) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeComponentList performs a merge with any union data inside the ResponseData_Content, using the provided ComponentList
-func (t *ResponseData_Content) MergeComponentList(v ComponentList) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JsonMerge(b, t.union)
-	t.union = merged
-	return err
-}
-
-// AsIncident returns the union data inside the ResponseData_Content as a Incident
-func (t ResponseData_Content) AsIncident() (Incident, error) {
-	var body Incident
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromIncident overwrites any union data inside the ResponseData_Content as the provided Incident
-func (t *ResponseData_Content) FromIncident(v Incident) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeIncident performs a merge with any union data inside the ResponseData_Content, using the provided Incident
-func (t *ResponseData_Content) MergeIncident(v Incident) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JsonMerge(b, t.union)
-	t.union = merged
-	return err
-}
-
-// AsIncidentList returns the union data inside the ResponseData_Content as a IncidentList
-func (t ResponseData_Content) AsIncidentList() (IncidentList, error) {
-	var body IncidentList
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromIncidentList overwrites any union data inside the ResponseData_Content as the provided IncidentList
-func (t *ResponseData_Content) FromIncidentList(v IncidentList) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeIncidentList performs a merge with any union data inside the ResponseData_Content, using the provided IncidentList
-func (t *ResponseData_Content) MergeIncidentList(v IncidentList) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JsonMerge(b, t.union)
-	t.union = merged
-	return err
-}
-
-// AsIncidentUpdate returns the union data inside the ResponseData_Content as a IncidentUpdate
-func (t ResponseData_Content) AsIncidentUpdate() (IncidentUpdate, error) {
-	var body IncidentUpdate
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromIncidentUpdate overwrites any union data inside the ResponseData_Content as the provided IncidentUpdate
-func (t *ResponseData_Content) FromIncidentUpdate(v IncidentUpdate) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeIncidentUpdate performs a merge with any union data inside the ResponseData_Content, using the provided IncidentUpdate
-func (t *ResponseData_Content) MergeIncidentUpdate(v IncidentUpdate) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JsonMerge(b, t.union)
-	t.union = merged
-	return err
-}
-
-// AsIncidentUpdateList returns the union data inside the ResponseData_Content as a IncidentUpdateList
-func (t ResponseData_Content) AsIncidentUpdateList() (IncidentUpdateList, error) {
-	var body IncidentUpdateList
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromIncidentUpdateList overwrites any union data inside the ResponseData_Content as the provided IncidentUpdateList
-func (t *ResponseData_Content) FromIncidentUpdateList(v IncidentUpdateList) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeIncidentUpdateList performs a merge with any union data inside the ResponseData_Content, using the provided IncidentUpdateList
-func (t *ResponseData_Content) MergeIncidentUpdateList(v IncidentUpdateList) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JsonMerge(b, t.union)
-	t.union = merged
-	return err
-}
-
-func (t ResponseData_Content) MarshalJSON() ([]byte, error) {
-	b, err := t.union.MarshalJSON()
-	return b, err
-}
-
-func (t *ResponseData_Content) UnmarshalJSON(b []byte) error {
-	err := t.union.UnmarshalJSON(b)
-	return err
-}
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
@@ -1044,40 +773,41 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"H4sIAAAAAAAC/9xbS48buRH+KwUmQHaBtqQZ5xLdvDNJIGCwEWbsS9Y+UN3VEp0Wu02yZyII+u8ByX6w",
+	"XxL1HCPAHtYSxXp9/KqKxdmSMF1nKUeuJJluSUYFXaNCYf71UH43i+ZUrebll/q7CGUoWKZYysm0Xgmz",
+	"R2ASBP7ImcAIGIeMqtWIBITphfofJCCcrpFMa+GziASk/BGZKpFjQGS4wjXVwv4sMCZT8qdxre3YfivH",
+	"s4jsdgGZrTMaqs+bDA8qa5eC2mR4nLrMkXG2vjxkkY9ry4VHqlptfylFv2QRVeivbm7WA4vgF8YFrpEr",
+	"mvx6hAl5IfB0A3hYyiU7bYreBqX6LY0YNgH+bL/Rn4UpV8jN/9IsS1hItWXj71Kbt/UUXW1sBTdd9II8",
+	"AgrVz0akgd9L61LvPKwMB1YfCqtPEceLa1Psu1eXYk1DEYu/a6ljd/dRqgD2iFhEySzlsoWmJybVc/HN",
+	"UZpmIs1QqAKdEVX+QNMyjUo6gmRK0sV3DHu9/AmKcwACVS64BAoJkwrSuMakNL53zsdtrTndktapim6k",
+	"eUGWp6jMYfbYooAbAqgp9HwEOTwiO8R2Y4vOCMkQHd4yMo7IC8Sl2E222P2mppwTkOGc8A4xqQVfLjJF",
+	"YpG9We8drLtAsOpcaSwqq7HbmePUfyeTc72LsWO+ovKWkKvknY60TG9h8GYseMnDEKW8kf6FtGO1X1EJ",
+	"0v40zpNkAyLntuYqNm5UXF3VaBxjqDD6beOXL6yHAxIxmSV087vpQfb/8NFZugsIi3yKhIAkdIGJPLT2",
+	"ya4q2xbb/fyhhXzr+DFolp56a6ZwLY8ot7QUGv2LJ5uyxypkUCHoRn//qCmh0+7NU8aVbuQUW+MIfs+T",
+	"hC4ShDgVkGbIQVfP+rtYd4xSt3pxKtZUkalGD37Q3+mer/hhS7pUgvGlEe+K3XZgk6R8iQIU/lfBG1Mr",
+	"iFBRlpgm0wpkKdfSuxs3A94q/lepUEB5BPbzBeNL0P1p71azqKcf1jzI4uJEWb+YsMkRfPkye4RMYIxC",
+	"YDQig0FwRBiw9nigKlnClHO9vVsLGwtcXjYuapc5QesIGcWQh+iHa6vrObVZaV4J4k6QGzWmNM50rUxF",
+	"XSZ85TMOoea9NG6YrlYIs0cJxjpQacdPryxEeEUh6egrJ4HfUSrisuueG8fkLn82Qb2XbJylN6ApP9pp",
+	"NQ++vOOi4DDxVMXjAMfL4wh+gUvKP6mDXjMVUPAuIUIeYeSvom/iMWWAV7nxXJ38XVDcw8kjqq2qWvGB",
+	"kNvleAOo6if84VMUtX3MWV5Vas6U+QIEyjQXIRp24A1OUX+RwApKxwgWG8MnzLmj1RTClIT0jUMqIhSj",
+	"r9zKlrCimc6JjAOFJXvFekWHfEOBVB2DgvcAqtH+2DLcBYXdIHCs3YcRp+s6FillS+OFl0rdnnJHMsVe",
+	"0Ua5XGmKgny9QGHzuzZKf2YWaelV+k9jwNFy1ECZtOEf0ItxhUsULc36M+RTkR+dhTZJlplcKyXzRS3Z",
+	"O725MTzsw6eqxKVRxLR2NJk34N0pbFqWmA2ACoRYINq67j+4gVea5AgZZcJa5l5Y9iBnXlJeu5SQjC8T",
+	"LDojJuF7LpU5tqa40wcdQsphgZXv7GnXS5bIUdh46giXR/gFcQoenGqi3bG/bvO6oDNKVkEzXqHJG91o",
+	"QuGRLnJpeaHQreJqbY8MsvGN9D5p1tWdAqh14B1tKgnfhgL37BagTZ98TuvAlB1uMBgdHWGOGNkiu1WD",
+	"ncx+J3v2YrTpaNDnxLL17st52gXWS2+NTts5Ros0TZBy26frNsocXKZ0l0ZeHl7gRVGVS5jTJcKn+YwE",
+	"RJfNVsTdaGJMzZDTjJEp+TiajO6196laGZXGzdHzEg30K710M0X+ieqhXtWat9xPJkNOrNaN+4cy5h4h",
+	"X6+p2FgpwzOQLJU9ij2YhFU30O5wcTOslTN/HHeGj7uOfXeH7XMmHE2jrIZAgeNbYyqyC1zXj7fOEH5n",
+	"oZKgLZSaJj+az12T3dcCf/QrWi8ZD74m2H07JbDtW6ym9VbZzjzoIMje26ruxK0PqjLDkMUsdDpXnZsi",
+	"C1iqwlXXSlsBXc3Qy4P/bAxYi1sY0Oi39wdmRLWPeeo29TTqGZjn7eOezvRsH/s4bfQJEeg+OLgi/zTH",
+	"aa0YjLfuwxoPDmoYfhyKh58JXZOFuvPEw5h7d9N6Brd7ucgx0ZeNrmjtFU7D5Qipz2fluSjntHuZqVrU",
+	"cVvr/lpRYYhFsbVupejaXGr8yFFsTP/0y/M/Hj5+/Pi3X6tHWOa7+hWW1DvsfYIVYUzzRJEpuZ/c33+Y",
+	"3H2Y3H2+m0zNf6PJ3eTfQ5f+rSZoF7TV/7su4M9QHnnkr/pfz1H9tBPW96hgb3oo4w4LVG+IHNRbClnK",
+	"9EflEOZg2igvz045Jq1XYddMGfXAv3Euxtv6baNPrqitPZJgBh5oXjlPuM8cDh3/d7ap84hkf3oo70h9",
+	"c8N1jLw44C+WFbgf5MfOffwhgBT3zj8JTnpe6+wju8JOiEW67gOSN9EVd78/BY6ar1hPo8+ehzR7eLQY",
+	"bphBZ58PDyNtvC2fYh/Bt5d2euD90/6H6le9ZKj8Wjh7CLI+pP7/4biB92t7M8QB5/mnjJ/ThVdijCt0",
+	"JYcDoUmjng8MQbqeaXRC0VetN2YDp/yJx0lI7b7n64JUrRDCXAhdvjjzhTJTWU8czEeuO1pwuMjfMrgv",
+	"BXe3SC2OK3SXtsLmS8Pdbve/AAAA//8S4DNZYDYAAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
