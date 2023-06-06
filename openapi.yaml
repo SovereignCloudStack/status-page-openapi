@@ -64,7 +64,7 @@ components:
       type: object
       properties:
         type:
-          $ref: '#/components/schemas/ImpactType'
+          $ref: '#/components/schemas/Id'
         reference:
           $ref: '#/components/schemas/Id'
 
