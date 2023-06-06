@@ -219,9 +219,9 @@ components:
       schema:
         $ref: '#/components/schemas/Id'
 
-    IncidentUpdateIdPathParameter:
-      description: Incident update id (inremental) is required in path.
-      name: updateId
+    IncidentUpdateOrderPathParameter:
+      description: Incident update order (inremental) is required in path.
+      name: updateOrder
       in: path
       required: true
       schema:
@@ -281,18 +281,29 @@ components:
           schema:
             type: object
             properties:
-              data:
+              id:
                 $ref: '#/components/schemas/Id'
 
-    IncrementalResponse:
-      description: A request returns an Incremental.
+    GenerationResponse:
+      description: A request returns a generation.
       content:
         application/json:
           schema:
             type: object
             properties:
-              data:
+              generation:
                 $ref: '#/components/schemas/Incremental'
+
+    OrderResponse:
+      description: A request returns an order.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              order:
+                $ref: '#/components/schemas/Incremental'
+
 
     PhaseListResponse:
       description: A request returns a phase list.
@@ -402,7 +413,7 @@ paths:
         $ref: '#/components/requestBodies/PhaseListRequest'
       responses:
         '201':
-          $ref: '#/components/responses/IncrementalResponse'
+          $ref: '#/components/responses/GenerationResponse'
 
   /impacttypes:
     get:
@@ -581,15 +592,15 @@ paths:
         $ref: '#/components/requestBodies/IncidentUpdateRequest'
       responses:
         '201':
-          $ref: '#/components/responses/IncrementalResponse'
+          $ref: '#/components/responses/OrderResponse'
 
-  /incidents/{incidentId}/updates/{updateId}:
+  /incidents/{incidentId}/updates/{updateOrder}:
     get:
       summary: Get a specific update from a specific incident.
       operationId: getIncidentUpdate
       parameters:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
-        - $ref: '#/components/parameters/IncidentUpdateIdPathParameter'
+        - $ref: '#/components/parameters/IncidentUpdateOrderPathParameter'
       responses:
         '200':
           $ref: '#/components/responses/IncidentUpdateResponse'
@@ -599,7 +610,7 @@ paths:
       operationId: updateIncidentUpdate
       parameters:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
-        - $ref: '#/components/parameters/IncidentUpdateIdPathParameter'
+        - $ref: '#/components/parameters/IncidentUpdateOrderPathParameter'
       requestBody:
         $ref: '#/components/requestBodies/IncidentUpdateRequest'
       responses:
@@ -611,7 +622,7 @@ paths:
       operationId: deleteIncidentUpdate
       parameters:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
-        - $ref: '#/components/parameters/IncidentUpdateIdPathParameter'
+        - $ref: '#/components/parameters/IncidentUpdateOrderPathParameter'
       responses:
         '204':
           description: Successful. No Content
