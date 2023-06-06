@@ -198,27 +198,6 @@ components:
         $ref: '#/components/schemas/Incident'
       readOnly: true
 
-    ResponseData:
-      description: |
-        Wraps the retuned data in an object.
-        See: https://github.com/SovereignCloudStack/status-page-openapi/issues/6
-      type: object
-      properties:
-        content:
-          oneOf:
-            - $ref: '#/components/schemas/Success'
-            - $ref: '#/components/schemas/Id'
-            - $ref: '#/components/schemas/Incremental'
-            - $ref: '#/components/schemas/PhaseList'
-            - $ref: '#/components/schemas/ImpactType'
-            - $ref: '#/components/schemas/ImpactTypeList'
-            - $ref: '#/components/schemas/Component'
-            - $ref: '#/components/schemas/ComponentList'
-            - $ref: '#/components/schemas/Incident'
-            - $ref: '#/components/schemas/IncidentList'
-            - $ref: '#/components/schemas/IncidentUpdate'
-            - $ref: '#/components/schemas/IncidentUpdateList'
-
   # requests
   requestBodies:
     ComponentRequest:
@@ -251,12 +230,125 @@ components:
 
   # responses
   responses:
-    Response:
-      description: General response for successful operations.
+    SuccessResponse:
+      description: A request has successfully run.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ResponseData'
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Success'
+
+    IdResponse:
+      description: A request returns an ID.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Id'
+
+    IncrementalResponse:
+      description: A request returns an Incremental.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Incremental'
+
+    PhaseListResponse:
+      description: A request returns a phase list.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/PhaseList'
+
+    ImpactTypeResponse:
+      description: A request returns an impact type.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/ImpactType'
+
+    ImpactTypeListResponse:
+      description: A request returns a list of impact types.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/ImpactTypeList'
+
+    ComponentResponse:
+      description: A request returns a component.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Component'
+
+    ComponentListResponse:
+      description: A request returns a list of components.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/ComponentList'
+
+    IncidentResponse:
+      description: A request returns an incident.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Incident'
+
+    IncidentListResponse:
+      description: A request returns a list of incidents.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/IncidentList'
+
+    IncidentUpdateResponse:
+      description: A request returns an incident update.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/IncidentUpdate'
+
+    IncidentUpdateListResponse:
+      description: A request returns a list of incident updates.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/IncidentUpdateList'
 
   # parameter
   parameters:
@@ -304,7 +396,7 @@ paths:
             $ref: '#/components/schemas/Incremental'
       responses:
         '200':
-          $ref: '#/components/responses/Response'
+          $ref: '#/components/responses/PhaseListResponse'
 
     post:
       summary: Create a new generation of the phase list.
@@ -316,7 +408,7 @@ paths:
               $ref: '#/components/schemas/PhaseList'
       responses:
         '201':
-          $ref: '#/components/responses/Response'
+          $ref: '#/components/responses/IncrementalResponse'
 
   /impacttypes:
     get:
@@ -324,7 +416,7 @@ paths:
       operationId: getImpactTypes
       responses:
         '200':
-          $ref: '#/components/responses/Response'
+          $ref: '#/components/responses/ImpactTypeListResponse'
 
     post:
       summary: Create a new impact type.
@@ -333,7 +425,7 @@ paths:
         $ref: '#/components/requestBodies/ImpactTypeRequest'
       responses:
         '201':
-          $ref: '#/components/responses/Response'
+          $ref: '#/components/responses/IdResponse'
 
   /impacttypes/{impactTypeId}:
     get:
@@ -343,7 +435,7 @@ paths:
         - $ref: '#/components/parameters/ImpactTypeIdPathParameter'
       responses:
         '200':
-          $ref: '#/components/responses/Response'
+          $ref: '#/components/responses/ImpactTypeResponse'
 
     patch:
       summary: Update a specific impact type.
@@ -354,7 +446,7 @@ paths:
         $ref: '#/components/requestBodies/ImpactTypeRequest'
       responses:
         '200':
-          $ref: '#/components/responses/Response'
+          $ref: '#/components/responses/SuccessResponse'
 
     delete:
       summary: Delete an impact type.
@@ -363,7 +455,7 @@ paths:
         - $ref: '#/components/parameters/ImpactTypeIdPathParameter'
       responses:
         '200':
-          $ref: "#/components/responses/Response"
+          $ref: "#/components/responses/SuccessResponse"
 
   /components:
     get:
@@ -371,7 +463,7 @@ paths:
       operationId: getComponents
       responses:
         '200':
-          $ref: '#/components/responses/Response'
+          $ref: '#/components/responses/ComponentListResponse'
 
     post:
       summary: Create a new component.
@@ -380,7 +472,7 @@ paths:
         $ref: '#/components/requestBodies/ComponentRequest'
       responses:
         '201':
-          $ref: '#/components/responses/Response'
+          $ref: '#/components/responses/IdResponse'
 
   /components/{componentId}:
     get:
@@ -390,7 +482,7 @@ paths:
       - $ref: '#/components/parameters/ComponentIdPathParameter'
       responses:
         '200':
-          $ref: '#/components/responses/Response'
+          $ref: '#/components/responses/ComponentResponse'
 
     patch:
       summary: Update a component.
@@ -401,7 +493,7 @@ paths:
         $ref: '#/components/requestBodies/ComponentRequest'
       responses:
         '200':
-          $ref: "#/components/responses/Response"
+          $ref: "#/components/responses/SuccessResponse"
 
     delete:
       summary: Delete a component.
@@ -410,7 +502,7 @@ paths:
         - $ref: '#/components/parameters/ComponentIdPathParameter'
       responses:
         '200':
-          $ref: "#/components/responses/Response"
+          $ref: "#/components/responses/SuccessResponse"
 
   /incidents:
     get:
@@ -435,7 +527,7 @@ paths:
         description: End of time frame to query for (RFC3339).
       responses:
         '200':
-          $ref: '#/components/responses/Response'
+          $ref: '#/components/responses/IncidentListResponse'
 
     post:
       summary: Create a new incident.
@@ -444,7 +536,7 @@ paths:
         $ref: '#/components/requestBodies/IncidentRequest'
       responses:
         '201':
-          $ref: '#/components/responses/Response'
+          $ref: '#/components/responses/IdResponse'
 
   /incidents/{incidentId}:
     get:
@@ -454,7 +546,7 @@ paths:
       - $ref: '#/components/parameters/IncidentIdPathParameter'
       responses:
         '200':
-          $ref: '#/components/responses/Response'
+          $ref: '#/components/responses/IncidentResponse'
 
     patch:
       summary: Update an incident.
@@ -465,7 +557,7 @@ paths:
         $ref: '#/components/requestBodies/IncidentRequest'
       responses:
         '200':
-          $ref: "#/components/responses/Response"
+          $ref: "#/components/responses/SuccessResponse"
 
     delete:
       summary: Delete an incident.
@@ -474,7 +566,7 @@ paths:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
       responses:
         '200':
-          $ref: "#/components/responses/Response"
+          $ref: "#/components/responses/SuccessResponse"
 
   /incidents/{incidentId}/updates:
     get:
@@ -484,7 +576,7 @@ paths:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
       responses:
         '200':
-          $ref: '#/components/responses/Response'
+          $ref: '#/components/responses/IncidentUpdateListResponse'
 
     post:
       summary: Create a new update to a specific incident.
@@ -495,7 +587,7 @@ paths:
         $ref: '#/components/requestBodies/IncidentUpdateRequest'
       responses:
         '201':
-          $ref: '#/components/responses/Response'
+          $ref: '#/components/responses/IncrementalResponse'
 
   /incidents/{incidentId}/updates/{updateId}:
     get:
@@ -506,7 +598,7 @@ paths:
         - $ref: '#/components/parameters/IncidentUpdateIdPathParameter'
       responses:
         '200':
-          $ref: '#/components/responses/Response'
+          $ref: '#/components/responses/IncidentUpdateResponse'
 
     patch:
       summary: Update a specific update from a specific incident.
@@ -518,7 +610,7 @@ paths:
         $ref: '#/components/requestBodies/IncidentUpdateRequest'
       responses:
         '200':
-          $ref: "#/components/responses/Response"
+          $ref: "#/components/responses/SuccessResponse"
 
     delete:
       summary: Delete a specific update from a specific incident
@@ -528,4 +620,4 @@ paths:
         - $ref: '#/components/parameters/IncidentUpdateIdPathParameter'
       responses:
         '200':
-          $ref: "#/components/responses/Response"
+          $ref: "#/components/responses/SuccessResponse"
