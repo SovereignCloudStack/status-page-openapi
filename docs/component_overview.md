@@ -47,7 +47,7 @@ C4Component
   }
 
   Container_Boundary(components, "Components") {
-    Component(component, Component, "ID, displayName, Labels, affectedBy")
+    Component(component, Component, "ID, displayName, Labels, activelyAffectedBy")
     Component(labels, Labels, "", "Key value pairs")
 
     Rel(component, labels, "contains")
@@ -63,16 +63,16 @@ C4Component
 
   %% new %%
   Rel(incident, impactList, "affects")
-  Rel(component, impactList, "affected by")
+  Rel(component, impactList, "actively affected by", "only list active/open impacts")
   Rel(incident, phaseReference, "has")
   Rel(impact, component, "references", "from Incident")
   Rel(impact, incident, "references", "from Component")
 
   UpdateRelStyle(incident, impactList, "green", "green")
-  UpdateRelStyle(component, impactList, "green", "green")
+  UpdateRelStyle(component, impactList, "green", "green", $offsetY="70")
   UpdateRelStyle(incident, phaseReference, "green", "green")
-  UpdateRelStyle(impact, component, "green", "green")
-  UpdateRelStyle(impact, incident, "green", "green")
+  UpdateRelStyle(impact, component, "green", "green", $offsetX="-140")
+  UpdateRelStyle(impact, incident, "green", "green", $offsetX="-100")
 
 ```
 
