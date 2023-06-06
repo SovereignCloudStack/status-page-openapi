@@ -172,8 +172,8 @@ type ImpactTypeIdPathParameter = Id
 // IncidentIdPathParameter Identification for objects. UUID preferred.
 type IncidentIdPathParameter = Id
 
-// IncidentUpdateIdPathParameter Positive and incrementing number for ordering and identfication of e.g. sub resources.
-type IncidentUpdateIdPathParameter = Incremental
+// IncidentUpdateOrderPathParameter Positive and incrementing number for ordering and identfication of e.g. sub resources.
+type IncidentUpdateOrderPathParameter = Incremental
 
 // ComponentListResponse defines model for ComponentListResponse.
 type ComponentListResponse struct {
@@ -185,10 +185,16 @@ type ComponentResponse struct {
 	Data *Component `json:"data,omitempty"`
 }
 
+// GenerationResponse defines model for GenerationResponse.
+type GenerationResponse struct {
+	// Generation Positive and incrementing number for ordering and identfication of e.g. sub resources.
+	Generation *Incremental `json:"generation,omitempty"`
+}
+
 // IdResponse defines model for IdResponse.
 type IdResponse struct {
-	// Data Identification for objects. UUID preferred.
-	Data *Id `json:"data,omitempty"`
+	// Id Identification for objects. UUID preferred.
+	Id *Id `json:"id,omitempty"`
 }
 
 // ImpactTypeListResponse defines model for ImpactTypeListResponse.
@@ -224,10 +230,10 @@ type IncidentUpdateResponse struct {
 	Data *IncidentUpdate `json:"data,omitempty"`
 }
 
-// IncrementalResponse defines model for IncrementalResponse.
-type IncrementalResponse struct {
-	// Data Positive and incrementing number for ordering and identfication of e.g. sub resources.
-	Data *Incremental `json:"data,omitempty"`
+// OrderResponse defines model for OrderResponse.
+type OrderResponse struct {
+	// Order Positive and incrementing number for ordering and identfication of e.g. sub resources.
+	Order *Incremental `json:"order,omitempty"`
 }
 
 // PhaseListResponse defines model for PhaseListResponse.
@@ -349,14 +355,14 @@ type ServerInterface interface {
 	// (POST /incidents/{incidentId}/updates)
 	CreateIncidentUpdate(ctx echo.Context, incidentId IncidentIdPathParameter) error
 	// Delete a specific update from a specific incident
-	// (DELETE /incidents/{incidentId}/updates/{updateId})
-	DeleteIncidentUpdate(ctx echo.Context, incidentId IncidentIdPathParameter, updateId IncidentUpdateIdPathParameter) error
+	// (DELETE /incidents/{incidentId}/updates/{updateOrder})
+	DeleteIncidentUpdate(ctx echo.Context, incidentId IncidentIdPathParameter, updateOrder IncidentUpdateOrderPathParameter) error
 	// Get a specific update from a specific incident.
-	// (GET /incidents/{incidentId}/updates/{updateId})
-	GetIncidentUpdate(ctx echo.Context, incidentId IncidentIdPathParameter, updateId IncidentUpdateIdPathParameter) error
+	// (GET /incidents/{incidentId}/updates/{updateOrder})
+	GetIncidentUpdate(ctx echo.Context, incidentId IncidentIdPathParameter, updateOrder IncidentUpdateOrderPathParameter) error
 	// Update a specific update from a specific incident.
-	// (PATCH /incidents/{incidentId}/updates/{updateId})
-	UpdateIncidentUpdate(ctx echo.Context, incidentId IncidentIdPathParameter, updateId IncidentUpdateIdPathParameter) error
+	// (PATCH /incidents/{incidentId}/updates/{updateOrder})
+	UpdateIncidentUpdate(ctx echo.Context, incidentId IncidentIdPathParameter, updateOrder IncidentUpdateOrderPathParameter) error
 	// Get the current generation list of phases.
 	// (GET /phases)
 	GetPhaseList(ctx echo.Context, params GetPhaseListParams) error
@@ -627,16 +633,16 @@ func (w *ServerInterfaceWrapper) DeleteIncidentUpdate(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter incidentId: %s", err))
 	}
 
-	// ------------- Path parameter "updateId" -------------
-	var updateId IncidentUpdateIdPathParameter
+	// ------------- Path parameter "updateOrder" -------------
+	var updateOrder IncidentUpdateOrderPathParameter
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "updateId", runtime.ParamLocationPath, ctx.Param("updateId"), &updateId)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "updateOrder", runtime.ParamLocationPath, ctx.Param("updateOrder"), &updateOrder)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter updateId: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter updateOrder: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.DeleteIncidentUpdate(ctx, incidentId, updateId)
+	err = w.Handler.DeleteIncidentUpdate(ctx, incidentId, updateOrder)
 	return err
 }
 
@@ -651,16 +657,16 @@ func (w *ServerInterfaceWrapper) GetIncidentUpdate(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter incidentId: %s", err))
 	}
 
-	// ------------- Path parameter "updateId" -------------
-	var updateId IncidentUpdateIdPathParameter
+	// ------------- Path parameter "updateOrder" -------------
+	var updateOrder IncidentUpdateOrderPathParameter
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "updateId", runtime.ParamLocationPath, ctx.Param("updateId"), &updateId)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "updateOrder", runtime.ParamLocationPath, ctx.Param("updateOrder"), &updateOrder)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter updateId: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter updateOrder: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetIncidentUpdate(ctx, incidentId, updateId)
+	err = w.Handler.GetIncidentUpdate(ctx, incidentId, updateOrder)
 	return err
 }
 
@@ -675,16 +681,16 @@ func (w *ServerInterfaceWrapper) UpdateIncidentUpdate(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter incidentId: %s", err))
 	}
 
-	// ------------- Path parameter "updateId" -------------
-	var updateId IncidentUpdateIdPathParameter
+	// ------------- Path parameter "updateOrder" -------------
+	var updateOrder IncidentUpdateOrderPathParameter
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "updateId", runtime.ParamLocationPath, ctx.Param("updateId"), &updateId)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "updateOrder", runtime.ParamLocationPath, ctx.Param("updateOrder"), &updateOrder)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter updateId: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter updateOrder: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.UpdateIncidentUpdate(ctx, incidentId, updateId)
+	err = w.Handler.UpdateIncidentUpdate(ctx, incidentId, updateOrder)
 	return err
 }
 
@@ -760,9 +766,9 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.PATCH(baseURL+"/incidents/:incidentId", wrapper.UpdateIncident)
 	router.GET(baseURL+"/incidents/:incidentId/updates", wrapper.GetIncidentUpdates)
 	router.POST(baseURL+"/incidents/:incidentId/updates", wrapper.CreateIncidentUpdate)
-	router.DELETE(baseURL+"/incidents/:incidentId/updates/:updateId", wrapper.DeleteIncidentUpdate)
-	router.GET(baseURL+"/incidents/:incidentId/updates/:updateId", wrapper.GetIncidentUpdate)
-	router.PATCH(baseURL+"/incidents/:incidentId/updates/:updateId", wrapper.UpdateIncidentUpdate)
+	router.DELETE(baseURL+"/incidents/:incidentId/updates/:updateOrder", wrapper.DeleteIncidentUpdate)
+	router.GET(baseURL+"/incidents/:incidentId/updates/:updateOrder", wrapper.GetIncidentUpdate)
+	router.PATCH(baseURL+"/incidents/:incidentId/updates/:updateOrder", wrapper.UpdateIncidentUpdate)
 	router.GET(baseURL+"/phases", wrapper.GetPhaseList)
 	router.POST(baseURL+"/phases", wrapper.CreatePhaseList)
 
@@ -771,41 +777,42 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
+	"Zuk2AAA=",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
