@@ -9,16 +9,20 @@ C4Component
   Container_Boundary(impacts, "Impacts") {
     Component(impactType, ImpactType, "ID, displayName, description")
     Component(impact, Impact, "type, reference")
-    Component(impactList, ImpactList, "[]Impact")
+    Component(impactComponentList, ImpactComponentList, "[]Impact", "Impacts reference components")
+    Component(impactIncidentList, ImpactIncidentList, "<<readonly>>[]Impact", "Impacts reference incidents")
 
     Rel(impact, impactType, "has")
-    Rel(impactList, impact, "lists")
+    Rel(impactComponentList, impact, "lists")
+    Rel(impactIncidentList, impact, "lists")
 
     UpdateElementStyle(impact, $bgColor="green")
-    UpdateElementStyle(impactList, $bgColor="green")
+    UpdateElementStyle(impactComponentList, $bgColor="green")
+    UpdateElementStyle(impactIncidentList, $bgColor="green")
 
     UpdateRelStyle(impact, impactType, "green", "green", $offsetY="-10")
-    UpdateRelStyle(impactList, impact, "green", "green", $offsetY="-10")
+    UpdateRelStyle(impactComponentList, impact, "green", "green", $offsetY="-15")
+    UpdateRelStyle(impactIncidentList, impact, "green", "green")
   }
 
   Container_Boundary(incidents, "Incidents") {
@@ -62,15 +66,15 @@ C4Component
   UpdateRelStyle(component, incident, "red", "red", $offsetX="10")
 
   %% new %%
-  Rel(incident, impactList, "affects")
-  Rel(component, impactList, "actively affected by", "only list active/open impacts")
+  Rel(incident, impactComponentList, "affects")
+  Rel(component, impactIncidentList, "actively affected by", "only list active/open impacts")
   Rel(incident, phaseReference, "has")
-  Rel(impact, component, "references", "from Incident")
-  Rel(impact, incident, "references", "from Component")
+  Rel(impact, component, "references", "from impactComponentList")
+  Rel(impact, incident, "references", "from impactIncidentList")
 
-  UpdateRelStyle(incident, impactList, "green", "green")
-  UpdateRelStyle(component, impactList, "green", "green", $offsetY="70")
-  UpdateRelStyle(incident, phaseReference, "green", "green")
+  UpdateRelStyle(incident, impactComponentList, "green", "green")
+  UpdateRelStyle(component, impactIncidentList, "green", "green", $offsetX="-180", $offsetY="-70")
+  UpdateRelStyle(incident, phaseReference, "green", "green", $offsetX="-70", $offsetY="40")
   UpdateRelStyle(impact, component, "green", "green", $offsetX="-140")
   UpdateRelStyle(impact, incident, "green", "green", $offsetX="-100")
 
