@@ -44,10 +44,6 @@ components:
       format: date-time
       nullable: true
 
-    Success:
-      description: An operation was successful.
-      type: boolean
-
     # API objects
     ImpactType:
       type: object
@@ -278,16 +274,6 @@ components:
 
   # responses
   responses:
-    SuccessResponse:
-      description: A request has successfully run.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              data:
-                $ref: '#/components/schemas/Success'
-
     IdResponse:
       description: A request returns an ID.
       content:
@@ -453,8 +439,8 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/ImpactTypeRequest'
       responses:
-        '200':
-          $ref: '#/components/responses/SuccessResponse'
+        '204':
+          description: Successful. No Content
 
     delete:
       summary: Delete an impact type.
@@ -462,8 +448,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ImpactTypeIdPathParameter'
       responses:
-        '200':
-          $ref: "#/components/responses/SuccessResponse"
+        '204':
+          description: Successful. No Content
 
   /components:
     get:
@@ -500,8 +486,8 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/ComponentRequest'
       responses:
-        '200':
-          $ref: "#/components/responses/SuccessResponse"
+        '204':
+          description: Successful. No Content
 
     delete:
       summary: Delete a component.
@@ -509,8 +495,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ComponentIdPathParameter'
       responses:
-        '200':
-          $ref: "#/components/responses/SuccessResponse"
+        '204':
+          description: Successful. No Content
 
   /incidents:
     get:
@@ -564,8 +550,8 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/IncidentRequest'
       responses:
-        '200':
-          $ref: "#/components/responses/SuccessResponse"
+        '204':
+          description: Successful. No Content
 
     delete:
       summary: Delete an incident.
@@ -573,8 +559,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
       responses:
-        '200':
-          $ref: "#/components/responses/SuccessResponse"
+        '204':
+          description: Successful. No Content
 
   /incidents/{incidentId}/updates:
     get:
@@ -617,8 +603,8 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/IncidentUpdateRequest'
       responses:
-        '200':
-          $ref: "#/components/responses/SuccessResponse"
+        '204':
+          description: Successful. No Content
 
     delete:
       summary: Delete a specific update from a specific incident
@@ -627,5 +613,5 @@ paths:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
         - $ref: '#/components/parameters/IncidentUpdateIdPathParameter'
       responses:
-        '200':
-          $ref: "#/components/responses/SuccessResponse"
+        '204':
+          description: Successful. No Content
