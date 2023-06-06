@@ -8,7 +8,6 @@ components:
     Id:
       description: Identification for objects. UUID preferred.
       type: string
-      readOnly: true
 
     IdList:
       description: List of IDs for referencing other objects.
@@ -21,7 +20,6 @@ components:
       description: |
         Positive and incrementing number for ordering and identfication of e.g. sub resources.
       type: integer
-      readOnly: true
 
     IncrementalList:
       description: List of Incrementals for referencing subresources.
@@ -54,8 +52,6 @@ components:
           $ref: '#/components/schemas/DisplayName'
         description:
           $ref: '#/components/schemas/Description'
-      required:
-        - id
 
     ImpactTypeList:
       type: array
@@ -72,13 +68,22 @@ components:
         reference:
           $ref: '#/components/schemas/Id'
 
-    ImpactList:
+    ImpactComponentList:
       description: |
-        A list of impacts for a component or incident.
-        In case of an incident the IDs refer to a component and vice versa.
+        A list of impacts for an incident.
+        Impacts reference components.
       type: array
       items:
         $ref: '#/components/schemas/Impact'
+
+    ImpactIncidentList:
+      description: |
+        A list of impacts for an component.
+        Impacts reference incidents.
+      type: array
+      items:
+        $ref: '#/components/schemas/Impact'
+      readOnly: true
 
     Phase:
       description: |
@@ -112,7 +117,6 @@ components:
           items:
             $ref: '#/components/schemas/Phase'
       required:
-        - generation
         - phases
 
     IncidentUpdate:
@@ -132,7 +136,6 @@ components:
           $ref: '#/components/schemas/Date'
       required:
         - order
-        - createdAt
 
     IncidentUpdateList:
       type: array
@@ -155,10 +158,8 @@ components:
           $ref: '#/components/schemas/DisplayName'
         labels:
           $ref: '#/components/schemas/Labels'
-        affectedBy:
-          $ref: '#/components/schemas/ImpactList'
-      required:
-        - id
+        activelyAffectedBy:
+          $ref: '#/components/schemas/ImpactIncidentList'
 
     ComponentList:
       type: array
@@ -178,7 +179,7 @@ components:
         updates:
           $ref: '#/components/schemas/IncrementalList'
         affects:
-          $ref: '#/components/schemas/ImpactList'
+          $ref: '#/components/schemas/ImpactComponentList'
         beganAt:
           $ref: '#/components/schemas/Date'
         endedAt:
