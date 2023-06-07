@@ -9,17 +9,37 @@ components:
       description: Identification for objects. UUID preferred.
       type: string
 
-    IdList:
-      description: List of IDs for referencing other objects.
-      type: array
-      items:
-        $ref: '#/components/schemas/Id'
-      readOnly: true
+    IdField:
+      description: Id field for responses.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+      required:
+        - id
 
     Incremental:
       description: |
         Positive and incrementing number for ordering and identfication of e.g. sub resources.
       type: integer
+
+    Generation:
+      description: Incremental as generation field for responses.
+      type: object
+      properties:
+        generation:
+          $ref: '#/components/schemas/Incremental'
+      required:
+        - generation
+
+    Order:
+      description: Incremental as order field for responses.
+      type: object
+      properties:
+        order:
+          $ref: '#/components/schemas/Incremental'
+      required:
+        - order
 
     IncrementalList:
       description: List of Incrementals for referencing subresources.
@@ -46,18 +66,10 @@ components:
     ImpactType:
       type: object
       properties:
-        id:
-          $ref: '#/components/schemas/Id'
         displayName:
           $ref: '#/components/schemas/DisplayName'
         description:
           $ref: '#/components/schemas/Description'
-
-    ImpactTypeList:
-      type: array
-      items:
-        $ref: '#/components/schemas/ImpactType'
-      readOnly: true
 
     Impact:
       description: An impact connects a component and an incident with an impact type.
@@ -95,23 +107,14 @@ components:
     PhaseReference:
       description: To reference a phase, its generation and order is needed.
       type: object
-      properties:
-        displayName:
-          $ref: '#/components/schemas/DisplayName'
-        order:
-          $ref: '#/components/schemas/Incremental'
-        generation:
-          $ref: '#/components/schemas/Incremental'
-      required:
-        - order
-        - generation
+      allOf:
+        - $ref: '#/components/schemas/Order'
+        - $ref: '#/components/schemas/Generation'
 
     PhaseList:
       description: Phase resources are always handled as a list.
       type: object
       properties:
-        generation:
-          $ref: '#/components/schemas/Incremental'
         phases:
           type: array
           items:
@@ -126,8 +129,6 @@ components:
         Updates happen in a given order.
       type: object
       properties:
-        order:
-          $ref: '#/components/schemas/Incremental'
         displayName:
           $ref: '#/components/schemas/DisplayName'
         description:
@@ -136,12 +137,6 @@ components:
           $ref: '#/components/schemas/Date'
       required:
         - order
-
-    IncidentUpdateList:
-      type: array
-      items:
-        $ref: '#/components/schemas/IncidentUpdate'
-      readOnly: true
 
     Labels:
       description: Labels are free text key value pairs for components.
@@ -152,8 +147,6 @@ components:
     Component:
       type: object
       properties:
-        id:
-          $ref: '#/components/schemas/Id'
         displayName:
           $ref: '#/components/schemas/DisplayName'
         labels:
@@ -161,17 +154,9 @@ components:
         activelyAffectedBy:
           $ref: '#/components/schemas/ImpactIncidentList'
 
-    ComponentList:
-      type: array
-      items:
-        $ref: '#/components/schemas/Component'
-      readOnly: true
-
     Incident:
       type: object
       properties:
-        id:
-          $ref: '#/components/schemas/Id'
         displayName:
           $ref: '#/components/schemas/DisplayName'
         description:
@@ -188,12 +173,6 @@ components:
           $ref: '#/components/schemas/PhaseReference'
       required:
         - id
-
-    IncidentList:
-      type: array
-      items:
-        $ref: '#/components/schemas/Incident'
-      readOnly: true
 
   # parameter
   parameters:
@@ -280,31 +259,21 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              id:
-                $ref: '#/components/schemas/Id'
+            $ref: '#/components/schemas/IdField'
 
     GenerationResponse:
       description: A request returns a generation.
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              generation:
-                $ref: '#/components/schemas/Incremental'
+            $ref: '#/components/schemas/Generation'
 
     OrderResponse:
       description: A request returns an order.
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              order:
-                $ref: '#/components/schemas/Incremental'
-
+            $ref: '#/components/schemas/Order'
 
     PhaseListResponse:
       description: A request returns a phase list.
@@ -314,7 +283,9 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/PhaseList'
+                allOf:
+                  - $ref: '#/components/schemas/Generation'
+                  - $ref: '#/components/schemas/PhaseList'
 
     ImpactTypeResponse:
       description: A request returns an impact type.
@@ -324,7 +295,9 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/ImpactType'
+                allOf:
+                  - $ref: '#/components/schemas/IdField'
+                  - $ref: '#/components/schemas/ImpactType'
 
     ImpactTypeListResponse:
       description: A request returns a list of impact types.
@@ -334,7 +307,12 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/ImpactTypeList'
+                type: array
+                items:
+                  type: object
+                  allOf:
+                    - $ref: '#/components/schemas/IdField'
+                    - $ref: '#/components/schemas/ImpactType'
 
     ComponentResponse:
       description: A request returns a component.
@@ -344,7 +322,9 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/Component'
+                allOf:
+                  - $ref: '#/components/schemas/IdField'
+                  - $ref: '#/components/schemas/Component'
 
     ComponentListResponse:
       description: A request returns a list of components.
@@ -354,7 +334,12 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/ComponentList'
+                type: array
+                items:
+                  type: object
+                  allOf:
+                    - $ref: '#/components/schemas/IdField'
+                    - $ref: '#/components/schemas/Component'
 
     IncidentResponse:
       description: A request returns an incident.
@@ -364,7 +349,9 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/Incident'
+                allOf:
+                  - $ref: '#/components/schemas/IdField'
+                  - $ref: '#/components/schemas/Incident'
 
     IncidentListResponse:
       description: A request returns a list of incidents.
@@ -374,7 +361,12 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/IncidentList'
+                type: array
+                items:
+                  type: object
+                  allOf:
+                    - $ref: '#/components/schemas/IdField'
+                    - $ref: '#/components/schemas/Incident'
 
     IncidentUpdateResponse:
       description: A request returns an incident update.
@@ -384,7 +376,9 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/IncidentUpdate'
+                allOf:
+                  - $ref: '#/components/schemas/Order'
+                  - $ref: '#/components/schemas/IncidentUpdate'
 
     IncidentUpdateListResponse:
       description: A request returns a list of incident updates.
@@ -394,7 +388,12 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/IncidentUpdateList'
+                type: array
+                items:
+                  type: object
+                  allOf:
+                    - $ref: '#/components/schemas/Order'
+                    - $ref: '#/components/schemas/IncidentUpdate'
 
 paths:
   /phases:

@@ -28,15 +28,9 @@ type Component struct {
 	// DisplayName Short and describing name.
 	DisplayName *DisplayName `json:"displayName,omitempty"`
 
-	// Id Identification for objects. UUID preferred.
-	Id *Id `json:"id,omitempty"`
-
 	// Labels Labels are free text key value pairs for components.
 	Labels *Labels `json:"labels,omitempty"`
 }
-
-// ComponentList defines model for ComponentList.
-type ComponentList = []Component
 
 // Date Point in time. Nullable for open end timeframes.
 type Date = time.Time
@@ -47,8 +41,20 @@ type Description = string
 // DisplayName Short and describing name.
 type DisplayName = string
 
+// Generation Incremental as generation field for responses.
+type Generation struct {
+	// Generation Positive and incrementing number for ordering and identfication of e.g. sub resources.
+	Generation Incremental `json:"generation"`
+}
+
 // Id Identification for objects. UUID preferred.
 type Id = string
+
+// IdField Id field for responses.
+type IdField struct {
+	// Id Identification for objects. UUID preferred.
+	Id Id `json:"id"`
+}
 
 // Impact An impact connects a component and an incident with an impact type.
 type Impact struct {
@@ -74,13 +80,7 @@ type ImpactType struct {
 
 	// DisplayName Short and describing name.
 	DisplayName *DisplayName `json:"displayName,omitempty"`
-
-	// Id Identification for objects. UUID preferred.
-	Id *Id `json:"id,omitempty"`
 }
-
-// ImpactTypeList defines model for ImpactTypeList.
-type ImpactTypeList = []ImpactType
 
 // Incident defines model for Incident.
 type Incident struct {
@@ -100,18 +100,12 @@ type Incident struct {
 	// EndedAt Point in time. Nullable for open end timeframes.
 	EndedAt *Date `json:"endedAt"`
 
-	// Id Identification for objects. UUID preferred.
-	Id Id `json:"id"`
-
 	// Phase To reference a phase, its generation and order is needed.
 	Phase *PhaseReference `json:"phase,omitempty"`
 
 	// Updates List of Incrementals for referencing subresources.
 	Updates *IncrementalList `json:"updates,omitempty"`
 }
-
-// IncidentList defines model for IncidentList.
-type IncidentList = []Incident
 
 // IncidentUpdate An update is a sub resource to an incident.
 // It's identified by the incident ID and its own order.
@@ -125,13 +119,7 @@ type IncidentUpdate struct {
 
 	// DisplayName Short and describing name.
 	DisplayName *DisplayName `json:"displayName,omitempty"`
-
-	// Order Positive and incrementing number for ordering and identfication of e.g. sub resources.
-	Order Incremental `json:"order"`
 }
-
-// IncidentUpdateList defines model for IncidentUpdateList.
-type IncidentUpdateList = []IncidentUpdate
 
 // Incremental Positive and incrementing number for ordering and identfication of e.g. sub resources.
 type Incremental = int
@@ -142,6 +130,12 @@ type IncrementalList = []Incremental
 // Labels Labels are free text key value pairs for components.
 type Labels map[string]string
 
+// Order Incremental as order field for responses.
+type Order struct {
+	// Order Positive and incrementing number for ordering and identfication of e.g. sub resources.
+	Order Incremental `json:"order"`
+}
+
 // Phase A single phase is just its name.
 // It can be referenced by its generation and order.
 // See: #/components/schemas/PhaseReference
@@ -149,16 +143,11 @@ type Phase = string
 
 // PhaseList Phase resources are always handled as a list.
 type PhaseList struct {
-	// Generation Positive and incrementing number for ordering and identfication of e.g. sub resources.
-	Generation *Incremental `json:"generation,omitempty"`
-	Phases     []Phase      `json:"phases"`
+	Phases []Phase `json:"phases"`
 }
 
-// PhaseReference To reference a phase, its generation and order is needed.
+// PhaseReference defines model for PhaseReference.
 type PhaseReference struct {
-	// DisplayName Short and describing name.
-	DisplayName *DisplayName `json:"displayName,omitempty"`
-
 	// Generation Positive and incrementing number for ordering and identfication of e.g. sub resources.
 	Generation Incremental `json:"generation"`
 
@@ -183,69 +172,178 @@ type IncidentUpdateOrderPathParameter = Incremental
 
 // ComponentListResponse defines model for ComponentListResponse.
 type ComponentListResponse struct {
-	Data *ComponentList `json:"data,omitempty"`
+	Data *[]struct {
+		// ActivelyAffectedBy A list of impacts for an component.
+		// Impacts reference incidents.
+		ActivelyAffectedBy *ImpactIncidentList `json:"activelyAffectedBy,omitempty"`
+
+		// DisplayName Short and describing name.
+		DisplayName *DisplayName `json:"displayName,omitempty"`
+
+		// Id Identification for objects. UUID preferred.
+		Id Id `json:"id"`
+
+		// Labels Labels are free text key value pairs for components.
+		Labels *Labels `json:"labels,omitempty"`
+	} `json:"data,omitempty"`
 }
 
 // ComponentResponse defines model for ComponentResponse.
 type ComponentResponse struct {
-	Data *Component `json:"data,omitempty"`
+	Data *struct {
+		// ActivelyAffectedBy A list of impacts for an component.
+		// Impacts reference incidents.
+		ActivelyAffectedBy *ImpactIncidentList `json:"activelyAffectedBy,omitempty"`
+
+		// DisplayName Short and describing name.
+		DisplayName *DisplayName `json:"displayName,omitempty"`
+
+		// Id Identification for objects. UUID preferred.
+		Id Id `json:"id"`
+
+		// Labels Labels are free text key value pairs for components.
+		Labels *Labels `json:"labels,omitempty"`
+	} `json:"data,omitempty"`
 }
 
-// GenerationResponse defines model for GenerationResponse.
-type GenerationResponse struct {
-	// Generation Positive and incrementing number for ordering and identfication of e.g. sub resources.
-	Generation *Incremental `json:"generation,omitempty"`
-}
+// GenerationResponse Incremental as generation field for responses.
+type GenerationResponse = Generation
 
-// IdResponse defines model for IdResponse.
-type IdResponse struct {
-	// Id Identification for objects. UUID preferred.
-	Id *Id `json:"id,omitempty"`
-}
+// IdResponse Id field for responses.
+type IdResponse = IdField
 
 // ImpactTypeListResponse defines model for ImpactTypeListResponse.
 type ImpactTypeListResponse struct {
-	Data *ImpactTypeList `json:"data,omitempty"`
+	Data *[]struct {
+		// Description A longer text with detailed information.
+		Description *Description `json:"description,omitempty"`
+
+		// DisplayName Short and describing name.
+		DisplayName *DisplayName `json:"displayName,omitempty"`
+
+		// Id Identification for objects. UUID preferred.
+		Id Id `json:"id"`
+	} `json:"data,omitempty"`
 }
 
 // ImpactTypeResponse defines model for ImpactTypeResponse.
 type ImpactTypeResponse struct {
-	Data *ImpactType `json:"data,omitempty"`
+	Data *struct {
+		// Description A longer text with detailed information.
+		Description *Description `json:"description,omitempty"`
+
+		// DisplayName Short and describing name.
+		DisplayName *DisplayName `json:"displayName,omitempty"`
+
+		// Id Identification for objects. UUID preferred.
+		Id Id `json:"id"`
+	} `json:"data,omitempty"`
 }
 
 // IncidentListResponse defines model for IncidentListResponse.
 type IncidentListResponse struct {
-	Data *IncidentList `json:"data,omitempty"`
+	Data *[]struct {
+		// Affects A list of impacts for an incident.
+		// Impacts reference components.
+		Affects *ImpactComponentList `json:"affects,omitempty"`
+
+		// BeganAt Point in time. Nullable for open end timeframes.
+		BeganAt *Date `json:"beganAt"`
+
+		// Description A longer text with detailed information.
+		Description *Description `json:"description,omitempty"`
+
+		// DisplayName Short and describing name.
+		DisplayName *DisplayName `json:"displayName,omitempty"`
+
+		// EndedAt Point in time. Nullable for open end timeframes.
+		EndedAt *Date `json:"endedAt"`
+
+		// Id Identification for objects. UUID preferred.
+		Id Id `json:"id"`
+
+		// Phase To reference a phase, its generation and order is needed.
+		Phase *PhaseReference `json:"phase,omitempty"`
+
+		// Updates List of Incrementals for referencing subresources.
+		Updates *IncrementalList `json:"updates,omitempty"`
+	} `json:"data,omitempty"`
 }
 
 // IncidentResponse defines model for IncidentResponse.
 type IncidentResponse struct {
-	Data *Incident `json:"data,omitempty"`
+	Data *struct {
+		// Affects A list of impacts for an incident.
+		// Impacts reference components.
+		Affects *ImpactComponentList `json:"affects,omitempty"`
+
+		// BeganAt Point in time. Nullable for open end timeframes.
+		BeganAt *Date `json:"beganAt"`
+
+		// Description A longer text with detailed information.
+		Description *Description `json:"description,omitempty"`
+
+		// DisplayName Short and describing name.
+		DisplayName *DisplayName `json:"displayName,omitempty"`
+
+		// EndedAt Point in time. Nullable for open end timeframes.
+		EndedAt *Date `json:"endedAt"`
+
+		// Id Identification for objects. UUID preferred.
+		Id Id `json:"id"`
+
+		// Phase To reference a phase, its generation and order is needed.
+		Phase *PhaseReference `json:"phase,omitempty"`
+
+		// Updates List of Incrementals for referencing subresources.
+		Updates *IncrementalList `json:"updates,omitempty"`
+	} `json:"data,omitempty"`
 }
 
 // IncidentUpdateListResponse defines model for IncidentUpdateListResponse.
 type IncidentUpdateListResponse struct {
-	Data *IncidentUpdateList `json:"data,omitempty"`
+	Data *[]struct {
+		// CreatedAt Point in time. Nullable for open end timeframes.
+		CreatedAt *Date `json:"createdAt"`
+
+		// Description A longer text with detailed information.
+		Description *Description `json:"description,omitempty"`
+
+		// DisplayName Short and describing name.
+		DisplayName *DisplayName `json:"displayName,omitempty"`
+
+		// Order Positive and incrementing number for ordering and identfication of e.g. sub resources.
+		Order Incremental `json:"order"`
+	} `json:"data,omitempty"`
 }
 
 // IncidentUpdateResponse defines model for IncidentUpdateResponse.
 type IncidentUpdateResponse struct {
-	// Data An update is a sub resource to an incident.
-	// It's identified by the incident ID and its own order.
-	// Updates happen in a given order.
-	Data *IncidentUpdate `json:"data,omitempty"`
+	Data *struct {
+		// CreatedAt Point in time. Nullable for open end timeframes.
+		CreatedAt *Date `json:"createdAt"`
+
+		// Description A longer text with detailed information.
+		Description *Description `json:"description,omitempty"`
+
+		// DisplayName Short and describing name.
+		DisplayName *DisplayName `json:"displayName,omitempty"`
+
+		// Order Positive and incrementing number for ordering and identfication of e.g. sub resources.
+		Order Incremental `json:"order"`
+	} `json:"data,omitempty"`
 }
 
-// OrderResponse defines model for OrderResponse.
-type OrderResponse struct {
-	// Order Positive and incrementing number for ordering and identfication of e.g. sub resources.
-	Order *Incremental `json:"order,omitempty"`
-}
+// OrderResponse Incremental as order field for responses.
+type OrderResponse = Order
 
 // PhaseListResponse defines model for PhaseListResponse.
 type PhaseListResponse struct {
-	// Data Phase resources are always handled as a list.
-	Data *PhaseList `json:"data,omitempty"`
+	Data *struct {
+		// Generation Positive and incrementing number for ordering and identfication of e.g. sub resources.
+		Generation Incremental `json:"generation"`
+		Phases     []Phase     `json:"phases"`
+	} `json:"data,omitempty"`
 }
 
 // ComponentRequest defines model for ComponentRequest.
@@ -783,41 +881,42 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
