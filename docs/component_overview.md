@@ -1,6 +1,6 @@
 # Component Overview
 
-This represents a part of the decission process related to the overall structure the API wants to represent.
+This represents a part of the decision process related to the overall structure the API wants to represent.
 
 ```mermaid
 C4Component
