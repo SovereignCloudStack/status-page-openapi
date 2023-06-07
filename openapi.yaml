@@ -4,7 +4,7 @@ info:
   version: '1.0'
 components:
   schemas:
-    # common values
+    # common definitions
     Id:
       description: Identification for objects. UUID preferred.
       type: string
