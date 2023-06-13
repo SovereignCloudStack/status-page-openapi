@@ -305,7 +305,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Order'
-# here
+
     PhaseListResponse:
       description: A request returns a phase list.
       content:
