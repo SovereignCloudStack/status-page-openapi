@@ -174,6 +174,37 @@ components:
       required:
         - id
 
+    # response data
+    PhaseListResponseData:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Generation'
+        - $ref: '#/components/schemas/PhaseList'
+
+    ImpactTypeResponseData:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/IdField'
+        - $ref: '#/components/schemas/ImpactType'
+
+    ComponentResponseData:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/IdField'
+        - $ref: '#/components/schemas/Component'
+
+    IncidentResponseData:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/IdField'
+        - $ref: '#/components/schemas/Incident'
+
+    IncidentUpdateListResponseData:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Order'
+        - $ref: '#/components/schemas/IncidentUpdate'
+
   # parameter
   parameters:
     GenerationQueryParameter:
@@ -274,7 +305,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Order'
-
+# here
     PhaseListResponse:
       description: A request returns a phase list.
       content:
@@ -283,9 +314,7 @@ components:
             type: object
             properties:
               data:
-                allOf:
-                  - $ref: '#/components/schemas/Generation'
-                  - $ref: '#/components/schemas/PhaseList'
+                $ref: '#/components/schemas/PhaseListResponseData'
 
     ImpactTypeResponse:
       description: A request returns an impact type.
@@ -295,9 +324,8 @@ components:
             type: object
             properties:
               data:
-                allOf:
-                  - $ref: '#/components/schemas/IdField'
-                  - $ref: '#/components/schemas/ImpactType'
+                $ref: '#/components/schemas/ImpactTypeResponseData'
+
 
     ImpactTypeListResponse:
       description: A request returns a list of impact types.
@@ -309,10 +337,7 @@ components:
               data:
                 type: array
                 items:
-                  type: object
-                  allOf:
-                    - $ref: '#/components/schemas/IdField'
-                    - $ref: '#/components/schemas/ImpactType'
+                  $ref: '#/components/schemas/ImpactTypeResponseData'
 
     ComponentResponse:
       description: A request returns a component.
@@ -322,9 +347,7 @@ components:
             type: object
             properties:
               data:
-                allOf:
-                  - $ref: '#/components/schemas/IdField'
-                  - $ref: '#/components/schemas/Component'
+                $ref: '#/components/schemas/ComponentResponseData'
 
     ComponentListResponse:
       description: A request returns a list of components.
@@ -336,10 +359,7 @@ components:
               data:
                 type: array
                 items:
-                  type: object
-                  allOf:
-                    - $ref: '#/components/schemas/IdField'
-                    - $ref: '#/components/schemas/Component'
+                  $ref: '#/components/schemas/ComponentResponseData'
 
     IncidentResponse:
       description: A request returns an incident.
@@ -349,9 +369,8 @@ components:
             type: object
             properties:
               data:
-                allOf:
-                  - $ref: '#/components/schemas/IdField'
-                  - $ref: '#/components/schemas/Incident'
+                $ref: '#/components/schemas/IncidentResponseData'
+
 
     IncidentListResponse:
       description: A request returns a list of incidents.
@@ -363,10 +382,7 @@ components:
               data:
                 type: array
                 items:
-                  type: object
-                  allOf:
-                    - $ref: '#/components/schemas/IdField'
-                    - $ref: '#/components/schemas/Incident'
+                  $ref: '#/components/schemas/IncidentResponseData'
 
     IncidentUpdateResponse:
       description: A request returns an incident update.
@@ -376,9 +392,8 @@ components:
             type: object
             properties:
               data:
-                allOf:
-                  - $ref: '#/components/schemas/Order'
-                  - $ref: '#/components/schemas/IncidentUpdate'
+                $ref: '#/components/schemas/IncidentUpdateListResponseData'
+
 
     IncidentUpdateListResponse:
       description: A request returns a list of incident updates.
@@ -390,10 +405,7 @@ components:
               data:
                 type: array
                 items:
-                  type: object
-                  allOf:
-                    - $ref: '#/components/schemas/Order'
-                    - $ref: '#/components/schemas/IncidentUpdate'
+                  $ref: '#/components/schemas/IncidentUpdateListResponseData'
 
 paths:
   /phases:
