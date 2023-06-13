@@ -199,7 +199,7 @@ components:
         - $ref: '#/components/schemas/IdField'
         - $ref: '#/components/schemas/Incident'
 
-    IncidentUpdateListResponseData:
+    IncidentUpdateResponseData:
       type: object
       allOf:
         - $ref: '#/components/schemas/Order'
@@ -392,7 +392,7 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/IncidentUpdateListResponseData'
+                $ref: '#/components/schemas/IncidentUpdateResponseData'
 
 
     IncidentUpdateListResponse:
@@ -405,7 +405,7 @@ components:
               data:
                 type: array
                 items:
-                  $ref: '#/components/schemas/IncidentUpdateListResponseData'
+                  $ref: '#/components/schemas/IncidentUpdateResponseData'
 
 paths:
   /phases:
