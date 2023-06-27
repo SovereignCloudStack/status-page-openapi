@@ -2,6 +2,16 @@ openapi: '3.0.2'
 info:
   title: SCS Status Page API
   version: '1.0'
+tags:
+  - name: phase
+    description: Handles incident phases.
+  - name: impact
+    description: Handles impacts.
+  - name: component
+    description: Handles components.
+  - name: incident
+    description: Handles incidents.
+
 components:
   schemas:
     # common definitions
@@ -315,6 +325,8 @@ components:
             properties:
               data:
                 $ref: '#/components/schemas/PhaseListResponseData'
+            required:
+              - data
 
     ImpactTypeResponse:
       description: A request returns an impact type.
@@ -325,7 +337,8 @@ components:
             properties:
               data:
                 $ref: '#/components/schemas/ImpactTypeResponseData'
-
+            required:
+              - data
 
     ImpactTypeListResponse:
       description: A request returns a list of impact types.
@@ -338,6 +351,8 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/ImpactTypeResponseData'
+            required:
+            - data
 
     ComponentResponse:
       description: A request returns a component.
@@ -348,6 +363,8 @@ components:
             properties:
               data:
                 $ref: '#/components/schemas/ComponentResponseData'
+            required:
+              - data
 
     ComponentListResponse:
       description: A request returns a list of components.
@@ -360,6 +377,8 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/ComponentResponseData'
+            required:
+              - data
 
     IncidentResponse:
       description: A request returns an incident.
@@ -370,6 +389,8 @@ components:
             properties:
               data:
                 $ref: '#/components/schemas/IncidentResponseData'
+            required:
+              - data
 
 
     IncidentListResponse:
@@ -383,6 +404,8 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/IncidentResponseData'
+            required:
+              - data
 
     IncidentUpdateResponse:
       description: A request returns an incident update.
@@ -393,7 +416,8 @@ components:
             properties:
               data:
                 $ref: '#/components/schemas/IncidentUpdateResponseData'
-
+            required:
+              - data
 
     IncidentUpdateListResponse:
       description: A request returns a list of incident updates.
@@ -406,12 +430,16 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/IncidentUpdateResponseData'
+            required:
+              - data
 
 paths:
   /phases:
     get:
       summary: Get the current generation list of phases.
       operationId: getPhaseList
+      tags:
+        - phase
       parameters:
         - $ref: '#/components/parameters/GenerationQueryParameter'
       responses:
@@ -421,6 +449,8 @@ paths:
     post:
       summary: Create a new generation of the phase list.
       operationId: createPhaseList
+      tags:
+        - phase
       requestBody:
         $ref: '#/components/requestBodies/PhaseListRequest'
       responses:
@@ -431,6 +461,8 @@ paths:
     get:
       summary: Get a list of impact types.
       operationId: getImpactTypes
+      tags:
+        - impact
       responses:
         '200':
           $ref: '#/components/responses/ImpactTypeListResponse'
@@ -438,6 +470,8 @@ paths:
     post:
       summary: Create a new impact type.
       operationId: createImpactType
+      tags:
+        - impact
       requestBody:
         $ref: '#/components/requestBodies/ImpactTypeRequest'
       responses:
@@ -448,6 +482,8 @@ paths:
     get:
       summary: Get a specific impact type by id.
       operationId: getImpactType
+      tags:
+        - impact
       parameters:
         - $ref: '#/components/parameters/ImpactTypeIdPathParameter'
       responses:
@@ -457,6 +493,8 @@ paths:
     patch:
       summary: Update a specific impact type.
       operationId: updateImpactType
+      tags:
+        - impact
       parameters:
         - $ref: '#/components/parameters/ImpactTypeIdPathParameter'
       requestBody:
@@ -468,6 +506,8 @@ paths:
     delete:
       summary: Delete an impact type.
       operationId: deleteImpactType
+      tags:
+        - impact
       parameters:
         - $ref: '#/components/parameters/ImpactTypeIdPathParameter'
       responses:
@@ -478,6 +518,8 @@ paths:
     get:
       summary: Get a list of components.
       operationId: getComponents
+      tags:
+        - component
       responses:
         '200':
           $ref: '#/components/responses/ComponentListResponse'
@@ -485,6 +527,8 @@ paths:
     post:
       summary: Create a new component.
       operationId: createComponent
+      tags:
+        - component
       requestBody:
         $ref: '#/components/requestBodies/ComponentRequest'
       responses:
@@ -495,6 +539,8 @@ paths:
     get:
       summary: Get a specific component by id.
       operationId: getComponent
+      tags:
+        - component
       parameters:
       - $ref: '#/components/parameters/ComponentIdPathParameter'
       responses:
@@ -504,6 +550,8 @@ paths:
     patch:
       summary: Update a component.
       operationId: updateComponent
+      tags:
+        - component
       parameters:
       - $ref: '#/components/parameters/ComponentIdPathParameter'
       requestBody:
@@ -515,6 +563,8 @@ paths:
     delete:
       summary: Delete a component.
       operationId: deleteComponent
+      tags:
+        - component
       parameters:
         - $ref: '#/components/parameters/ComponentIdPathParameter'
       responses:
@@ -525,6 +575,8 @@ paths:
     get:
       summary: Get a list of incidents between two points in time.
       operationId: getIncidents
+      tags:
+        - incident
       parameters:
       - in: query
         name: start
@@ -549,6 +601,8 @@ paths:
     post:
       summary: Create a new incident.
       operationId: createIncident
+      tags:
+        - incident
       requestBody:
         $ref: '#/components/requestBodies/IncidentRequest'
       responses:
@@ -559,6 +613,8 @@ paths:
     get:
       summary: Get a specific incident by id.
       operationId: getIncident
+      tags:
+        - incident
       parameters:
       - $ref: '#/components/parameters/IncidentIdPathParameter'
       responses:
@@ -568,6 +624,8 @@ paths:
     patch:
       summary: Update an incident.
       operationId: updateIncident
+      tags:
+        - incident
       parameters:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
       requestBody:
@@ -579,6 +637,8 @@ paths:
     delete:
       summary: Delete an incident.
       operationId: deleteIncident
+      tags:
+        - incident
       parameters:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
       responses:
@@ -589,6 +649,8 @@ paths:
     get:
       summary: Get a list of updates from a specific incident.
       operationId: getIncidentUpdates
+      tags:
+        - incident
       parameters:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
       responses:
@@ -598,6 +660,8 @@ paths:
     post:
       summary: Create a new update to a specific incident.
       operationId: createIncidentUpdate
+      tags:
+        - incident
       parameters:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
       requestBody:
@@ -610,6 +674,8 @@ paths:
     get:
       summary: Get a specific update from a specific incident.
       operationId: getIncidentUpdate
+      tags:
+        - incident
       parameters:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
         - $ref: '#/components/parameters/IncidentUpdateOrderPathParameter'
@@ -620,6 +686,8 @@ paths:
     patch:
       summary: Update a specific update from a specific incident.
       operationId: updateIncidentUpdate
+      tags:
+        - incident
       parameters:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
         - $ref: '#/components/parameters/IncidentUpdateOrderPathParameter'
@@ -632,6 +700,8 @@ paths:
     delete:
       summary: Delete a specific update from a specific incident
       operationId: deleteIncidentUpdate
+      tags:
+        - incident
       parameters:
         - $ref: '#/components/parameters/IncidentIdPathParameter'
         - $ref: '#/components/parameters/IncidentUpdateOrderPathParameter'
