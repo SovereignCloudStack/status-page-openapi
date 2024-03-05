@@ -1,7 +1,7 @@
-openapi: '3.0.2'
+openapi: "3.0.2"
 info:
   title: SCS Status Page API
-  version: '1.1'
+  version: "1.1"
 tags:
   - name: phase
     description: Handles incident phases.
@@ -24,7 +24,7 @@ components:
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/Id'
+          $ref: "#/components/schemas/Id"
       required:
         - id
 
@@ -38,7 +38,7 @@ components:
       type: object
       properties:
         generation:
-          $ref: '#/components/schemas/Incremental'
+          $ref: "#/components/schemas/Incremental"
       required:
         - generation
 
@@ -47,7 +47,7 @@ components:
       type: object
       properties:
         order:
-          $ref: '#/components/schemas/Incremental'
+          $ref: "#/components/schemas/Incremental"
       required:
         - order
 
@@ -55,7 +55,7 @@ components:
       description: List of Incrementals for referencing subresources.
       type: array
       items:
-        $ref: '#/components/schemas/Incremental'
+        $ref: "#/components/schemas/Incremental"
       readOnly: true
 
     DisplayName:
@@ -85,29 +85,29 @@ components:
       type: object
       properties:
         displayName:
-          $ref: '#/components/schemas/DisplayName'
+          $ref: "#/components/schemas/DisplayName"
         description:
-          $ref: '#/components/schemas/Description'
+          $ref: "#/components/schemas/Description"
 
     Impact:
       description: An impact connects a component and an incident with an impact type.
       type: object
       properties:
         type:
-          $ref: '#/components/schemas/Id'
+          $ref: "#/components/schemas/Id"
         reference:
-          $ref: '#/components/schemas/Id'
+          $ref: "#/components/schemas/Id"
         severity:
-          $ref: '#/components/schemas/SeverityValue'
+          $ref: "#/components/schemas/SeverityValue"
 
     Severity:
       description: A severity has an identifying name and a numeric value.
       type: object
       properties:
         displayName:
-          $ref: '#/components/schemas/DisplayName'
+          $ref: "#/components/schemas/DisplayName"
         value:
-          $ref: '#/components/schemas/SeverityValue'
+          $ref: "#/components/schemas/SeverityValue"
 
     ImpactComponentList:
       description: |
@@ -115,7 +115,7 @@ components:
         Impacts reference components.
       type: array
       items:
-        $ref: '#/components/schemas/Impact'
+        $ref: "#/components/schemas/Impact"
 
     ImpactIncidentList:
       description: |
@@ -123,7 +123,7 @@ components:
         Impacts reference incidents.
       type: array
       items:
-        $ref: '#/components/schemas/Impact'
+        $ref: "#/components/schemas/Impact"
       readOnly: true
 
     Phase:
@@ -137,8 +137,8 @@ components:
       description: To reference a phase, its generation and order is needed.
       type: object
       allOf:
-        - $ref: '#/components/schemas/Order'
-        - $ref: '#/components/schemas/Generation'
+        - $ref: "#/components/schemas/Order"
+        - $ref: "#/components/schemas/Generation"
 
     PhaseList:
       description: Phase resources are always handled as a list.
@@ -147,7 +147,7 @@ components:
         phases:
           type: array
           items:
-            $ref: '#/components/schemas/Phase'
+            $ref: "#/components/schemas/Phase"
       required:
         - phases
 
@@ -159,11 +159,11 @@ components:
       type: object
       properties:
         displayName:
-          $ref: '#/components/schemas/DisplayName'
+          $ref: "#/components/schemas/DisplayName"
         description:
-          $ref: '#/components/schemas/Description'
+          $ref: "#/components/schemas/Description"
         createdAt:
-          $ref: '#/components/schemas/Date'
+          $ref: "#/components/schemas/Date"
       required:
         - order
 
@@ -177,29 +177,29 @@ components:
       type: object
       properties:
         displayName:
-          $ref: '#/components/schemas/DisplayName'
+          $ref: "#/components/schemas/DisplayName"
         labels:
-          $ref: '#/components/schemas/Labels'
+          $ref: "#/components/schemas/Labels"
         activelyAffectedBy:
-          $ref: '#/components/schemas/ImpactIncidentList'
+          $ref: "#/components/schemas/ImpactIncidentList"
 
     Incident:
       type: object
       properties:
         displayName:
-          $ref: '#/components/schemas/DisplayName'
+          $ref: "#/components/schemas/DisplayName"
         description:
-          $ref: '#/components/schemas/Description'
+          $ref: "#/components/schemas/Description"
         updates:
-          $ref: '#/components/schemas/IncrementalList'
+          $ref: "#/components/schemas/IncrementalList"
         affects:
-          $ref: '#/components/schemas/ImpactComponentList'
+          $ref: "#/components/schemas/ImpactComponentList"
         beganAt:
-          $ref: '#/components/schemas/Date'
+          $ref: "#/components/schemas/Date"
         endedAt:
-          $ref: '#/components/schemas/Date'
+          $ref: "#/components/schemas/Date"
         phase:
-          $ref: '#/components/schemas/PhaseReference'
+          $ref: "#/components/schemas/PhaseReference"
       required:
         - id
 
@@ -207,32 +207,32 @@ components:
     PhaseListResponseData:
       type: object
       allOf:
-        - $ref: '#/components/schemas/Generation'
-        - $ref: '#/components/schemas/PhaseList'
+        - $ref: "#/components/schemas/Generation"
+        - $ref: "#/components/schemas/PhaseList"
 
     ImpactTypeResponseData:
       type: object
       allOf:
-        - $ref: '#/components/schemas/IdField'
-        - $ref: '#/components/schemas/ImpactType'
+        - $ref: "#/components/schemas/IdField"
+        - $ref: "#/components/schemas/ImpactType"
 
     ComponentResponseData:
       type: object
       allOf:
-        - $ref: '#/components/schemas/IdField'
-        - $ref: '#/components/schemas/Component'
+        - $ref: "#/components/schemas/IdField"
+        - $ref: "#/components/schemas/Component"
 
     IncidentResponseData:
       type: object
       allOf:
-        - $ref: '#/components/schemas/IdField'
-        - $ref: '#/components/schemas/Incident'
+        - $ref: "#/components/schemas/IdField"
+        - $ref: "#/components/schemas/Incident"
 
     IncidentUpdateResponseData:
       type: object
       allOf:
-        - $ref: '#/components/schemas/Order'
-        - $ref: '#/components/schemas/IncidentUpdate'
+        - $ref: "#/components/schemas/Order"
+        - $ref: "#/components/schemas/IncidentUpdate"
 
   # parameter
   parameters:
@@ -241,7 +241,7 @@ components:
       name: generation
       in: query
       schema:
-        $ref: '#/components/schemas/Incremental'
+        $ref: "#/components/schemas/Incremental"
 
     ComponentIdPathParameter:
       description: Component ID is required in path.
@@ -249,7 +249,7 @@ components:
       in: path
       required: true
       schema:
-        $ref: '#/components/schemas/Id'
+        $ref: "#/components/schemas/Id"
 
     IncidentIdPathParameter:
       description: Incident ID is required in path.
@@ -257,7 +257,7 @@ components:
       in: path
       required: true
       schema:
-        $ref: '#/components/schemas/Id'
+        $ref: "#/components/schemas/Id"
 
     IncidentUpdateOrderPathParameter:
       description: Incident update order (inremental) is required in path.
@@ -265,7 +265,7 @@ components:
       in: path
       required: true
       schema:
-        $ref: '#/components/schemas/Incremental'
+        $ref: "#/components/schemas/Incremental"
 
     ImpactTypeIdPathParameter:
       description: Impact type ID is required in path.
@@ -273,7 +273,7 @@ components:
       in: path
       required: true
       schema:
-        $ref: '#/components/schemas/Id'
+        $ref: "#/components/schemas/Id"
 
     SeverityNamePathParameter:
       description: Severity name is required in path.
@@ -281,7 +281,7 @@ components:
       in: path
       required: true
       schema:
-        $ref: '#/components/schemas/DisplayName'
+        $ref: "#/components/schemas/DisplayName"
 
   # requests
   requestBodies:
@@ -290,42 +290,42 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/PhaseList'
+            $ref: "#/components/schemas/PhaseList"
 
     ComponentRequest:
       description: Send a component.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Component'
+            $ref: "#/components/schemas/Component"
 
     IncidentRequest:
       description: Send an incident.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Incident'
+            $ref: "#/components/schemas/Incident"
 
     IncidentUpdateRequest:
       description: Send an incident update.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/IncidentUpdate'
+            $ref: "#/components/schemas/IncidentUpdate"
 
     ImpactTypeRequest:
       description: Send an impact type.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ImpactType'
+            $ref: "#/components/schemas/ImpactType"
 
     SeverityRequest:
       description: Send an impact type.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Severity'
+            $ref: "#/components/schemas/Severity"
 
   # responses
   responses:
@@ -334,21 +334,21 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/IdField'
+            $ref: "#/components/schemas/IdField"
 
     GenerationResponse:
       description: A request returns a generation.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Generation'
+            $ref: "#/components/schemas/Generation"
 
     OrderResponse:
       description: A request returns an order.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Order'
+            $ref: "#/components/schemas/Order"
 
     PhaseListResponse:
       description: A request returns a phase list.
@@ -358,7 +358,7 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/PhaseListResponseData'
+                $ref: "#/components/schemas/PhaseListResponseData"
             required:
               - data
 
@@ -370,7 +370,7 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/ImpactTypeResponseData'
+                $ref: "#/components/schemas/ImpactTypeResponseData"
             required:
               - data
 
@@ -384,9 +384,9 @@ components:
               data:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ImpactTypeResponseData'
+                  $ref: "#/components/schemas/ImpactTypeResponseData"
             required:
-            - data
+              - data
 
     SeverityResponse:
       description: A request returns a severities.
@@ -396,7 +396,7 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/Severity'
+                $ref: "#/components/schemas/Severity"
 
     SeverityListResponse:
       description: A request returns a list of severities.
@@ -408,7 +408,7 @@ components:
               data:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Severity'
+                  $ref: "#/components/schemas/Severity"
 
     ComponentResponse:
       description: A request returns a component.
@@ -418,7 +418,7 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/ComponentResponseData'
+                $ref: "#/components/schemas/ComponentResponseData"
             required:
               - data
 
@@ -432,7 +432,7 @@ components:
               data:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ComponentResponseData'
+                  $ref: "#/components/schemas/ComponentResponseData"
             required:
               - data
 
@@ -444,10 +444,9 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/IncidentResponseData'
+                $ref: "#/components/schemas/IncidentResponseData"
             required:
               - data
-
 
     IncidentListResponse:
       description: A request returns a list of incidents.
@@ -459,7 +458,7 @@ components:
               data:
                 type: array
                 items:
-                  $ref: '#/components/schemas/IncidentResponseData'
+                  $ref: "#/components/schemas/IncidentResponseData"
             required:
               - data
 
@@ -471,7 +470,7 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/IncidentUpdateResponseData'
+                $ref: "#/components/schemas/IncidentUpdateResponseData"
             required:
               - data
 
@@ -485,7 +484,7 @@ components:
               data:
                 type: array
                 items:
-                  $ref: '#/components/schemas/IncidentUpdateResponseData'
+                  $ref: "#/components/schemas/IncidentUpdateResponseData"
             required:
               - data
 
@@ -497,10 +496,10 @@ paths:
       tags:
         - phase
       parameters:
-        - $ref: '#/components/parameters/GenerationQueryParameter'
+        - $ref: "#/components/parameters/GenerationQueryParameter"
       responses:
-        '200':
-          $ref: '#/components/responses/PhaseListResponse'
+        "200":
+          $ref: "#/components/responses/PhaseListResponse"
 
     post:
       summary: Create a new generation of the phase list.
@@ -508,10 +507,10 @@ paths:
       tags:
         - phase
       requestBody:
-        $ref: '#/components/requestBodies/PhaseListRequest'
+        $ref: "#/components/requestBodies/PhaseListRequest"
       responses:
-        '201':
-          $ref: '#/components/responses/GenerationResponse'
+        "201":
+          $ref: "#/components/responses/GenerationResponse"
 
   /impacttypes:
     get:
@@ -520,8 +519,8 @@ paths:
       tags:
         - impact
       responses:
-        '200':
-          $ref: '#/components/responses/ImpactTypeListResponse'
+        "200":
+          $ref: "#/components/responses/ImpactTypeListResponse"
 
     post:
       summary: Create a new impact type.
@@ -529,10 +528,10 @@ paths:
       tags:
         - impact
       requestBody:
-        $ref: '#/components/requestBodies/ImpactTypeRequest'
+        $ref: "#/components/requestBodies/ImpactTypeRequest"
       responses:
-        '201':
-          $ref: '#/components/responses/IdResponse'
+        "201":
+          $ref: "#/components/responses/IdResponse"
 
   /impacttypes/{impactTypeId}:
     get:
@@ -541,10 +540,10 @@ paths:
       tags:
         - impact
       parameters:
-        - $ref: '#/components/parameters/ImpactTypeIdPathParameter'
+        - $ref: "#/components/parameters/ImpactTypeIdPathParameter"
       responses:
-        '200':
-          $ref: '#/components/responses/ImpactTypeResponse'
+        "200":
+          $ref: "#/components/responses/ImpactTypeResponse"
 
     patch:
       summary: Update a specific impact type.
@@ -552,11 +551,11 @@ paths:
       tags:
         - impact
       parameters:
-        - $ref: '#/components/parameters/ImpactTypeIdPathParameter'
+        - $ref: "#/components/parameters/ImpactTypeIdPathParameter"
       requestBody:
-        $ref: '#/components/requestBodies/ImpactTypeRequest'
+        $ref: "#/components/requestBodies/ImpactTypeRequest"
       responses:
-        '204':
+        "204":
           description: Successful. No Content
 
     delete:
@@ -565,9 +564,9 @@ paths:
       tags:
         - impact
       parameters:
-        - $ref: '#/components/parameters/ImpactTypeIdPathParameter'
+        - $ref: "#/components/parameters/ImpactTypeIdPathParameter"
       responses:
-        '204':
+        "204":
           description: Successful. No Content
 
   /severities:
@@ -577,8 +576,8 @@ paths:
       tags:
         - impact
       responses:
-        '200':
-          $ref: '#/components/responses/SeverityListResponse'
+        "200":
+          $ref: "#/components/responses/SeverityListResponse"
 
     post:
       summary: Create a new severity.
@@ -586,9 +585,9 @@ paths:
       tags:
         - impact
       requestBody:
-        $ref: '#/components/requestBodies/SeverityRequest'
+        $ref: "#/components/requestBodies/SeverityRequest"
       responses:
-        '204':
+        "204":
           description: Successful. No Content
 
   /severities/{severityName}:
@@ -598,10 +597,10 @@ paths:
       tags:
         - impact
       parameters:
-        - $ref: '#/components/parameters/SeverityNamePathParameter'
+        - $ref: "#/components/parameters/SeverityNamePathParameter"
       responses:
-        '200':
-          $ref: '#/components/responses/SeverityResponse'
+        "200":
+          $ref: "#/components/responses/SeverityResponse"
 
     patch:
       summary: Update a specific severity.
@@ -609,11 +608,11 @@ paths:
       tags:
         - impact
       parameters:
-        - $ref: '#/components/parameters/SeverityNamePathParameter'
+        - $ref: "#/components/parameters/SeverityNamePathParameter"
       requestBody:
-        $ref: '#/components/requestBodies/SeverityRequest'
+        $ref: "#/components/requestBodies/SeverityRequest"
       responses:
-        '204':
+        "204":
           description: Successful. No Content
 
     delete:
@@ -622,9 +621,9 @@ paths:
       tags:
         - impact
       parameters:
-        - $ref: '#/components/parameters/SeverityNamePathParameter'
+        - $ref: "#/components/parameters/SeverityNamePathParameter"
       responses:
-        '204':
+        "204":
           description: Successful. No Content
 
   /components:
@@ -634,8 +633,8 @@ paths:
       tags:
         - component
       responses:
-        '200':
-          $ref: '#/components/responses/ComponentListResponse'
+        "200":
+          $ref: "#/components/responses/ComponentListResponse"
 
     post:
       summary: Create a new component.
@@ -643,10 +642,10 @@ paths:
       tags:
         - component
       requestBody:
-        $ref: '#/components/requestBodies/ComponentRequest'
+        $ref: "#/components/requestBodies/ComponentRequest"
       responses:
-        '201':
-          $ref: '#/components/responses/IdResponse'
+        "201":
+          $ref: "#/components/responses/IdResponse"
 
   /components/{componentId}:
     get:
@@ -655,10 +654,10 @@ paths:
       tags:
         - component
       parameters:
-      - $ref: '#/components/parameters/ComponentIdPathParameter'
+        - $ref: "#/components/parameters/ComponentIdPathParameter"
       responses:
-        '200':
-          $ref: '#/components/responses/ComponentResponse'
+        "200":
+          $ref: "#/components/responses/ComponentResponse"
 
     patch:
       summary: Update a component.
@@ -666,11 +665,11 @@ paths:
       tags:
         - component
       parameters:
-      - $ref: '#/components/parameters/ComponentIdPathParameter'
+        - $ref: "#/components/parameters/ComponentIdPathParameter"
       requestBody:
-        $ref: '#/components/requestBodies/ComponentRequest'
+        $ref: "#/components/requestBodies/ComponentRequest"
       responses:
-        '204':
+        "204":
           description: Successful. No Content
 
     delete:
@@ -679,9 +678,9 @@ paths:
       tags:
         - component
       parameters:
-        - $ref: '#/components/parameters/ComponentIdPathParameter'
+        - $ref: "#/components/parameters/ComponentIdPathParameter"
       responses:
-        '204':
+        "204":
           description: Successful. No Content
 
   /incidents:
@@ -691,25 +690,25 @@ paths:
       tags:
         - incident
       parameters:
-      - in: query
-        name: start
-        schema:
-          type: string
-          format: date-time
-          default: '2022-01-01T10:10:10.010Z'
-        required: true
-        description: Start of time frame to query for (RFC3339).
-      - in: query
-        name: end
-        schema:
-          type: string
-          format: date-time
-          default: '2024-01-01T10:10:10.010Z'
-        required: true
-        description: End of time frame to query for (RFC3339).
+        - in: query
+          name: start
+          schema:
+            type: string
+            format: date-time
+            default: "2022-01-01T10:10:10.010Z"
+          required: true
+          description: Start of time frame to query for (RFC3339).
+        - in: query
+          name: end
+          schema:
+            type: string
+            format: date-time
+            default: "2024-01-01T10:10:10.010Z"
+          required: true
+          description: End of time frame to query for (RFC3339).
       responses:
-        '200':
-          $ref: '#/components/responses/IncidentListResponse'
+        "200":
+          $ref: "#/components/responses/IncidentListResponse"
 
     post:
       summary: Create a new incident.
@@ -717,10 +716,10 @@ paths:
       tags:
         - incident
       requestBody:
-        $ref: '#/components/requestBodies/IncidentRequest'
+        $ref: "#/components/requestBodies/IncidentRequest"
       responses:
-        '201':
-          $ref: '#/components/responses/IdResponse'
+        "201":
+          $ref: "#/components/responses/IdResponse"
 
   /incidents/{incidentId}:
     get:
@@ -729,10 +728,10 @@ paths:
       tags:
         - incident
       parameters:
-      - $ref: '#/components/parameters/IncidentIdPathParameter'
+        - $ref: "#/components/parameters/IncidentIdPathParameter"
       responses:
-        '200':
-          $ref: '#/components/responses/IncidentResponse'
+        "200":
+          $ref: "#/components/responses/IncidentResponse"
 
     patch:
       summary: Update an incident.
@@ -740,11 +739,11 @@ paths:
       tags:
         - incident
       parameters:
-        - $ref: '#/components/parameters/IncidentIdPathParameter'
+        - $ref: "#/components/parameters/IncidentIdPathParameter"
       requestBody:
-        $ref: '#/components/requestBodies/IncidentRequest'
+        $ref: "#/components/requestBodies/IncidentRequest"
       responses:
-        '204':
+        "204":
           description: Successful. No Content
 
     delete:
@@ -753,9 +752,9 @@ paths:
       tags:
         - incident
       parameters:
-        - $ref: '#/components/parameters/IncidentIdPathParameter'
+        - $ref: "#/components/parameters/IncidentIdPathParameter"
       responses:
-        '204':
+        "204":
           description: Successful. No Content
 
   /incidents/{incidentId}/updates:
@@ -765,10 +764,10 @@ paths:
       tags:
         - incident
       parameters:
-        - $ref: '#/components/parameters/IncidentIdPathParameter'
+        - $ref: "#/components/parameters/IncidentIdPathParameter"
       responses:
-        '200':
-          $ref: '#/components/responses/IncidentUpdateListResponse'
+        "200":
+          $ref: "#/components/responses/IncidentUpdateListResponse"
 
     post:
       summary: Create a new update to a specific incident.
@@ -776,12 +775,12 @@ paths:
       tags:
         - incident
       parameters:
-        - $ref: '#/components/parameters/IncidentIdPathParameter'
+        - $ref: "#/components/parameters/IncidentIdPathParameter"
       requestBody:
-        $ref: '#/components/requestBodies/IncidentUpdateRequest'
+        $ref: "#/components/requestBodies/IncidentUpdateRequest"
       responses:
-        '201':
-          $ref: '#/components/responses/OrderResponse'
+        "201":
+          $ref: "#/components/responses/OrderResponse"
 
   /incidents/{incidentId}/updates/{updateOrder}:
     get:
@@ -790,11 +789,11 @@ paths:
       tags:
         - incident
       parameters:
-        - $ref: '#/components/parameters/IncidentIdPathParameter'
-        - $ref: '#/components/parameters/IncidentUpdateOrderPathParameter'
+        - $ref: "#/components/parameters/IncidentIdPathParameter"
+        - $ref: "#/components/parameters/IncidentUpdateOrderPathParameter"
       responses:
-        '200':
-          $ref: '#/components/responses/IncidentUpdateResponse'
+        "200":
+          $ref: "#/components/responses/IncidentUpdateResponse"
 
     patch:
       summary: Update a specific update from a specific incident.
@@ -802,12 +801,12 @@ paths:
       tags:
         - incident
       parameters:
-        - $ref: '#/components/parameters/IncidentIdPathParameter'
-        - $ref: '#/components/parameters/IncidentUpdateOrderPathParameter'
+        - $ref: "#/components/parameters/IncidentIdPathParameter"
+        - $ref: "#/components/parameters/IncidentUpdateOrderPathParameter"
       requestBody:
-        $ref: '#/components/requestBodies/IncidentUpdateRequest'
+        $ref: "#/components/requestBodies/IncidentUpdateRequest"
       responses:
-        '204':
+        "204":
           description: Successful. No Content
 
     delete:
@@ -816,8 +815,8 @@ paths:
       tags:
         - incident
       parameters:
-        - $ref: '#/components/parameters/IncidentIdPathParameter'
-        - $ref: '#/components/parameters/IncidentUpdateOrderPathParameter'
+        - $ref: "#/components/parameters/IncidentIdPathParameter"
+        - $ref: "#/components/parameters/IncidentUpdateOrderPathParameter"
       responses:
-        '204':
+        "204":
           description: Successful. No Content
