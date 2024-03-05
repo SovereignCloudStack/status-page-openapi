@@ -1,7 +1,7 @@
 openapi: '3.0.2'
 info:
   title: SCS Status Page API
-  version: '1.0'
+  version: '1.1'
 tags:
   - name: phase
     description: Handles incident phases.
@@ -72,6 +72,14 @@ components:
       format: date-time
       nullable: true
 
+    SeverityValue:
+      description: |
+        The severity of an impact affecting a component. Different impact types
+        might have different severities impacting different components.
+      type: integer
+      minimum: 0
+      maximum: 100
+
     # API objects
     ImpactType:
       type: object
@@ -89,6 +97,17 @@ components:
           $ref: '#/components/schemas/Id'
         reference:
           $ref: '#/components/schemas/Id'
+        severity:
+          $ref: '#/components/schemas/SeverityValue'
+
+    Severity:
+      description: A severity has an identifying name and a numeric value.
+      type: object
+      properties:
+        displayName:
+          $ref: '#/components/schemas/DisplayName'
+        value:
+          $ref: '#/components/schemas/SeverityValue'
 
     ImpactComponentList:
       description: |
@@ -256,6 +275,14 @@ components:
       schema:
         $ref: '#/components/schemas/Id'
 
+    SeverityNamePathParameter:
+      description: Severity name is required in path.
+      name: severityName
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/DisplayName'
+
   # requests
   requestBodies:
     PhaseListRequest:
@@ -292,6 +319,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ImpactType'
+
+    SeverityRequest:
+      description: Send an impact type.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Severity'
 
   # responses
   responses:
@@ -353,6 +387,28 @@ components:
                   $ref: '#/components/schemas/ImpactTypeResponseData'
             required:
             - data
+
+    SeverityResponse:
+      description: A request returns a severities.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Severity'
+
+    SeverityListResponse:
+      description: A request returns a list of severities.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Severity'
 
     ComponentResponse:
       description: A request returns a component.
@@ -510,6 +566,63 @@ paths:
         - impact
       parameters:
         - $ref: '#/components/parameters/ImpactTypeIdPathParameter'
+      responses:
+        '204':
+          description: Successful. No Content
+
+  /severities:
+    get:
+      summary: Get the current list of severieties.
+      operationId: getSeverities
+      tags:
+        - impact
+      responses:
+        '200':
+          $ref: '#/components/responses/SeverityListResponse'
+
+    post:
+      summary: Create a new severity.
+      operationId: createSeverity
+      tags:
+        - impact
+      requestBody:
+        $ref: '#/components/requestBodies/SeverityRequest'
+      responses:
+        '204':
+          description: Successful. No Content
+
+  /severities/{severityName}:
+    get:
+      summary: Get a specific severity by its name.
+      operationId: getSeverity
+      tags:
+        - impact
+      parameters:
+        - $ref: '#/components/parameters/SeverityNamePathParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/SeverityResponse'
+
+    patch:
+      summary: Update a specific severity.
+      operationId: updateSeverity
+      tags:
+        - impact
+      parameters:
+        - $ref: '#/components/parameters/SeverityNamePathParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/SeverityRequest'
+      responses:
+        '204':
+          description: Successful. No Content
+
+    delete:
+      summary: Delete a specific severity.
+      operationId: deleteSeverity
+      tags:
+        - impact
+      parameters:
+        - $ref: '#/components/parameters/SeverityNamePathParameter'
       responses:
         '204':
           description: Successful. No Content
