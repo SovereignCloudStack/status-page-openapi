@@ -119,7 +119,7 @@ components:
 
     ImpactIncidentList:
       description: |
-        A list of impacts for an component.
+        A list of impacts for a component.
         Impacts reference incidents.
       type: array
       items:
