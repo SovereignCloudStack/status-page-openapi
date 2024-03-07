@@ -26,7 +26,7 @@ export interface ComponentResponseData {
      */
     labels?: { [key: string]: string; };
     /**
-     * A list of impacts for an component. Impacts reference incidents. 
+     * A list of impacts for a component. Impacts reference incidents. 
      */
     readonly activelyAffectedBy?: Array<Impact>;
 }
