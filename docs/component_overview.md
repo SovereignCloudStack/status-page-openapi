@@ -8,21 +8,25 @@ C4Component
 
   Container_Boundary(impacts, "Impacts") {
     Component(impactType, ImpactType, "ID, displayName, description")
-    Component(impact, Impact, "type, reference")
+    Component(impact, Impact, "type, reference, severity")
     Component(impactComponentList, ImpactComponentList, "[]Impact", "Impacts reference components")
     Component(impactIncidentList, ImpactIncidentList, "<<readonly>>[]Impact", "Impacts reference incidents")
+    Component(severity, Severity,"name, value")
 
     Rel(impact, impactType, "has")
     Rel(impactComponentList, impact, "lists")
     Rel(impactIncidentList, impact, "lists")
+    Rel(impact, severity, "has", "when used by ImpactIncidentList")
 
     UpdateElementStyle(impact, $bgColor="green")
     UpdateElementStyle(impactComponentList, $bgColor="green")
     UpdateElementStyle(impactIncidentList, $bgColor="green")
+    UpdateElementStyle(severity, $bgColor="green")
 
     UpdateRelStyle(impact, impactType, "green", "green", $offsetY="-10")
     UpdateRelStyle(impactComponentList, impact, "green", "green", $offsetY="-15")
     UpdateRelStyle(impactIncidentList, impact, "green", "green")
+    UpdateRelStyle(impact, severity, "green", "green")
   }
 
   Container_Boundary(incidents, "Incidents") {
