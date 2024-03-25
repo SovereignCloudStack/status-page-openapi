@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   title: SCS Status Page API
-  version: "1.1.1"
+  version: "1.1.2"
 tags:
   - name: phase
     description: Handles incident phases.
@@ -411,6 +411,8 @@ components:
                 type: array
                 items:
                   $ref: "#/components/schemas/Severity"
+            required:
+              - data
 
     ComponentResponse:
       description: A request returns a component.
