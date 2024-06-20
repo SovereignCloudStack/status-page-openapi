@@ -296,7 +296,7 @@ export class ImpactService implements ImpactServiceInterface {
             }
         }
 
-        let localVarPath = `/impacttypes/${this.configuration.encodeParam({name: "impactTypeId", value: impactTypeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/impacttypes/${this.configuration.encodeParam({name: "impactTypeId", value: impactTypeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -423,7 +423,7 @@ export class ImpactService implements ImpactServiceInterface {
             }
         }
 
-        let localVarPath = `/impacttypes/${this.configuration.encodeParam({name: "impactTypeId", value: impactTypeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/impacttypes/${this.configuration.encodeParam({name: "impactTypeId", value: impactTypeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<GetImpactType200Response>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -680,7 +680,7 @@ export class ImpactService implements ImpactServiceInterface {
             }
         }
 
-        let localVarPath = `/impacttypes/${this.configuration.encodeParam({name: "impactTypeId", value: impactTypeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/impacttypes/${this.configuration.encodeParam({name: "impactTypeId", value: impactTypeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<any>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

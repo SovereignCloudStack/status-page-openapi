@@ -220,7 +220,7 @@ export class ComponentService implements ComponentServiceInterface {
             }
         }
 
-        let localVarPath = `/components/${this.configuration.encodeParam({name: "componentId", value: componentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/components/${this.configuration.encodeParam({name: "componentId", value: componentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -284,7 +284,7 @@ export class ComponentService implements ComponentServiceInterface {
             }
         }
 
-        let localVarPath = `/components/${this.configuration.encodeParam({name: "componentId", value: componentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/components/${this.configuration.encodeParam({name: "componentId", value: componentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<GetComponent200Response>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -417,7 +417,7 @@ export class ComponentService implements ComponentServiceInterface {
             }
         }
 
-        let localVarPath = `/components/${this.configuration.encodeParam({name: "componentId", value: componentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/components/${this.configuration.encodeParam({name: "componentId", value: componentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<any>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
