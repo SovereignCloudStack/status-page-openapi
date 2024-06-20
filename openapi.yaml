@@ -18,6 +18,7 @@ components:
     Id:
       description: Identification for objects. UUID preferred.
       type: string
+      format: uuid
 
     IdField:
       description: Id field for responses.
@@ -32,6 +33,7 @@ components:
       description: |
         Positive and incrementing number for ordering and identfication of e.g. sub resources.
       type: integer
+      minimum: 0
 
     Generation:
       description: Incremental as generation field for responses.

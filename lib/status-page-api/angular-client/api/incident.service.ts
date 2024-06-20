@@ -239,7 +239,7 @@ export class IncidentService implements IncidentServiceInterface {
             }
         }
 
-        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/updates`;
+        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/updates`;
         return this.httpClient.request<Order>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -303,7 +303,7 @@ export class IncidentService implements IncidentServiceInterface {
             }
         }
 
-        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -370,7 +370,7 @@ export class IncidentService implements IncidentServiceInterface {
             }
         }
 
-        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/updates/${this.configuration.encodeParam({name: "updateOrder", value: updateOrder, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/updates/${this.configuration.encodeParam({name: "updateOrder", value: updateOrder, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -434,7 +434,7 @@ export class IncidentService implements IncidentServiceInterface {
             }
         }
 
-        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<GetIncident200Response>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -502,7 +502,7 @@ export class IncidentService implements IncidentServiceInterface {
             }
         }
 
-        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/updates/${this.configuration.encodeParam({name: "updateOrder", value: updateOrder, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/updates/${this.configuration.encodeParam({name: "updateOrder", value: updateOrder, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         return this.httpClient.request<GetIncidentUpdate200Response>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -566,7 +566,7 @@ export class IncidentService implements IncidentServiceInterface {
             }
         }
 
-        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/updates`;
+        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/updates`;
         return this.httpClient.request<GetIncidentUpdates200Response>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -718,7 +718,7 @@ export class IncidentService implements IncidentServiceInterface {
             }
         }
 
-        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<any>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -796,7 +796,7 @@ export class IncidentService implements IncidentServiceInterface {
             }
         }
 
-        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/updates/${this.configuration.encodeParam({name: "updateOrder", value: updateOrder, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/incidents/${this.configuration.encodeParam({name: "incidentId", value: incidentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/updates/${this.configuration.encodeParam({name: "updateOrder", value: updateOrder, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         return this.httpClient.request<any>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
