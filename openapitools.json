@@ -4,7 +4,7 @@
   "generator-cli": {
     "version": "7.3.0",
     "generators":{
-      "status-page-api":{
+      "status-page-api-angular-client":{
         "generatorName": "typescript-angular",
         "inputSpec": "openapi.yaml",
         "output": "lib/status-page-api/angular-client",
@@ -16,7 +16,7 @@
       "status-page-api-doc":{
         "generatorName": "markdown",
         "inputSpec": "openapi.yaml",
-        "output": "docs/status-page-api"
+        "output": "docs/api/status-page-api"
       }
     }
   }
