@@ -12,6 +12,12 @@ tags:
   - name: incident
     description: Handles incidents.
 
+servers:
+  - url: https://status-api.k8s.scs.community
+    description: Sovereign Cloud Stack public default server.
+  - url: http://localhost:3000
+    description: Local development server.
+
 components:
   schemas:
     # common definitions
