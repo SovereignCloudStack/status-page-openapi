@@ -251,6 +251,13 @@ components:
       schema:
         $ref: "#/components/schemas/Incremental"
 
+    ComponentNowQueryParameter:
+      description: An optional now time stamp to orientate the component.
+      name: now
+      in: query
+      schema:
+        $ref: "#/components/schemas/Date"
+
     ComponentIdPathParameter:
       description: Component ID is required in path.
       name: componentId
@@ -644,6 +651,8 @@ paths:
       operationId: getComponents
       tags:
         - component
+      parameters:
+        - $ref: "#/components/parameters/ComponentNowQueryParameter"
       responses:
         "200":
           $ref: "#/components/responses/ComponentListResponse"
@@ -667,6 +676,7 @@ paths:
         - component
       parameters:
         - $ref: "#/components/parameters/ComponentIdPathParameter"
+        - $ref: "#/components/parameters/ComponentNowQueryParameter"
       responses:
         "200":
           $ref: "#/components/responses/ComponentResponse"

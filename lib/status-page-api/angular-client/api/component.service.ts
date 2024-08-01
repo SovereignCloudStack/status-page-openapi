@@ -237,15 +237,22 @@ export class ComponentService implements ComponentServiceInterface {
     /**
      * Get a specific component by id.
      * @param componentId Component ID is required in path.
+     * @param now An optional now time stamp to orientate the component.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getComponent(componentId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GetComponent200Response>;
-    public getComponent(componentId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GetComponent200Response>>;
-    public getComponent(componentId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GetComponent200Response>>;
-    public getComponent(componentId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getComponent(componentId: string, now?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GetComponent200Response>;
+    public getComponent(componentId: string, now?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GetComponent200Response>>;
+    public getComponent(componentId: string, now?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GetComponent200Response>>;
+    public getComponent(componentId: string, now?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (componentId === null || componentId === undefined) {
             throw new Error('Required parameter componentId was null or undefined when calling getComponent.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (now !== undefined && now !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>now, 'now');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -288,6 +295,7 @@ export class ComponentService implements ComponentServiceInterface {
         return this.httpClient.request<GetComponent200Response>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -300,13 +308,20 @@ export class ComponentService implements ComponentServiceInterface {
 
     /**
      * Get a list of components.
+     * @param now An optional now time stamp to orientate the component.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getComponents(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GetComponents200Response>;
-    public getComponents(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GetComponents200Response>>;
-    public getComponents(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GetComponents200Response>>;
-    public getComponents(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getComponents(now?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GetComponents200Response>;
+    public getComponents(now?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GetComponents200Response>>;
+    public getComponents(now?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GetComponents200Response>>;
+    public getComponents(now?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (now !== undefined && now !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>now, 'now');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -348,6 +363,7 @@ export class ComponentService implements ComponentServiceInterface {
         return this.httpClient.request<GetComponents200Response>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

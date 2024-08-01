@@ -4,6 +4,8 @@ SPEC=openapi.yaml
 
 GO_DIR=pkg/api
 
+.DEFAULT_GOAL := all
+
 ${GO_DIR}:
 	@mkdir -p $@
 
