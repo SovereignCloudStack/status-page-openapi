@@ -45,16 +45,16 @@ export interface ComponentServiceInterface {
      * Get a specific component by id.
      * 
      * @param componentId Component ID is required in path.
-     * @param now An optional now time stamp to orientate the component.
+     * @param at An optional at time stamp, used as reference time for the component.
      */
-    getComponent(componentId: string, now?: string, extraHttpRequestParams?: any): Observable<GetComponent200Response>;
+    getComponent(componentId: string, at?: string, extraHttpRequestParams?: any): Observable<GetComponent200Response>;
 
     /**
      * Get a list of components.
      * 
-     * @param now An optional now time stamp to orientate the component.
+     * @param at An optional at time stamp, used as reference time for the component.
      */
-    getComponents(now?: string, extraHttpRequestParams?: any): Observable<GetComponents200Response>;
+    getComponents(at?: string, extraHttpRequestParams?: any): Observable<GetComponents200Response>;
 
     /**
      * Update a component.

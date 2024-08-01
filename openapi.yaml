@@ -251,9 +251,9 @@ components:
       schema:
         $ref: "#/components/schemas/Incremental"
 
-    ComponentNowQueryParameter:
-      description: An optional now time stamp to orientate the component.
-      name: now
+    ComponentAtQueryParameter:
+      description: An optional at time stamp, used as reference time for the component.
+      name: at
       in: query
       schema:
         $ref: "#/components/schemas/Date"
@@ -652,7 +652,7 @@ paths:
       tags:
         - component
       parameters:
-        - $ref: "#/components/parameters/ComponentNowQueryParameter"
+        - $ref: "#/components/parameters/ComponentAtQueryParameter"
       responses:
         "200":
           $ref: "#/components/responses/ComponentListResponse"
@@ -676,7 +676,7 @@ paths:
         - component
       parameters:
         - $ref: "#/components/parameters/ComponentIdPathParameter"
-        - $ref: "#/components/parameters/ComponentNowQueryParameter"
+        - $ref: "#/components/parameters/ComponentAtQueryParameter"
       responses:
         "200":
           $ref: "#/components/responses/ComponentResponse"
