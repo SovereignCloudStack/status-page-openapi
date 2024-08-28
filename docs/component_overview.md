@@ -16,7 +16,7 @@ C4Component
     Rel(impact, impactType, "has")
     Rel(impactComponentList, impact, "lists")
     Rel(impactIncidentList, impact, "lists")
-    Rel(impact, severity, "has", "when used by ImpactIncidentList")
+    Rel(impact, severity, "has")
 
     UpdateElementStyle(impact, $bgColor="green")
     UpdateElementStyle(impactComponentList, $bgColor="green")
