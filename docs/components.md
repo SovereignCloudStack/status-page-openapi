@@ -1,6 +1,6 @@
 # Components
 
-Illustrating multiple interchangable logical "layers" of possible Status Page application stacks:
+Illustrating multiple interchangeable logical "layers" of possible Status Page application stacks:
 
 ```mermaid
   C4Container
